@@ -61,6 +61,19 @@
 }
 
 @media (max-width: 605px) {
+    .rectangleSVG {
+        visibility: hidden !important;
+    }
+}
+
+.rectangleSVG {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    z-index: -2;
+}
+
+@media (max-width: 605px) {
     .dotsSVG {
         visibility: hidden !important;
     }
@@ -74,6 +87,12 @@
 }
 
 @media (max-width: 605px) {
+    .waveSVG {
+        visibility: hidden !important;
+    }
+}
+
+@media (min-width: 1512px) {
     .waveSVG {
         visibility: hidden !important;
     }

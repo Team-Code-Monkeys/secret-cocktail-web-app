@@ -8,6 +8,7 @@ function LandingPage() {
             <Navbar/>
             <Title/>
             <SubTitle/>
+            <Rectangle/>
             <Dots/>
             <Waves/>
         </div>
@@ -37,6 +38,14 @@ function SubTitle() {
         <p className={styles.subtitle} style={{color: '#2D3436'}}>
             Find a partner near you
         </p>
+    );
+}
+
+function Rectangle() {
+    return (
+        <svg width="873" height="753" viewBox="0 0 873 753" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.rectangleSVG}>
+            <rect x="-41" y="251" width="1376.03" height="767.907" rx="99" transform="rotate(-45 -41 251)" fill="#faebb9"/>
+        </svg>
     );
 }
 
