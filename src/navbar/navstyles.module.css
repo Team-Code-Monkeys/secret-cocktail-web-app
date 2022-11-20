@@ -18,7 +18,8 @@
 
 @media (max-width: 740px) {
     .navbarTitleText {
-        font-size: 20px !important;
+        visibility: hidden;
+        width: 1px;
     }
 }
 
@@ -52,6 +53,12 @@
     filter: brightness(80%);
 }
 
+@media (max-width: 740px) {
+    .loginBtn {
+        width: 100px !important;
+    }
+}
+
 .loginBtn {
     width: 150px;
     height: 45px;
@@ -67,6 +74,12 @@
     border: 1px solid #6C5CE7;
     border-radius: 999px;
     background: white;
+}
+
+@media (max-width: 740px) {
+    .signUpBtn {
+        width: 100px !important;
+    }
 }
 
 .signUpBtn:hover {

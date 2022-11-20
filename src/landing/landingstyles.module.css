@@ -30,6 +30,12 @@
     border-radius: 999px;
 }
 
+@media (max-width: 605px) {
+    .greenPillContainer {
+        visibility: hidden !important;
+    }
+}
+
 .titleTextContainer {
     width: 100%;
     display: flex;
@@ -49,6 +55,12 @@
     text-shadow: 0 4px 0 #FFFFFF;
 }
 
+@media (max-width: 605px) {
+    .title {
+        font-size: 50px !important;
+    }
+}
+
 .subtitle {
     margin: 0;
     font-family: 'Inter', sans-serif;
@@ -59,6 +71,12 @@
     text-align: center;
     letter-spacing: -3px;
     text-shadow: 0 4px 0 #FFFFFF;
+}
+
+@media (max-width: 605px) {
+    .subtitle {
+        font-size: 30px !important;
+    }
 }
 
 @media (max-width: 605px) {
