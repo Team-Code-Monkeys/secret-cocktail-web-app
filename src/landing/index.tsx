@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../navbar';
 import styles from './landingstyles.module.css';
+import wave from '../wave.png';
 
 function LandingPage() {
     return (
@@ -92,9 +93,10 @@ function Dots() {
 
 function Waves() {
     return (
-        <svg width="100%" height="150" viewBox="0 0 1512 150" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.waveSVG}>
-            <path d="M-0.350505 543.58L-0.612731 17.1367C-0.612731 17.1367 107.28 49.7262 231.959 17.2077C356.637 -15.3108 419.896 2.67075 593.598 59.0556C767.3 115.44 849.319 7.45996 1098.3 50.0386C1347.28 92.6173 1314.4 -46.9064 1511.76 17.6112C1511.8 95.8885 1512.01 483.507 1512.05 544.056C1359.93 544.008 -0.350505 543.58 -0.350505 543.58Z" fill="#FFEAA7"/>
-        </svg>
+        <img src={wave} className={styles.wave}/>
+        // <svg width="100%" height="150" xmlns="http://www.w3.org/2000/svg" className={styles.waveSVG}>
+        //     <path d="M-0.350505 543.58L-0.612731 17.1367C-0.612731 17.1367 107.28 49.7262 231.959 17.2077C356.637 -15.3108 419.896 2.67075 593.598 59.0556C767.3 115.44 849.319 7.45996 1098.3 50.0386C1347.28 92.6173 1314.4 -46.9064 1511.76 17.6112C1511.8 95.8885 1512.01 483.507 1512.05 544.056C1359.93 544.008 -0.350505 543.58 -0.350505 543.58Z" fill="#FFEAA7"/>
+        // </svg>
     );
 }
 
