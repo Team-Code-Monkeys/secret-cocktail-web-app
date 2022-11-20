@@ -13,6 +13,8 @@ import RegisterPage from './register';
 // define routes
 export const k_landing_page_route = '/';
 export const k_login_page_route = '/sign-in';
+export const k_login_page_route_facility = '/sign-in-facility';
+export const k_login_page_route_admin = '/sign-in-admin';
 export const k_register_page_route = '/sign-up';
 
 const router = createBrowserRouter([
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
     },
     {
         path: k_login_page_route,
+        element: <LoginPage/>,
+    },
+    {
+        path: k_login_page_route_facility,
+        element: <LoginPage/>,
+    },
+    {
+        path: k_login_page_route_admin,
         element: <LoginPage/>,
     },
     {

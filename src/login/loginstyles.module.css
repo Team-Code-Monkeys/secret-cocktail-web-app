@@ -111,6 +111,14 @@
     color: #6C5CE7;
 }
 
+.primaryBtn:hover {
+    cursor: pointer;
+}
+
+.primaryBtn:active {
+    filter: brightness(80%);
+}
+
 .primaryBtn {
     margin-top: 50px;
     margin-left: 10px;

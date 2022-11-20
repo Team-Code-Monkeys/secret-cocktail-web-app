@@ -1,19 +1,37 @@
 import React, {useState} from 'react';
 import styles from './loginstyles.module.css';
 import Navbar from "../navbar";
-import {useNavigate} from "react-router-dom";
-import {k_landing_page_route} from "../index";
+import {useLocation, useNavigate} from "react-router-dom";
+import {
+    k_landing_page_route,
+    k_login_page_route,
+    k_login_page_route_admin,
+    k_login_page_route_facility
+} from "../index";
 
 function LoginPage() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const pathname = location?.pathname;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
     return (
         <div className={styles.loginPageContainer}>
             <Navbar/>
             <div className={styles.titleContainer}>
                 <div className={styles.title}>CNA Facilities</div>
-                <div className={styles.subtitle}>CNA Trainer Login</div>
+                {
+                    (pathname === k_login_page_route) &&
+                    <div className={styles.subtitle}>CNA Trainer Login</div>
+                }
+                {
+                    (pathname === k_login_page_route_facility) &&
+                    <div className={styles.subtitle}>CNA Facility Login</div>
+                }
+                {
+                    (pathname === k_login_page_route_admin) &&
+                    <div className={styles.subtitle}>Admin Login</div>
+                }
             </div>
             <div className={styles.formContainer}>
                 <div className={styles.inputContainer}>

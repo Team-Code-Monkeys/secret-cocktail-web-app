@@ -48,6 +48,10 @@
     cursor: pointer;
 }
 
+.loginBtn:active {
+    filter: brightness(80%);
+}
+
 .loginBtn {
     width: 150px;
     height: 45px;
@@ -67,6 +71,10 @@
 
 .signUpBtn:hover {
     cursor: pointer;
+}
+
+.signUpBtn:active {
+    filter: brightness(80%);
 }
 
 .signUpBtn {
