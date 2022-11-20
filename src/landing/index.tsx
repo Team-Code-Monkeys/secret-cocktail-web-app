@@ -1,0 +1,24 @@
+import React from 'react';
+import styles from './styles.module.css';
+
+function LandingPage() {
+    return (
+        <div className={styles.landingPageContainer}>
+            <div className={styles.titleContainer}>
+                <div className={styles.titleTextContainer}>
+                    <p className={styles.title} style={{color: '#E75C5C', marginRight: '20px'}}>
+                        CNA
+                    </p>
+                    <p className={styles.title} style={{color: '#2D3436'}}>
+                        Facilities
+                    </p>
+                </div>
+                <div className={styles.greenPillContainer}>
+                    <div className={styles.greenPill} />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default LandingPage;
