@@ -1,6 +1,7 @@
 .landingPageContainer {
     width: 100%;
     display: flex;
+    flex-direction: column;
 }
 
 /*CNA Facilities Title */
@@ -41,6 +42,18 @@
     font-weight: 800;
     font-size: 96px;
     line-height: 104px;
+    text-align: center;
+    letter-spacing: -3px;
+    text-shadow: 0 4px 0 #FFFFFF;
+}
+
+.subtitle {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 58px;
+    line-height: 77px;
     text-align: center;
     letter-spacing: -3px;
     text-shadow: 0 4px 0 #FFFFFF;

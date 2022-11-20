@@ -1,0 +1,29 @@
+.navbarContainer {
+    height: 70px;
+    filter: drop-shadow(0px 2px 4px rgba(38, 50, 56, 0.16)) drop-shadow(0px 4px 8px rgba(38, 50, 56, 0.08));
+    background: #FFFFFF;
+    display: flex;
+}
+
+.navbarInnerContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.navbarLogo {
+    max-height: 100%;
+}
+
+.navbarTitleText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 56px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -1px;
+    color: #455154;
+    padding: 10px;
+}
