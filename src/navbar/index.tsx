@@ -12,7 +12,7 @@ function Navbar() {
             <div className={styles.navbarInnerContainer}>
                 <Logo/>
                 <TitleText/>
-                { (pathname === k_landing_page_route) &&
+                {(pathname === k_landing_page_route) &&
                     <AuthButtons/>
                 }
             </div>

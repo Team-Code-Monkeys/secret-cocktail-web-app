@@ -56,7 +56,7 @@ function Dots() {
     return (
         <svg width="209" height="285" viewBox="0 0 209 285" fill="none" xmlns="http://www.w3.org/2000/svg"
              className={styles.dotsSVG}>
-            <g clip-path="url(#clip0_65_4460)">
+            <g clipPath="url(#clip0_65_4460)">
                 <path
                     d="M162.704 35.6611C166.397 35.6611 169.391 32.6675 169.391 28.9747C169.391 25.2818 166.397 22.2882 162.704 22.2882C159.011 22.2882 156.018 25.2818 156.018 28.9747C156.018 32.6675 159.011 35.6611 162.704 35.6611Z"
                     fill="#FDCB6E"/>
