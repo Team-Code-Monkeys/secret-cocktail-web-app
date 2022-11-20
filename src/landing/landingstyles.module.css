@@ -16,7 +16,7 @@
     position: relative;
     width: 191px;
     height: 51px;
-    left: calc(50% - 191px/2 - 208px);
+    left: calc(50% - 191px / 2 - 208px);
 }
 
 .greenPill {

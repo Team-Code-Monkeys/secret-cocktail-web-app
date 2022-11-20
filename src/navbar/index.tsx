@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './navstyles.module.css';
 import logo from '../logo.png';
+import {useNavigate} from "react-router-dom";
+import {k_login_page_route, k_register_page_route} from "../index";
 
 function Navbar() {
     return (
@@ -27,10 +29,18 @@ function TitleText() {
 }
 
 function AuthButtons() {
+    const navigate = useNavigate();
+
     return (
         <div className={styles.navbarBtnsContainer}>
-            <button className={styles.loginBtn} onClick={() => {alert('login')}}>Login</button>
-            <button className={styles.signUpBtn} onClick={() => {alert('sign-up')}}>Sign Up</button>
+            <button className={styles.loginBtn} onClick={() => {
+                navigate(k_login_page_route)
+            }}>Login
+            </button>
+            <button className={styles.signUpBtn} onClick={() => {
+                navigate(k_register_page_route)
+            }}>Sign Up
+            </button>
         </div>
     );
 }
