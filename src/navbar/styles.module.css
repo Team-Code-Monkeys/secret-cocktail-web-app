@@ -6,9 +6,10 @@
 }
 
 .navbarInnerContainer {
+    width: 100%;
     display: flex;
     flex-direction: row;
-    padding: 10px;
+    padding: 10px 20px;
 }
 
 .navbarLogo {
@@ -26,4 +27,53 @@
     letter-spacing: -1px;
     color: #455154;
     padding: 10px;
+}
+
+.navbarBtnsContainer {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.loginBtn:hover {
+    cursor: pointer;
+}
+
+.loginBtn {
+    width: 150px;
+    height: 45px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: #6C5CE7;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #6C5CE7;
+    border-radius: 999px;
+    background: white;
+}
+
+.signUpBtn:hover {
+    cursor: pointer;
+}
+
+.signUpBtn {
+    margin-left: 10px;
+    width: 150px;
+    height: 45px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: white;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #6C5CE7;
+    border-radius: 999px;
+    background: #6C5CE7;
 }

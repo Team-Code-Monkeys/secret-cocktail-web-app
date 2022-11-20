@@ -8,6 +8,10 @@ function Navbar() {
             <div className={styles.navbarInnerContainer}>
                 <img src={logo} alt={'The Secret Cocktail company logo'} className={styles.navbarLogo}/>
                 <div className={styles.navbarTitleText}>The Secret Cocktail</div>
+                <div className={styles.navbarBtnsContainer}>
+                    <button className={styles.loginBtn} onClick={() => {alert('login')}}>Login</button>
+                    <button className={styles.signUpBtn} onClick={() => {alert('sign-up')}}>Sign Up</button>
+                </div>
             </div>
         </div>
     );
