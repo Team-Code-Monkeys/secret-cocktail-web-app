@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './navstyles.module.css';
 import logo from '../logo.png';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {k_landing_page_route, k_login_page_route, k_register_page_route} from '../index';
+import {k_landing_page_route, k_login_page_route_trainee, k_register_page_route_trainee} from '../index';
 
 function Navbar() {
     const location = useLocation();
@@ -38,11 +38,11 @@ function AuthButtons() {
     return (
         <div className={styles.navbarBtnsContainer}>
             <button className={styles.loginBtn} onClick={() => {
-                navigate(k_login_page_route)
+                navigate(k_login_page_route_trainee)
             }}>Login
             </button>
             <button className={styles.signUpBtn} onClick={() => {
-                navigate(k_register_page_route)
+                navigate(k_register_page_route_trainee)
             }}>Sign Up
             </button>
         </div>

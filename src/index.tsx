@@ -12,10 +12,10 @@ import RegisterPage from './register';
 
 // define routes
 export const k_landing_page_route = '/';
-export const k_login_page_route = '/sign-in';
+export const k_login_page_route_trainee = '/sign-in-trainer';
 export const k_login_page_route_facility = '/sign-in-facility';
 export const k_login_page_route_admin = '/sign-in-admin';
-export const k_register_page_route = '/sign-up';
+export const k_register_page_route_trainee = '/sign-up-trainer';
 
 const router = createBrowserRouter([
     {
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         element: <LandingPage/>,
     },
     {
-        path: k_login_page_route,
+        path: k_login_page_route_trainee,
         element: <LoginPage/>,
     },
     {
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         element: <LoginPage/>,
     },
     {
-        path: k_register_page_route,
+        path: k_register_page_route_trainee,
         element: <RegisterPage/>,
     },
 ]);

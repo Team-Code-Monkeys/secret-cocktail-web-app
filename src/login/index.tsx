@@ -4,7 +4,7 @@ import Navbar from "../navbar";
 import {useLocation, useNavigate} from "react-router-dom";
 import {
     k_landing_page_route,
-    k_login_page_route,
+    k_login_page_route_trainee,
     k_login_page_route_admin,
     k_login_page_route_facility
 } from "../index";
@@ -21,7 +21,7 @@ function LoginPage() {
             <div className={styles.titleContainer}>
                 <div className={styles.title}>CNA Facilities</div>
                 {
-                    (pathname === k_login_page_route) &&
+                    (pathname === k_login_page_route_trainee) &&
                     <div className={styles.subtitle}>CNA Trainer Login</div>
                 }
                 {
