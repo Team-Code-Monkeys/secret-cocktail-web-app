@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import LandingPage from './landing';
 import LoginPage from './login';
+import RegisterPage from './register';
 
 // define routes
 export const k_landing_page_route = '/';
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
     {
         path: k_login_page_route,
         element: <LoginPage/>,
+    },
+    {
+        path: k_register_page_route,
+        element: <RegisterPage/>,
     },
 ]);
 

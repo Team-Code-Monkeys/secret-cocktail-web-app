@@ -1,16 +1,20 @@
 import React from 'react';
 import styles from './navstyles.module.css';
 import logo from '../logo.png';
-import {useNavigate} from "react-router-dom";
-import {k_login_page_route, k_register_page_route} from "../index";
+import {useNavigate, useLocation} from 'react-router-dom';
+import {k_landing_page_route, k_login_page_route, k_register_page_route} from '../index';
 
 function Navbar() {
+    const location = useLocation();
+    const pathname = location?.pathname;
     return (
         <div className={styles.navbarContainer}>
             <div className={styles.navbarInnerContainer}>
                 <Logo/>
                 <TitleText/>
-                <AuthButtons/>
+                { (pathname === k_landing_page_route) &&
+                    <AuthButtons/>
+                }
             </div>
         </div>
     );
