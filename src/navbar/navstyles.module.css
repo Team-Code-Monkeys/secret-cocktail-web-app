@@ -16,7 +16,7 @@
     max-height: 100%;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 740px) {
     .navbarTitleText {
         font-size: 20px !important;
     }
