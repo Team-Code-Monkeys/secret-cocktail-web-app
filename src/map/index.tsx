@@ -7,9 +7,9 @@ import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from '../authredirect/auth-check';
 import {Wrapper, Status} from '@googlemaps/react-wrapper';
-import {collection, query, getFirestore, where, orderBy, getDocs, startAt, endAt} from 'firebase/firestore';
+import {collection, query, getFirestore, where, getDocs} from 'firebase/firestore';
 import {GOOGLE_MAPS_API_KEY} from '../api';
-import {distanceBetween, geohashForLocation, geohashQueryBounds, Geopoint} from "geofire-common";
+import {distanceBetween, geohashQueryBounds, Geopoint} from "geofire-common";
 import {useDebouncedCallback} from "use-debounce";
 
 const render = (status: Status) => {
@@ -51,15 +51,21 @@ function MapPage() {
                             if (lat && lon) {
                                 // geo hash not 100% accurate, have to double-check distance
                                 const distance = distanceBetween([lat, lon] as Geopoint, c) * 1000;
-                                console.log(distance);
                                 if (distance <= radiusInM) {
                                     const newFacility: any = doc.data();
                                     newFacility.id = doc.id;
+                                    newFacility.distance = distance;
                                     newFacilities.push(newFacility);
                                 }
                             }
                         });
                     }
+                    newFacilities.sort((a: any, b: any) => {
+                        let keyA = a.distance, keyB = b.distance;
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
                     setFacilities(newFacilities);
                 }
             }
@@ -70,7 +76,7 @@ function MapPage() {
 
     useEffect(() => {
         debounced(radius);
-    }, [radius])
+    }, [radius, debounced])
 
     return (
         <div className={styles.container}>
@@ -127,7 +133,7 @@ function FacilityList(props: any) {
 
     return (
         <div className={styles.listView}>
-            <div>Your Location</div>
+            <div>Location:</div>
             <input value={'930 Spring Street NW'} onChange={(event) => {
                 console.log(event.target.value)
             }}/>
@@ -173,7 +179,7 @@ function MapComponent(props: MapComponentProps) {
                 zoom: props.zoom,
             }));
         }
-    }, [ref, map, props.radius]);
+    }, [ref, map, props.radius, props.center, props.zoom]);
 
     return (
         // <div ref={ref} style={{width: '100%', height: '100%'}} {...props}/>
