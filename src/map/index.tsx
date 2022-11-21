@@ -12,6 +12,7 @@ import {GOOGLE_MAPS_API_KEY} from '../api';
 import {distanceBetween, geohashQueryBounds, Geopoint} from "geofire-common";
 import {useDebouncedCallback} from "use-debounce";
 import {k_facility_page_route} from "../index";
+import { doc, deleteDoc } from "firebase/firestore";
 
 const render = (status: Status) => {
     return <h1>{status}</h1>;
@@ -136,6 +137,7 @@ function MapPage() {
 }
 
 function FacilityList(props: any) {
+    const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
 
     function getMiles(meters: number): number {
@@ -172,6 +174,17 @@ function FacilityList(props: any) {
                                         <div className={styles.listItemText}>{`PHONE: ${facility.phone}`}</div>
                                         <div className={styles.listItemText}>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
                                         <div className={styles.listItemButtonsContainer}>
+                                            <button className={styles.secondaryBtnListView} onClick={() => {
+                                                // eslint-disable-next-line no-restricted-globals
+                                                if (confirm(`Delete ${facility.name} facility?`)) {
+                                                    deleteDoc(doc(db, 'facility', facility.id || "")).then(() => {
+                                                        window.location.reload();
+                                                    }).catch((error: any) => {
+                                                        alert("Error deleting facility.");
+                                                        console.error("Error deleting facility", error);
+                                                    });
+                                                }
+                                            }}>Delete</button>
                                             <button className={styles.primaryBtnListView} onClick={() => {navigate(k_facility_page_route + '/' + facility.id || 'none')}}>More Info</button>
                                         </div>
                                     </div>

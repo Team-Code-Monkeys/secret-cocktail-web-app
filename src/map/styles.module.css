@@ -117,6 +117,8 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
+    margin-bottom: 100px;
+    overflow-y: scroll;
 }
 
 .listItemContainer {
@@ -136,7 +138,7 @@
 }
 
 .primaryBtnListView {
-    margin-left: auto;
+    margin-left: 10px;
     width: 100px;
     height: 40px;
     font-family: 'Inter', sans-serif;
@@ -153,9 +155,36 @@
     background: #6C5CE7;
 }
 
+.secondaryBtnListView:hover {
+    cursor: pointer;
+}
+
+.secondaryBtnListView:active {
+    filter: brightness(80%);
+}
+
+.secondaryBtnListView {
+    margin-left: 10px;
+    width: 100px;
+    height: 40px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: white;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #e13d3d;
+    border-radius: 16px;
+    background: #e13d3d;
+}
+
 .listItemButtonsContainer {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
 }
 
 .listItemText {
