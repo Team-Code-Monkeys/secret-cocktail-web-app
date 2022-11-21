@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import {getAuth} from 'firebase/auth';
@@ -15,6 +15,7 @@ const render = (status: Status) => {
 function MapPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [facilities, setFacilities] = useState([{
         id: "bhRZIgLYzeIgv2PD5SEZD",
         name: "Facility A",
@@ -63,21 +64,21 @@ function MapPage() {
     );
 }
 
-function MapComponent() {
+function MapComponent({...props}) {
     const ref = React.useRef<HTMLDivElement>(null);
     const [map, setMap] = React.useState<google.maps.Map>();
 
     React.useEffect(() => {
         if (ref.current && !map) {
             setMap(new window.google.maps.Map(ref.current, {
-                center: new google.maps.LatLng(-33.91722, 151.23064),
+                center: new google.maps.LatLng(33.78010647946605, -84.38955018824828),
                 zoom: 16,
             }));
         }
     }, [ref, map]);
 
     return (
-        <div ref={ref} style={{width: '100%', height: '100%'}}/>
+        <div ref={ref} style={{width: '100%', height: '100%'}} {...props}/>
     );
 }
 
