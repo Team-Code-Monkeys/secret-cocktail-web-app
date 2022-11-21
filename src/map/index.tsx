@@ -25,58 +25,60 @@ function MapPage() {
     const [radius, setRadius] = useState<number>(444);
     const [facilities, setFacilities] = useState<any>([])
 
-    useEffect(() => {
-        checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
-        setupAuthListener(auth, navigate, true, false);
-    }, [auth, navigate]);
+    const queryLocations = async () => {
+        // setFacilities([]);
+        if (db) {
+            const c = center as Geopoint;
+            const radiusInM = radius;
+            const bounds = geohashQueryBounds(c, radiusInM);
+            const newFacilities: any = [];
+            for (const b of bounds) {
+                const lowerPointHash = b[1];
+                const upperPointHash = b[0];
+                const documentGeohashField = 'geohash';
+                const q = query(collection(db, 'facility'), where(documentGeohashField, '>=', upperPointHash), where(documentGeohashField, '<=', lowerPointHash));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    const lat = doc?.data()?.geopoint?.latitude;
+                    const lon = doc?.data()?.geopoint?.longitude;
+                    if (lat && lon) {
+                        // geo hash not 100% accurate, have to double-check distance
+                        const distance = distanceBetween([lat, lon] as Geopoint, c) * 1000;
+                        if (distance <= radiusInM) {
+                            const newFacility: any = doc.data();
+                            newFacility.id = doc.id;
+                            newFacility.distance = distance;
+                            newFacilities.push(newFacility);
+                        }
+                    }
+                });
+            }
+            newFacilities.sort((a: any, b: any) => {
+                let keyA = a.distance, keyB = b.distance;
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+            });
+            setFacilities(newFacilities);
+        }
+    }
 
     const debounced = useDebouncedCallback(
         (radius) => {
-            const queryLocations = async () => {
-                // setFacilities([]);
-                if (db) {
-                    const c = center as Geopoint;
-                    const radiusInM = radius;
-                    const bounds = geohashQueryBounds(c, radiusInM);
-                    const newFacilities: any = [];
-                    for (const b of bounds) {
-                        const lowerPointHash = b[1];
-                        const upperPointHash = b[0];
-                        const documentGeohashField = 'geohash';
-                        const q = query(collection(db, 'facility'), where(documentGeohashField, '>=', upperPointHash), where(documentGeohashField, '<=', lowerPointHash));
-                        const querySnapshot = await getDocs(q);
-                        querySnapshot.forEach((doc) => {
-                            const lat = doc?.data()?.geopoint?.latitude;
-                            const lon = doc?.data()?.geopoint?.longitude;
-                            if (lat && lon) {
-                                // geo hash not 100% accurate, have to double-check distance
-                                const distance = distanceBetween([lat, lon] as Geopoint, c) * 1000;
-                                if (distance <= radiusInM) {
-                                    const newFacility: any = doc.data();
-                                    newFacility.id = doc.id;
-                                    newFacility.distance = distance;
-                                    newFacilities.push(newFacility);
-                                }
-                            }
-                        });
-                    }
-                    newFacilities.sort((a: any, b: any) => {
-                        let keyA = a.distance, keyB = b.distance;
-                        if (keyA < keyB) return -1;
-                        if (keyA > keyB) return 1;
-                        return 0;
-                    });
-                    setFacilities(newFacilities);
-                }
-            }
             queryLocations();
         },
         1000
     );
 
     useEffect(() => {
+        checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
+        setupAuthListener(auth, navigate, true, false);
+    }, [auth, navigate]);
+
+    useEffect(() => {
+        // search facilities when center or radius is updated
         debounced(radius);
-    }, [radius, debounced])
+    }, [center, radius, debounced])
 
     return (
         <div className={styles.container}>
@@ -140,7 +142,7 @@ function FacilityList(props: any) {
             <div>Max Distance:</div>
             <div>
                 <div>{parseFloat(getMiles(props.radius).toString()).toFixed(2)} miles</div>
-                <input type="range" min={100} max={10000} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
+                <input type="range" min={100} max={10099} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
             </div>
             {props.facilities.map((facility: any, index: number) => {
                 const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
