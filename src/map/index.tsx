@@ -8,11 +8,12 @@ import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from '../authredirect/auth-check';
 import {Wrapper, Status} from '@googlemaps/react-wrapper';
 import {collection, query, getFirestore, where, getDocs} from 'firebase/firestore';
-import {GOOGLE_MAPS_API_KEY} from '../api';
+import {GOOGLE_GEOCODING_API_KEY, GOOGLE_MAPS_API_KEY} from '../api';
 import {distanceBetween, geohashQueryBounds, Geopoint} from "geofire-common";
 import {useDebouncedCallback} from "use-debounce";
 import {k_facility_page_route} from "../index";
 import {doc, deleteDoc} from "firebase/firestore";
+import Geocode from "react-geocode";
 
 const render = (status: Status) => {
     return <h1>{status}</h1>;
@@ -28,6 +29,7 @@ function MapPage() {
     const [facilities, setFacilities] = useState<any>([])
     const [loading, setLoading] = useState<boolean>(false);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [locationInput, setLocationInput] = useState<string>('930 Spring St NW, Atlanta, GA 30309');
 
     const queryLocations = async () => {
         // setFacilities([]);
@@ -105,13 +107,41 @@ function MapPage() {
         });
     }, [auth]);
 
+    // rate limit the frequency at which we query search input
+    const debouncedSearchInput = useDebouncedCallback(
+        (locationInput) => {
+            console.log('querying');
+            setLoading(true);
+            Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
+            Geocode.fromAddress(locationInput || '').then(
+                (response) => {
+                    setLoading(false);
+                    const { lat, lng } = response.results[0].geometry.location;
+                    setCenter([lat, lng]);
+                },
+                (error) => {
+                    setLoading(false);
+                    if (error.code !== 'ZERO_RESULTS') {
+                        console.error(error);
+                    } else {
+                        console.log('zero results');
+                    }
+                }
+            );
+        },
+        1000
+    );
+
+    useEffect(() => {
+        debouncedSearchInput(locationInput);
+    }, [locationInput]);
+
     return (
         <div className={styles.container}>
             <Navbar/>
-            {/*TODO: allow admin user to delete facility*/}
             <div className={styles.innerContainer}>
                 <FacilityList facilities={facilities} center={center} radius={radius} setRadius={setRadius}
-                              loading={loading} isAdmin={isAdmin}/>
+                              loading={loading} isAdmin={isAdmin} locationInput={locationInput} setLocationInput={setLocationInput}/>
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
                         <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom}
@@ -167,9 +197,11 @@ function FacilityList(props: any) {
         <div className={styles.listView}>
             <div className={styles.filterContainer}>
                 <div className={styles.filterHeader}>Location</div>
-                <input value={'930 Spring Street NW'} onChange={(event) => {
-                    console.log(event.target.value)
-                }}/>
+                <div className={styles.searchContainer}>
+                    <input className={styles.searchLocation} value={props.locationInput} onChange={(event) => {
+                        props.setLocationInput(event.target.value);
+                    }}/>
+                </div>
                 <div className={styles.filterHeader}>Max Distance</div>
                 <div className={styles.distanceSliderContainer}>
                     <div>{parseFloat(getMiles(props.radius).toString()).toFixed(2)} miles</div>

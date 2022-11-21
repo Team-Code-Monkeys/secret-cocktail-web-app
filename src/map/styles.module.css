@@ -196,3 +196,32 @@
     letter-spacing: 0.25px;
     color: #000000;
 }
+
+.searchContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.searchLocation {
+    flex-grow: 1;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    background: rgba(194, 194, 194, 0.24);
+    /*opacity: 0.24;*/
+    border-radius: 14px;
+    /*font-weight: 400;*/
+    /*font-size: 18px;*/
+    /*line-height: 32px;*/
+    outline: 0;
+    border: none;
+    padding: 5px 10px;
+}
+
+.searchLocation::placeholder {
+    color: rgba(45, 52, 54, 0.68);
+}
