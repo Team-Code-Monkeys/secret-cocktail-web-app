@@ -7,7 +7,7 @@ import {
     k_landing_page_route,
     k_login_page_trainee_route,
     k_login_page_admin_route,
-    k_login_page_facility_route, k_map_page_route, k_root_page_route
+    k_login_page_facility_route, k_root_page_route
 } from '../index';
 import firebaseApp from '../firebase';
 import {setupAuthListener} from "../authredirect/setup-auth-listener";
