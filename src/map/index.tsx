@@ -19,7 +19,15 @@ function MapPage() {
     return (
         <div className={styles.container}>
             <Navbar/>
-            <div>TODO: map of facilities to view and admin can edit (for 'regular' and 'admin' user types)</div>
+            {/*TODO: allow admin user to delete facility*/}
+            <div className={styles.innerContainer}>
+                <div className={styles.listView}>
+
+                </div>
+                <div className={styles.mapView}>
+
+                </div>
+            </div>
         </div>
     );
 }
