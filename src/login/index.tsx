@@ -24,7 +24,7 @@ function LoginPage() {
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        setupAuthListener(auth, navigate);
+        setupAuthListener(auth, navigate, false, true);
     }, [auth, navigate]);
 
     function signIn() {

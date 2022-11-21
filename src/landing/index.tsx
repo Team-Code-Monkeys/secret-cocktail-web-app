@@ -12,7 +12,7 @@ function LandingPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setupAuthListener(auth, navigate);
+        setupAuthListener(auth, navigate, false, true);
     }, [auth, navigate]);
 
     return (

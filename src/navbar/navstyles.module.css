@@ -45,21 +45,21 @@
     align-items: center;
 }
 
-.loginBtn:hover {
+.btnSecondary:hover {
     cursor: pointer;
 }
 
-.loginBtn:active {
+.btnSecondary:active {
     filter: brightness(80%);
 }
 
 @media (max-width: 740px) {
-    .loginBtn {
+    .btnSecondary {
         width: 100px !important;
     }
 }
 
-.loginBtn {
+.btnSecondary {
     width: 150px;
     height: 45px;
     font-family: 'Inter', sans-serif;
@@ -77,20 +77,20 @@
 }
 
 @media (max-width: 740px) {
-    .signUpBtn {
+    .btnPrimary {
         width: 100px !important;
     }
 }
 
-.signUpBtn:hover {
+.btnPrimary:hover {
     cursor: pointer;
 }
 
-.signUpBtn:active {
+.btnPrimary:active {
     filter: brightness(80%);
 }
 
-.signUpBtn {
+.btnPrimary {
     margin-left: 10px;
     width: 150px;
     height: 45px;

@@ -14,7 +14,7 @@ function AuthRedirectPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setupAuthListener(auth, navigate);
+        setupAuthListener(auth, navigate, true, true);
     }, [auth, navigate]);
 
     useEffect(() => {

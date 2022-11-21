@@ -19,7 +19,7 @@ function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
 
     useEffect(() => {
-        setupAuthListener(auth, navigate);
+        setupAuthListener(auth, navigate, false, true);
     }, [auth, navigate]);
 
     function signUp() {
