@@ -74,17 +74,17 @@ function MapPage() {
             }
         }
         queryLocations();
-    }, [db]);
+    }, [db, center, radius]);
 
     return (
         <div className={styles.container}>
             <Navbar/>
             {/*TODO: allow admin user to delete facility*/}
             <div className={styles.innerContainer}>
-                <FacilityList facilities={facilities} center={center}/>
+                <FacilityList facilities={facilities} center={center} radius={radius} setRadius={setRadius}/>
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
-                        <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom}>
+                        <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} radius={radius} setRadius={setRadius}>
                             {
                                 facilities.map((facility: any, index: number) => {
                                     return (
@@ -135,6 +135,11 @@ function FacilityList(props: any) {
             <input value={'930 Spring Street NW'} onChange={(event) => {
                 console.log(event.target.value)
             }}/>
+            <div>Max Distance:</div>
+            <div>
+                <div>{props.radius} miles</div>
+                <input type="range" min={1} max={1000} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
+            </div>
             {props.facilities.map((facility: any, index: number) => {
                 const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
                 const distance = getMiles(distanceInMeters);
@@ -154,6 +159,8 @@ function FacilityList(props: any) {
 interface MapComponentProps {
     center: any,
     setCenter: Function,
+    radius: number,
+    setRadius: Function,
     zoom: number,
     setZoom: Function,
     children: any
@@ -170,7 +177,7 @@ function MapComponent(props: MapComponentProps) {
                 zoom: props.zoom,
             }));
         }
-    }, [ref, map]);
+    }, [ref, map, props.radius]);
 
     return (
         // <div ref={ref} style={{width: '100%', height: '100%'}} {...props}/>
