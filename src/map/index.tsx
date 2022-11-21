@@ -31,6 +31,7 @@ function MapPage() {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [locationInput, setLocationInput] = useState<string>('930 Spring St NW, Atlanta, GA 30309');
     const [isUnknownLocation, setIsUnknownLocation] = useState<boolean>(false);
+    const [map, setMap] = React.useState<google.maps.Map>();
 
     const queryLocations = async () => {
         // setFacilities([]);
@@ -146,28 +147,30 @@ function MapPage() {
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
                         <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom}
-                                      radius={radius} setRadius={setRadius}>
+                                      radius={radius} setRadius={setRadius} map={map} setMap={setMap}>
                             {
                                 facilities.map((facility: any, index: number) => {
                                     return (
                                         <Marker
                                             key={facility?.id || index}
+                                            map={map}
                                             position={{
                                                 lat: facility?.geopoint?.latitude || 0.0,
                                                 lng: facility?.geopoint?.longitude || 0.0,
                                             }}
-                                            label={{color: 'black', text: facility?.name || 'No name'}}
+                                            label={facility?.name}
                                         />
                                     );
                                 })
                             }
                             <Marker
+                                map={map}
                                 key={'user'}
                                 position={{
                                     lat: center[0],
                                     lng: center[1],
                                 }}
-                                label={{color: 'black', text: 'You'}}
+                                label={'You'}
                             />
                             <Circle
                                 center={{
@@ -274,21 +277,22 @@ interface MapComponentProps {
     setRadius: Function,
     zoom: number,
     setZoom: Function,
-    children: any
+    children: any,
+    map: any,
+    setMap: Function
 }
 
 function MapComponent(props: MapComponentProps) {
     const ref = React.useRef<HTMLDivElement>(null);
-    const [map, setMap] = React.useState<google.maps.Map>();
 
     React.useEffect(() => {
-        if (ref.current && !map) {
-            setMap(new window.google.maps.Map(ref.current, {
+        if (ref.current && !props.map) {
+            props.setMap(new window.google.maps.Map(ref.current, {
                 center: new google.maps.LatLng(props.center[0], props.center[1]),
                 zoom: props.zoom,
             }));
         }
-    }, [ref, map, props.radius, props.center, props.zoom]);
+    }, [ref, props.map, props.radius, props.center, props.zoom]);
 
     return (
         // <div ref={ref} style={{width: '100%', height: '100%'}} {...props}/>
@@ -298,7 +302,7 @@ function MapComponent(props: MapComponentProps) {
                 if (React.isValidElement(child)) {
                     // set the map prop on the child component
                     // @ts-ignore
-                    return React.cloneElement(child, {map});
+                    return React.cloneElement(child, {map: props.map});
                 }
             })}
         </>
