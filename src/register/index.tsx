@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './registerstyles.module.css';
 import Navbar from '../navbar';
 import {useLocation, useNavigate} from "react-router-dom";
@@ -6,6 +6,7 @@ import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
 import {
     k_landing_page_route, k_map_page_route, k_register_page_trainee_route, k_root_page_route
 } from '../index';
+import {setupAuthListener} from "../authredirect/setup-auth-listener";
 import firebaseApp from '../firebase';
 
 function RegisterPage() {
@@ -16,6 +17,10 @@ function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    useEffect(() => {
+        setupAuthListener(auth, navigate);
+    }, [auth, navigate]);
 
     function signUp() {
         if (!email || !password) {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './loginstyles.module.css';
 import Navbar from "../navbar";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -10,6 +10,7 @@ import {
     k_login_page_facility_route, k_map_page_route, k_root_page_route
 } from '../index';
 import firebaseApp from '../firebase';
+import {setupAuthListener} from "../authredirect/setup-auth-listener";
 
 function LoginPage() {
     const auth = getAuth(firebaseApp);
@@ -21,6 +22,10 @@ function LoginPage() {
     const isAdmin = (pathname === k_login_page_admin_route);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        setupAuthListener(auth, navigate);
+    }, [auth, navigate]);
 
     function signIn() {
         if (!email || !password) {

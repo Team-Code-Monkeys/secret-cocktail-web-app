@@ -1,9 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Navbar from '../navbar';
 import styles from './landingstyles.module.css';
 import wave from '../wave.png';
+import {setupAuthListener} from "../authredirect/setup-auth-listener";
+import {getAuth} from "firebase/auth";
+import {useNavigate} from "react-router-dom";
+import firebaseApp from "../firebase";
 
 function LandingPage() {
+    const auth = getAuth(firebaseApp);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setupAuthListener(auth, navigate);
+    }, [auth, navigate]);
+
     return (
         <div className={styles.landingPageContainer}>
             <Navbar/>
