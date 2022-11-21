@@ -8,6 +8,7 @@ import firebaseApp from '../firebase';
 import wave from '../wave.png';
 import {k_facility_report_correction_page_route, k_map_page_route} from "../index";
 import {collection, doc, getDoc, getDocs, getFirestore, query, where} from "firebase/firestore";
+import ReactMarkdown from 'react-markdown'
 
 function FacilityPage() {
     const auth = getAuth(firebaseApp);
@@ -42,7 +43,11 @@ function FacilityPage() {
 
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach((doc) => {
-                    setFacility(doc.data());
+                    const facilityData = doc.data();
+                    if (facilityData?.about) {
+                        facilityData.about = facilityData.about.replaceAll("\\n", "\n");
+                    }
+                    setFacility(facilityData);
                 });
             }
         }
@@ -89,9 +94,15 @@ function FacilityPage() {
                 facility &&
                 <div className={styles.facilityOuterContainer}>
                     <div className={styles.facilityContainer}>
-                        <div>NAME: {facility.name}</div>
-                        <div>ADDRESS: {facility.address}</div>
-                        <div>PHONE: {facility.phone}</div>
+                        <div className={styles.facilityInnerContainer}>
+                            <div className={styles.facilityText}>NAME: {facility.name}</div>
+                            <div className={styles.facilityText}>ADDRESS: {facility.address}</div>
+                            <div className={styles.facilityText}>PHONE: {facility.phone}</div>
+                        </div>
+                        {
+                            facility?.about &&
+                            <ReactMarkdown className={styles.aboutText}>{`${facility.about}`}</ReactMarkdown>
+                        }
                     </div>
                 </div>
             }
