@@ -7,7 +7,7 @@ import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from '../authredirect/auth-check';
 import {Wrapper, Status} from '@googlemaps/react-wrapper';
-import { collection, query, getFirestore, where, orderBy, getDocs, startAt, endAt} from 'firebase/firestore';
+import {collection, query, getFirestore, where, orderBy, getDocs, startAt, endAt} from 'firebase/firestore';
 import {GOOGLE_MAPS_API_KEY} from '../api';
 import {distanceBetween, geohashForLocation, geohashQueryBounds, Geopoint} from "geofire-common";
 
@@ -21,6 +21,7 @@ function MapPage() {
     const navigate = useNavigate();
     const [center, setCenter] = useState<any>([33.78010647946605, -84.38955018824828]);
     const [zoom, setZoom] = useState<number>(16.0);
+    const [radius, setRadius] = useState<number>(300);
     const [facilities, setFacilities] = useState<any>([])
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // const [facilities, setFacilities] = useState([{
@@ -45,7 +46,7 @@ function MapPage() {
             // setFacilities([]);
             if (db) {
                 const c = center as Geopoint;
-                const radiusInM = 50 * 1000;
+                const radiusInM = radius;
                 const bounds = geohashQueryBounds(c, radiusInM);
                 const newFacilities: any = [];
                 for (const b of bounds) {
@@ -95,6 +96,15 @@ function MapPage() {
                                     );
                                 })
                             }
+                            <Circle
+                                center={{
+                                    lat: center[0],
+                                    lng: center[1],
+                                }}
+                                radius={radius}
+                                fillColor={'grey'}
+                                strokeColor={'grey'}
+                            />
                         </MapComponent>
                     </Wrapper>
                 </div>
@@ -181,6 +191,31 @@ const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
             marker.setOptions(options);
         }
     }, [marker, options]);
+
+    return null;
+};
+
+const Circle: React.FC<google.maps.CircleOptions> = (options) => {
+    const [circle, setCircle] = React.useState<google.maps.Circle>();
+
+    React.useEffect(() => {
+        if (!circle) {
+            setCircle(new google.maps.Circle());
+        }
+
+        // remove marker from map on unmount
+        return () => {
+            if (circle) {
+                circle.setMap(null);
+            }
+        };
+    }, [circle]);
+
+    React.useEffect(() => {
+        if (circle) {
+            circle.setOptions(options);
+        }
+    }, [circle, options]);
 
     return null;
 };
