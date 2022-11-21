@@ -14,6 +14,7 @@
 
 .listView {
     width: 410px;
+    max-width: 100%;
     overflow-y: scroll;
 }
 
@@ -35,4 +36,51 @@
         display: none !important;
         overflow: hidden !important;
     }
+}
+
+.filterContainer {
+    max-width: 100%;
+    padding: 10px;
+}
+
+.filterHeader {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 56px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -1px;
+    color: #2D3436;
+}
+
+.listOuterContainer {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.distanceSliderContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.distanceSliderContainer > input {
+    flex-grow: 1;
+}
+
+.distanceSliderContainer > div {
+    width: 100px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 56px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -1px;
+    color: #2D3436;
 }

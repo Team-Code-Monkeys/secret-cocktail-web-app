@@ -24,6 +24,7 @@ function MapPage() {
     const [zoom, setZoom] = useState<number>(16.0);
     const [radius, setRadius] = useState<number>(444);
     const [facilities, setFacilities] = useState<any>([])
+    const [loading, setLoading] = useState<boolean>(false);
 
     const queryLocations = async () => {
         // setFacilities([]);
@@ -60,12 +61,16 @@ function MapPage() {
                 return 0;
             });
             setFacilities(newFacilities);
+            return;
         }
     }
 
     const debounced = useDebouncedCallback(
         (radius) => {
-            queryLocations();
+            setLoading(true);
+            queryLocations().then(() => {
+                setLoading(false);
+            });
         },
         1000
     );
@@ -85,7 +90,7 @@ function MapPage() {
             <Navbar/>
             {/*TODO: allow admin user to delete facility*/}
             <div className={styles.innerContainer}>
-                <FacilityList facilities={facilities} center={center} radius={radius} setRadius={setRadius}/>
+                <FacilityList facilities={facilities} center={center} radius={radius} setRadius={setRadius} loading={loading}/>
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
                         <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} radius={radius} setRadius={setRadius}>
@@ -135,27 +140,39 @@ function FacilityList(props: any) {
 
     return (
         <div className={styles.listView}>
-            <div>Location:</div>
-            <input value={'930 Spring Street NW'} onChange={(event) => {
-                console.log(event.target.value)
-            }}/>
-            <div>Max Distance:</div>
-            <div>
-                <div>{parseFloat(getMiles(props.radius).toString()).toFixed(2)} miles</div>
-                <input type="range" min={100} max={10099} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
+            <div className={styles.filterContainer}>
+                <div className={styles.filterHeader}>Location</div>
+                <input value={'930 Spring Street NW'} onChange={(event) => {
+                    console.log(event.target.value)
+                }}/>
+                <div className={styles.filterHeader}>Max Distance</div>
+                <div className={styles.distanceSliderContainer}>
+                    <div>{parseFloat(getMiles(props.radius).toString()).toFixed(2)} miles</div>
+                    <input type="range" min={100} max={10099} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
+                </div>
             </div>
-            {props.facilities.map((facility: any, index: number) => {
-                const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
-                const distance = getMiles(distanceInMeters);
-                return (
-                    <div key={facility.id}>
-                        <div>{`NAME: ${facility.name}`}</div>
-                        <div>{`ADDRESS: ${facility.address}`}</div>
-                        <div>{`PHONE: ${facility.phone}`}</div>
-                        <div>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
-                    </div>
-                );
-            })}
+            <div className={styles.listOuterContainer}>
+                {
+                    props?.loading ? (
+                        <div className="loader"></div>
+                    ) : (
+                        <>
+                            {props.facilities.map((facility: any, index: number) => {
+                                const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
+                                const distance = getMiles(distanceInMeters);
+                                return (
+                                    <div key={facility.id}>
+                                        <div>{`NAME: ${facility.name}`}</div>
+                                        <div>{`ADDRESS: ${facility.address}`}</div>
+                                        <div>{`PHONE: ${facility.phone}`}</div>
+                                        <div>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
+                                    </div>
+                                );
+                            })}
+                        </>
+                    )
+                }
+            </div>
         </div>
     );
 }
