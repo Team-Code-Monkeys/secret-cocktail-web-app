@@ -5,9 +5,9 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
 import {
     k_landing_page_route,
-    k_login_page_route_trainee,
-    k_login_page_route_admin,
-    k_login_page_route_facility
+    k_login_page_trainee_route,
+    k_login_page_admin_route,
+    k_login_page_facility_route, k_map_page_route, k_root_page_route
 } from '../index';
 import firebaseApp from '../firebase';
 
@@ -16,9 +16,9 @@ function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const pathname = location?.pathname;
-    const isTrainee = (pathname === k_login_page_route_trainee);
-    const isFacility = (pathname === k_login_page_route_facility);
-    const isAdmin = (pathname === k_login_page_route_admin);
+    const isTrainee = (pathname === k_login_page_trainee_route);
+    const isFacility = (pathname === k_login_page_facility_route);
+    const isAdmin = (pathname === k_login_page_admin_route);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -29,9 +29,10 @@ function LoginPage() {
         }
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                // ...
+                const user = userCredential?.user;
+                if (user) {
+                    navigate(k_root_page_route);
+                }
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -45,7 +46,7 @@ function LoginPage() {
                 } else if(errorCode === 'auth/invalid-email') {
                     alert('Unable to login. Invalid email provided.');
                 } else {
-                    alert(`Unable to login. ${errorMessage ? errorMessage : ''}`);
+                    alert(`Unable to login. ${errorMessage ? errorMessage : 'Unknown server error.'}`);
                 }
             });
     }

@@ -4,7 +4,7 @@ import Navbar from '../navbar';
 import {useLocation, useNavigate} from "react-router-dom";
 import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
 import {
-    k_landing_page_route, k_register_page_route_trainee
+    k_landing_page_route, k_map_page_route, k_register_page_trainee_route, k_root_page_route
 } from '../index';
 import firebaseApp from '../firebase';
 
@@ -12,7 +12,7 @@ function RegisterPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const location = useLocation();
-    const isTrainee = (location?.pathname === k_register_page_route_trainee);
+    const isTrainee = (location?.pathname === k_register_page_trainee_route);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,8 +28,10 @@ function RegisterPage() {
         }
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                const user = userCredential.user;
-                console.log(user, user);
+                const user = userCredential?.user;
+                if (user) {
+                    navigate(k_root_page_route);
+                }
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -41,9 +43,9 @@ function RegisterPage() {
                 } else if(errorCode === 'auth/invalid-email') {
                     alert('Unable to create account. Invalid email provided.');
                 } else if(errorCode === 'auth/weak-password') {
-                    alert('Unable to create account. Password should be at least 6 characters.');
+                    alert('Unable to create account. Password should be at least 6 characters long.');
                 } else {
-                    alert(`Unable to create account. ${errorMessage ? errorMessage : ''}`);
+                    alert(`Unable to create account. ${errorMessage ? errorMessage : 'Unknown server error.'}`);
                 }
             });
     }
