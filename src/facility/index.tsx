@@ -57,7 +57,11 @@ function FacilityPage() {
                 const docRef = doc(db, 'facility', facilityID);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
-                    setFacility(docSnap.data());
+                    const facilityData = docSnap.data();
+                    if (facilityData?.about) {
+                        facilityData.about = facilityData.about.replaceAll("\\n", "\n");
+                    }
+                    setFacility(facilityData);
                 } else {
                     console.log("No facility with ID: ", facilityID);
                 }
@@ -71,7 +75,7 @@ function FacilityPage() {
             const facilityID = splitName.length > 0 ? splitName[splitName.length - 1] : undefined;
             getFacility(facilityID);
         }
-    }, [location, isFacility, db]);
+    }, [location, isFacility, db, email]);
 
     return (
         <div className={styles.container}>

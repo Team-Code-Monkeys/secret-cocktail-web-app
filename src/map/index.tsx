@@ -294,8 +294,8 @@ function MapComponent(props: MapComponentProps) {
     useEffect(() => {
         if (map) {
             map.panTo({
-                lat: props.center[0],
-                lng: props.center[1]
+                lat: props.center[0] || 0.0,
+                lng: props.center[1] || 0.0
             });
         }
     }, [map, props.center]);

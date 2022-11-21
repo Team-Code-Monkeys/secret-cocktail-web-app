@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_facility_role} from "../authredirect/auth-check";
-import {k_facility_page_route, k_map_page_route} from "../index";
+import {k_facility_page_route} from "../index";
 
 function ReportFacilityCorrectionPage() {
     const auth = getAuth(firebaseApp);
