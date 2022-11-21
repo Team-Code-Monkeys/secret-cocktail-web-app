@@ -56,13 +56,14 @@ function MapPage() {
                     const q = query(collection(db, 'facility'), where(documentGeohashField, '>=', upperPointHash), where(documentGeohashField, '<=', lowerPointHash));
                     const querySnapshot = await getDocs(q);
                     querySnapshot.forEach((doc) => {
-                        console.log('doc', doc.data());
                         const lat = doc?.data()?.geopoint?.latitude;
                         const lon = doc?.data()?.geopoint?.longitude;
                         if (lat && lon) {
                             // geo hash not 100% accurate, do double-check distance
                             if (distanceBetween([lat, lon] as Geopoint, c) <= radiusInM) {
-                                newFacilities.push(doc.data());
+                                const newFacility: any = doc.data();
+                                newFacility.id = doc.id;
+                                newFacilities.push(newFacility);
                             }
                         }
                     });
