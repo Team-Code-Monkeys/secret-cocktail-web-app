@@ -6,7 +6,11 @@ import {useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from "../authredirect/auth-check";
-import { GoogleMap, InfoWindow, LoadScript, Marker } from "@react-google-maps/api";
+import {Wrapper, Status} from "@googlemaps/react-wrapper";
+
+const render = (status: Status) => {
+    return <h1>{status}</h1>;
+};
 
 function MapPage() {
     const auth = getAuth(firebaseApp);
@@ -35,8 +39,10 @@ function MapPage() {
             <div className={styles.innerContainer}>
                 <div className={styles.listView}>
                     <div>Your Location</div>
-                    <input value={'930 Spring Street NW'} onChange={(event) => {console.log(event.target.value)}}/>
-                    {facilities.map(function(facility, index){
+                    <input value={'930 Spring Street NW'} onChange={(event) => {
+                        console.log(event.target.value)
+                    }}/>
+                    {facilities.map(function (facility, index) {
                         return (
                             <div key={facility.id}>
                                 <div>{`NAME: ${facility.name}`}</div>
@@ -48,7 +54,9 @@ function MapPage() {
                     })}
                 </div>
                 <div className={styles.mapView}>
-                    <MapComponent/>
+                    <Wrapper apiKey={'AIzaSyCpHG9-94DvB3FDFYLX8weS0QgyxNDESiQ'} render={render}>
+                        <MapComponent/>
+                    </Wrapper>
                 </div>
             </div>
         </div>
@@ -56,80 +64,20 @@ function MapPage() {
 }
 
 function MapComponent() {
-    const initialMarkers = [
-        {
-            position: {
-                lat: 33.78004405646938,
-                lng: -84.38951800174077
-            },
-            label: { color: "white", text: "P1" },
-            draggable: false
-        },
-        {
-            position: {
-                lat: 33.8004405646938,
-                lng: -84.38951800174077
-            },
-            label: { color: "red", text: "P2" },
-            draggable: false
-        },
-    ];
+    const ref = React.useRef<HTMLDivElement>(null);
+    const [map, setMap] = React.useState<google.maps.Map>();
 
-    const [activeInfoWindow, setActiveInfoWindow] = useState("");
-    const [markers, setMarkers] = useState(initialMarkers);
-
-    const containerStyle = {
-        width: "100%",
-        height: "100%",
-    }
-
-    const center = {
-        lat: 33.78004405646938,
-        lng: -84.38951800174077,
-    }
-
-    const mapClicked = (event: any) => {
-        console.log(event.latLng.lat(), event.latLng.lng())
-    }
-
-    const markerClicked = (marker: any, index: any) => {
-        setActiveInfoWindow(index)
-        console.log(marker, index)
-    }
-
-    const markerDragEnd = (event: any, index: any) => {
-        console.log(event.latLng.lat())
-        console.log(event.latLng.lng())
-    }
+    React.useEffect(() => {
+        if (ref.current && !map) {
+            setMap(new window.google.maps.Map(ref.current, {
+                center: new google.maps.LatLng(-33.91722, 151.23064),
+                zoom: 16,
+            }));
+        }
+    }, [ref, map]);
 
     return (
-        <LoadScript googleMapsApiKey='AIzaSyCpHG9-94DvB3FDFYLX8weS0QgyxNDESiQ'>
-            <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={center}
-                zoom={15}
-                onClick={mapClicked}
-            >
-                {markers.map((marker, index) => (
-                    <Marker
-                        key={index}
-                        position={marker.position}
-                        label={marker.label}
-                        draggable={marker.draggable}
-                        onDragEnd={event => markerDragEnd(event, index)}
-                        onClick={event => markerClicked(marker, index)}
-                    >
-                        {
-                            (activeInfoWindow === index.toString())
-                            &&
-                            <InfoWindow position={marker.position}>
-                                <b>{marker.position.lat}, {marker.position.lng}</b>
-                            </InfoWindow>
-                        }
-                    </Marker>
-                ))}
-            </GoogleMap>
-        </LoadScript>
+        <div ref={ref} style={{width: '100%', height: '100%'}}/>
     );
 }
 
