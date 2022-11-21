@@ -157,6 +157,7 @@ function MapPage() {
                                                 lng: facility?.geopoint?.longitude || 0.0,
                                             }}
                                             label={{color: 'black', text: facility?.name || 'No name'}}
+                                            title={facility?.id}
                                         />
                                     );
                                 })
@@ -307,6 +308,7 @@ function MapComponent(props: MapComponentProps) {
 
 const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
     const [marker, setMarker] = React.useState<google.maps.Marker>();
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         if (!marker) {
@@ -324,6 +326,12 @@ const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
     React.useEffect(() => {
         if (marker) {
             marker.setOptions(options);
+            marker.addListener('click', () => {
+                const facilityID = marker?.getTitle();
+                if (facilityID) {
+                    navigate(k_facility_page_route + '/' + facilityID);
+                }
+            });
         }
     }, [marker, options]);
 
