@@ -5,9 +5,11 @@ import {getAuth} from 'firebase/auth';
 import {useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
-import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from "../authredirect/auth-check";
-import {Wrapper, Status} from "@googlemaps/react-wrapper";
-import {GOOGLE_MAPS_API_KEY} from "../api";
+import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from '../authredirect/auth-check';
+import {Wrapper, Status} from '@googlemaps/react-wrapper';
+import { collection, query, getFirestore, where, orderBy, getDocs, startAt, endAt} from 'firebase/firestore';
+import {GOOGLE_MAPS_API_KEY} from '../api';
+import {distanceBetween, geohashForLocation, geohashQueryBounds, Geopoint} from "geofire-common";
 
 const render = (status: Status) => {
     return <h1>{status}</h1>;
@@ -15,19 +17,22 @@ const render = (status: Status) => {
 
 function MapPage() {
     const auth = getAuth(firebaseApp);
+    const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [facilities, setFacilities] = useState([{
-        id: "bhRZIgLYzeIgv2PD5SEZD",
-        name: "Facility A",
-        address: "4500 Foo Street",
-        phone: "(+1) 208-391-9267",
-        distance: "5.3 miles",
-        geo: {
-            lat: 33.78010647946605,
-            lng: -84.38955018824828
-        }
-    }])
+    // const [facilities, setFacilities] = useState([{
+    //     id: "bhRZIgLYzeIgv2PD5SEZD",
+    //     name: "Facility A",
+    //     address: "4500 Foo Street",
+    //     phone: "(+1) 208-391-9267",
+    //     distance: "5.3 miles",
+    //     geopoint: {
+    //         _lat: 33.78010647946605,
+    //         _long: -84.38955018824828
+    //     }
+    // }])
+    const [facilities, setFacilities] = useState<any>([])
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
@@ -35,8 +40,36 @@ function MapPage() {
     }, [auth, navigate]);
 
     useEffect(() => {
-
-    }, []);
+        const queryLocations = async () => {
+            // setFacilities([]);
+            if (db) {
+                const center = [33.78010647946605, -84.38955018824828] as Geopoint;
+                const radiusInM = 50 * 1000;
+                const bounds = geohashQueryBounds(center, radiusInM);
+                const newFacilities: any = [];
+                for (const b of bounds) {
+                    const lowerPointHash = b[1];
+                    const upperPointHash = b[0];
+                    const documentGeohashField = 'geohash';
+                    const q = query(collection(db, 'facility'), where(documentGeohashField, '>=', upperPointHash), where(documentGeohashField, '<=', lowerPointHash));
+                    const querySnapshot = await getDocs(q);
+                    querySnapshot.forEach((doc) => {
+                        console.log('doc', doc.data());
+                        const lat = doc?.data()?.geopoint?.latitude;
+                        const lon = doc?.data()?.geopoint?.longitude;
+                        if (lat && lon) {
+                            // geo hash not 100% accurate, do double-check distance
+                            if (distanceBetween([lat, lon] as Geopoint, center) <= radiusInM) {
+                                newFacilities.push(doc.data());
+                            }
+                        }
+                    });
+                }
+                setFacilities(newFacilities);
+            }
+        }
+        queryLocations();
+    }, [db]);
 
     return (
         <div className={styles.container}>
@@ -48,13 +81,13 @@ function MapPage() {
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
                         <MapComponent>
                             {
-                                facilities.map((facility, index) => {
+                                facilities.map((facility: any, index: number) => {
                                     return (
                                         <Marker
                                             key={facility?.id || index}
                                             position={{
-                                                lat: facility?.geo?.lat || 0.0,
-                                                lng: facility?.geo?.lng || 0.0,
+                                                lat: facility?.geopoint?.latitude || 0.0,
+                                                lng: facility?.geopoint?.longitude || 0.0,
                                             }}
                                             label={facility?.name || 'No name'}
                                         />
