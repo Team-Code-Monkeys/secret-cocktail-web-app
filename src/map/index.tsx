@@ -82,6 +82,7 @@ function MapPage() {
 
     useEffect(() => {
         // search facilities when center or radius is updated
+        setLoading(true);
         debounced(radius);
     }, [center, radius, debounced])
 

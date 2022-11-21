@@ -66,10 +66,39 @@
 .distanceSliderContainer {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 .distanceSliderContainer > input {
     flex-grow: 1;
+    -webkit-appearance: none;
+    height: 15px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 10px;
+}
+
+.distanceSliderContainer > input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #6C5CE7;
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+.distanceSliderContainer > input::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #6C5CE7;
+    cursor: pointer;
+    border-radius: 100%;
 }
 
 .distanceSliderContainer > div {
