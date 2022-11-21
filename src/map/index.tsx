@@ -22,7 +22,11 @@ function MapPage() {
         name: "Facility A",
         address: "4500 Foo Street",
         phone: "(+1) 208-391-9267",
-        distance: "5.3 miles"
+        distance: "5.3 miles",
+        geo: {
+            lat: 33.78010647946605,
+            lng: -84.38955018824828
+        }
     }])
 
     useEffect(() => {
@@ -43,7 +47,20 @@ function MapPage() {
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
                         <MapComponent>
-                            <Marker position={{lat: 33.78010647946605, lng: -84.38955018824828}} />
+                            {
+                                facilities.map((facility, index) => {
+                                    return (
+                                        <Marker
+                                            key={facility?.id || index}
+                                            position={{
+                                                lat: facility?.geo?.lat || 0.0,
+                                                lng: facility?.geo?.lng || 0.0,
+                                            }}
+                                            label={facility?.name || 'No name'}
+                                        />
+                                    );
+                                })
+                            }
                         </MapComponent>
                     </Wrapper>
                 </div>
@@ -93,12 +110,12 @@ function MapComponent(props: MapComponentProps) {
     return (
         // <div ref={ref} style={{width: '100%', height: '100%'}} {...props}/>
         <>
-            <div ref={ref} style={{width: '100%', height: '100%'}} />
+            <div ref={ref} style={{width: '100%', height: '100%'}}/>
             {React.Children.map(props.children, (child) => {
                 if (React.isValidElement(child)) {
                     // set the map prop on the child component
                     // @ts-ignore
-                    return React.cloneElement(child, { map });
+                    return React.cloneElement(child, {map});
                 }
             })}
         </>
