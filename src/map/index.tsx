@@ -12,7 +12,7 @@ import {GOOGLE_MAPS_API_KEY} from '../api';
 import {distanceBetween, geohashQueryBounds, Geopoint} from "geofire-common";
 import {useDebouncedCallback} from "use-debounce";
 import {k_facility_page_route} from "../index";
-import { doc, deleteDoc } from "firebase/firestore";
+import {doc, deleteDoc} from "firebase/firestore";
 
 const render = (status: Status) => {
     return <h1>{status}</h1>;
@@ -27,6 +27,7 @@ function MapPage() {
     const [radius, setRadius] = useState<number>(444);
     const [facilities, setFacilities] = useState<any>([])
     const [loading, setLoading] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
     const queryLocations = async () => {
         // setFacilities([]);
@@ -67,6 +68,7 @@ function MapPage() {
         }
     }
 
+    // rate limit the frequency at which we query for nearby facilities
     const debounced = useDebouncedCallback(
         (radius) => {
             setLoading(true);
@@ -77,26 +79,43 @@ function MapPage() {
         1000
     );
 
+    // redirect user if not allowed on page
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
 
+    // request for new list of facilities nearby location
     useEffect(() => {
         // search facilities when center or radius is updated
         setLoading(true);
         debounced(radius);
-    }, [center, radius, debounced])
+    }, [center, radius, debounced]);
+
+    // check if admin (to allow them to delete facilities)
+    useEffect(() => {
+        auth.onAuthStateChanged((user: any) => {
+            if (user) {
+                user.getIdTokenResult()
+                    .then((idTokenResult: any) => {
+                        const isAdmin = idTokenResult?.claims?.admin === true;
+                        setIsAdmin(isAdmin);
+                    });
+            }
+        });
+    }, [auth]);
 
     return (
         <div className={styles.container}>
             <Navbar/>
             {/*TODO: allow admin user to delete facility*/}
             <div className={styles.innerContainer}>
-                <FacilityList facilities={facilities} center={center} radius={radius} setRadius={setRadius} loading={loading}/>
+                <FacilityList facilities={facilities} center={center} radius={radius} setRadius={setRadius}
+                              loading={loading} isAdmin={isAdmin}/>
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
-                        <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} radius={radius} setRadius={setRadius}>
+                        <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom}
+                                      radius={radius} setRadius={setRadius}>
                             {
                                 facilities.map((facility: any, index: number) => {
                                     return (
@@ -154,7 +173,10 @@ function FacilityList(props: any) {
                 <div className={styles.filterHeader}>Max Distance</div>
                 <div className={styles.distanceSliderContainer}>
                     <div>{parseFloat(getMiles(props.radius).toString()).toFixed(2)} miles</div>
-                    <input type="range" min={160} max={10099} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
+                    <input type="range" min={160} max={10099} value={props.radius} className="slider"
+                           onChange={(event) => {
+                               props.setRadius(parseFloat(event.target.value))
+                           }}/>
                 </div>
             </div>
             <div className={styles.listOuterContainer}>
@@ -172,20 +194,27 @@ function FacilityList(props: any) {
                                         <div className={styles.listItemText}>{`ADDRESS:`}</div>
                                         <div className={styles.listItemText}>{`${facility.address}`}</div>
                                         <div className={styles.listItemText}>{`PHONE: ${facility.phone}`}</div>
-                                        <div className={styles.listItemText}>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
+                                        <div
+                                            className={styles.listItemText}>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
                                         <div className={styles.listItemButtonsContainer}>
-                                            <button className={styles.secondaryBtnListView} onClick={() => {
-                                                // eslint-disable-next-line no-restricted-globals
-                                                if (confirm(`Delete ${facility.name} facility?`)) {
-                                                    deleteDoc(doc(db, 'facility', facility.id || "")).then(() => {
-                                                        window.location.reload();
-                                                    }).catch((error: any) => {
-                                                        alert("Error deleting facility.");
-                                                        console.error("Error deleting facility", error);
-                                                    });
-                                                }
-                                            }}>Delete</button>
-                                            <button className={styles.primaryBtnListView} onClick={() => {navigate(k_facility_page_route + '/' + facility.id || 'none')}}>More Info</button>
+                                            {
+                                                props.isAdmin &&
+                                                <button className={styles.secondaryBtnListView} onClick={() => {
+                                                    // eslint-disable-next-line no-restricted-globals
+                                                    if (confirm(`Delete ${facility.name} facility?`)) {
+                                                        deleteDoc(doc(db, 'facility', facility.id || "")).then(() => {
+                                                            window.location.reload();
+                                                        }).catch((error: any) => {
+                                                            alert("Error deleting facility.");
+                                                            console.error("Error deleting facility", error);
+                                                        });
+                                                    }
+                                                }}>Delete</button>
+                                            }
+                                            <button className={styles.primaryBtnListView} onClick={() => {
+                                                navigate(k_facility_page_route + '/' + facility.id || 'none')
+                                            }}>More Info
+                                            </button>
                                         </div>
                                     </div>
                                 );
