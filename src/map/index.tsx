@@ -291,6 +291,15 @@ function MapComponent(props: MapComponentProps) {
         }
     }, [ref, map, props.radius, props.center, props.zoom]);
 
+    useEffect(() => {
+        if (map) {
+            map.panTo({
+                lat: props.center[0],
+                lng: props.center[1]
+            });
+        }
+    }, [map, props.center]);
+
     return (
         // <div ref={ref} style={{width: '100%', height: '100%'}} {...props}/>
         <>
