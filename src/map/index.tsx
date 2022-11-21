@@ -143,7 +143,7 @@ function FacilityList(props: any) {
                         <div>{`NAME: ${facility.name}`}</div>
                         <div>{`ADDRESS: ${facility.address}`}</div>
                         <div>{`PHONE: ${facility.phone}`}</div>
-                        <div>{`DISTANCE: ${distance} miles`}</div>
+                        <div>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
                     </div>
                 );
             })}
