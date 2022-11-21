@@ -30,6 +30,7 @@ function MapPage() {
     const [loading, setLoading] = useState<boolean>(false);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [locationInput, setLocationInput] = useState<string>('930 Spring St NW, Atlanta, GA 30309');
+    const [isUnknownLocation, setIsUnknownLocation] = useState<boolean>(false);
 
     const queryLocations = async () => {
         // setFacilities([]);
@@ -110,21 +111,21 @@ function MapPage() {
     // rate limit the frequency at which we query search input
     const debouncedSearchInput = useDebouncedCallback(
         (locationInput) => {
-            console.log('querying');
             setLoading(true);
             Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
             Geocode.fromAddress(locationInput || '').then(
                 (response) => {
+                    setIsUnknownLocation(false);
                     setLoading(false);
                     const { lat, lng } = response.results[0].geometry.location;
                     setCenter([lat, lng]);
                 },
                 (error) => {
                     setLoading(false);
-                    if (error.code !== 'ZERO_RESULTS') {
-                        console.error(error);
+                    if ((error?.message || '').includes('ZERO_RESULTS') || (error?.message || '').includes('Provided address is invalid')) {
+                        setIsUnknownLocation(true);
                     } else {
-                        console.log('zero results');
+                        console.error(error);
                     }
                 }
             );
@@ -141,7 +142,7 @@ function MapPage() {
             <Navbar/>
             <div className={styles.innerContainer}>
                 <FacilityList facilities={facilities} center={center} radius={radius} setRadius={setRadius}
-                              loading={loading} isAdmin={isAdmin} locationInput={locationInput} setLocationInput={setLocationInput}/>
+                              loading={loading} isAdmin={isAdmin} locationInput={locationInput} setLocationInput={setLocationInput} isUnknownLocation={isUnknownLocation}/>
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
                         <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom}
@@ -211,50 +212,57 @@ function FacilityList(props: any) {
                            }}/>
                 </div>
             </div>
-            <div className={styles.listOuterContainer}>
-                {
-                    props?.loading ? (
-                        <div className="loader"></div>
-                    ) : (
-                        <div className={styles.listInnerContainer}>
-                            {props.facilities.map((facility: any, index: number) => {
-                                const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
-                                const distance = getMiles(distanceInMeters);
-                                return (
-                                    <div key={facility.id} className={styles.listItemContainer}>
-                                        <div className={styles.listItemText}>{`NAME: ${facility.name}`}</div>
-                                        <div className={styles.listItemText}>{`ADDRESS:`}</div>
-                                        <div className={styles.listItemText}>{`${facility.address}`}</div>
-                                        <div className={styles.listItemText}>{`PHONE: ${facility.phone}`}</div>
-                                        <div
-                                            className={styles.listItemText}>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
-                                        <div className={styles.listItemButtonsContainer}>
-                                            {
-                                                props.isAdmin &&
-                                                <button className={styles.secondaryBtnListView} onClick={() => {
-                                                    // eslint-disable-next-line no-restricted-globals
-                                                    if (confirm(`Delete ${facility.name} facility?`)) {
-                                                        deleteDoc(doc(db, 'facility', facility.id || "")).then(() => {
-                                                            window.location.reload();
-                                                        }).catch((error: any) => {
-                                                            alert("Error deleting facility.");
-                                                            console.error("Error deleting facility", error);
-                                                        });
-                                                    }
-                                                }}>Delete</button>
-                                            }
-                                            <button className={styles.primaryBtnListView} onClick={() => {
-                                                navigate(k_facility_page_route + '/' + facility.id || 'none')
-                                            }}>More Info
-                                            </button>
+            {
+                props.isUnknownLocation &&
+                <div className={styles.invalidLocationText}>Invalid location</div>
+            }
+            {
+                !props.isUnknownLocation &&
+                <div className={styles.listOuterContainer}>
+                    {
+                        props?.loading ? (
+                            <div className="loader"></div>
+                        ) : (
+                            <div className={styles.listInnerContainer}>
+                                {props.facilities.map((facility: any, index: number) => {
+                                    const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
+                                    const distance = getMiles(distanceInMeters);
+                                    return (
+                                        <div key={facility.id} className={styles.listItemContainer}>
+                                            <div className={styles.listItemText}>{`NAME: ${facility.name}`}</div>
+                                            <div className={styles.listItemText}>{`ADDRESS:`}</div>
+                                            <div className={styles.listItemText}>{`${facility.address}`}</div>
+                                            <div className={styles.listItemText}>{`PHONE: ${facility.phone}`}</div>
+                                            <div
+                                                className={styles.listItemText}>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
+                                            <div className={styles.listItemButtonsContainer}>
+                                                {
+                                                    props.isAdmin &&
+                                                    <button className={styles.secondaryBtnListView} onClick={() => {
+                                                        // eslint-disable-next-line no-restricted-globals
+                                                        if (confirm(`Delete ${facility.name} facility?`)) {
+                                                            deleteDoc(doc(db, 'facility', facility.id || "")).then(() => {
+                                                                window.location.reload();
+                                                            }).catch((error: any) => {
+                                                                alert("Error deleting facility.");
+                                                                console.error("Error deleting facility", error);
+                                                            });
+                                                        }
+                                                    }}>Delete</button>
+                                                }
+                                                <button className={styles.primaryBtnListView} onClick={() => {
+                                                    navigate(k_facility_page_route + '/' + facility.id || 'none')
+                                                }}>More Info
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )
-                }
-            </div>
+                                    );
+                                })}
+                            </div>
+                        )
+                    }
+                </div>
+            }
         </div>
     );
 }

@@ -225,3 +225,19 @@
 .searchLocation::placeholder {
     color: rgba(45, 52, 54, 0.68);
 }
+
+.invalidLocationText {
+    margin-left: 10px;
+    flex-grow: 1;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    outline: 0;
+    border: none;
+    color: #c50000;
+    text-align: center;
+}
