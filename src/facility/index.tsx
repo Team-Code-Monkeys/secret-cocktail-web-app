@@ -96,7 +96,7 @@ function FacilityPage() {
                 </div>
             }
             {
-                isFacility &&
+                isFacility && facility &&
                 <div className={styles.btnOuterContainer}>
                     <div className={styles.btnContainer}>
                         <button className={styles.primaryBtn} onClick={() => {navigate(k_facility_report_correction_page_route)}}>Report a Correction</button>
