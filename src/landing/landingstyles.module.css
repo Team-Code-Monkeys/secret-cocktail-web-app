@@ -1,0 +1,118 @@
+.landingPageContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/*CNA Facilities Title */
+.titleContainer {
+    margin-top: 100px;
+    width: 100%;
+}
+
+.greenPillContainer {
+    z-index: -1;
+    position: relative;
+    width: 191px;
+    height: 51px;
+    left: calc(50% - 191px / 2 - 208px);
+}
+
+.greenPill {
+    position: relative;
+    left: 10px;
+    right: 0;
+    top: -45px;
+    height: 50px;
+    bottom: 25px;
+    background: #55EFC4;
+    border-radius: 999px;
+}
+
+@media (max-width: 605px) {
+    .greenPillContainer {
+        visibility: hidden !important;
+    }
+}
+
+.titleTextContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.title {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 96px;
+    line-height: 104px;
+    text-align: center;
+    letter-spacing: -3px;
+    text-shadow: 0 4px 0 #FFFFFF;
+}
+
+@media (max-width: 605px) {
+    .title {
+        font-size: 50px !important;
+    }
+}
+
+.subtitle {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 58px;
+    line-height: 77px;
+    text-align: center;
+    letter-spacing: -3px;
+    text-shadow: 0 4px 0 #FFFFFF;
+}
+
+@media (max-width: 605px) {
+    .subtitle {
+        font-size: 30px !important;
+    }
+}
+
+@media (max-width: 605px) {
+    .rectangleSVG {
+        visibility: hidden !important;
+    }
+}
+
+.rectangleSVG {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    z-index: -2;
+}
+
+@media (max-width: 605px) {
+    .dotsSVG {
+        visibility: hidden !important;
+    }
+}
+
+.dotsSVG {
+    position: absolute;
+    top: 100px;
+    right: 0;
+    z-index: -1;
+}
+
+@media (max-width: 605px) {
+    .wave {
+        visibility: hidden !important;
+    }
+}
+
+.wave {
+    margin-top: auto;
+    width: 100%;
+    z-index: -1;
+}

@@ -1,0 +1,109 @@
+.navbarContainer {
+    height: 70px;
+    filter: drop-shadow(0px 2px 4px rgba(38, 50, 56, 0.16)) drop-shadow(0px 4px 8px rgba(38, 50, 56, 0.08));
+    background: #FFFFFF;
+    display: flex;
+}
+
+.navbarInnerContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 20px;
+}
+
+.navbarLogo {
+    max-height: 100%;
+}
+
+@media (max-width: 740px) {
+    .navbarTitleText {
+        visibility: hidden;
+        width: 1px;
+    }
+}
+
+.navbarTitleText {
+    font-size: 36px;
+}
+
+.navbarTitleText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 56px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -1px;
+    color: #455154;
+    padding: 10px;
+}
+
+.navbarBtnsContainer {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.btnSecondary:hover {
+    cursor: pointer;
+}
+
+.btnSecondary:active {
+    filter: brightness(80%);
+}
+
+@media (max-width: 740px) {
+    .btnSecondary {
+        width: 100px !important;
+    }
+}
+
+.btnSecondary {
+    width: 150px;
+    height: 45px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: #6C5CE7;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #6C5CE7;
+    border-radius: 999px;
+    background: white;
+}
+
+@media (max-width: 740px) {
+    .btnPrimary {
+        width: 100px !important;
+    }
+}
+
+.btnPrimary:hover {
+    cursor: pointer;
+}
+
+.btnPrimary:active {
+    filter: brightness(80%);
+}
+
+.btnPrimary {
+    margin-left: 10px;
+    width: 150px;
+    height: 45px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: white;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #6C5CE7;
+    border-radius: 999px;
+    background: #6C5CE7;
+}
