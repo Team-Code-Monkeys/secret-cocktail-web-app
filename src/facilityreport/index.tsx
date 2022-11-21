@@ -5,12 +5,14 @@ import {getAuth} from 'firebase/auth';
 import {useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
+import {checkedIfAllowedOnPage, k_facility_role} from "../authredirect/auth-check";
 
 function ReportFacilityCorrectionPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
 
     useEffect(() => {
+        checkedIfAllowedOnPage(auth, navigate, [k_facility_role]);
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
 
