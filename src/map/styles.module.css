@@ -14,13 +14,11 @@
 
 .listView {
     width: 410px;
-    background: red;
     overflow-y: scroll;
 }
 
 .mapView {
     height: 100%;
-    background: blue;
     flex-grow: 1;
 }
 
@@ -32,5 +30,9 @@
     }
     .mapView {
         flex-grow: 0 !important;
+        width: 0 !important;
+        visibility: hidden !important;
+        display: none !important;
+        overflow: hidden !important;
     }
 }
