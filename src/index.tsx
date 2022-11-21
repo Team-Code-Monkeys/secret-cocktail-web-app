@@ -65,6 +65,10 @@ const router = createBrowserRouter([
         element: <FacilityPage/>,
     },
     {
+        path: k_facility_page_route + '/:id',
+        element: <FacilityPage/>,
+    },
+    {
         path: k_facility_report_correction_page_route,
         element: <ReportFacilityCorrectionPage/>,
     },

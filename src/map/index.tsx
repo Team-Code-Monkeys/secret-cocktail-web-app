@@ -11,6 +11,7 @@ import {collection, query, getFirestore, where, getDocs} from 'firebase/firestor
 import {GOOGLE_MAPS_API_KEY} from '../api';
 import {distanceBetween, geohashQueryBounds, Geopoint} from "geofire-common";
 import {useDebouncedCallback} from "use-debounce";
+import {k_facility_page_route} from "../index";
 
 const render = (status: Status) => {
     return <h1>{status}</h1>;
@@ -135,6 +136,8 @@ function MapPage() {
 }
 
 function FacilityList(props: any) {
+    const navigate = useNavigate();
+
     function getMiles(meters: number): number {
         return meters * 0.000621371192;
     }
@@ -149,7 +152,7 @@ function FacilityList(props: any) {
                 <div className={styles.filterHeader}>Max Distance</div>
                 <div className={styles.distanceSliderContainer}>
                     <div>{parseFloat(getMiles(props.radius).toString()).toFixed(2)} miles</div>
-                    <input type="range" min={100} max={10099} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
+                    <input type="range" min={160} max={10099} value={props.radius} className="slider" onChange={(event) => {props.setRadius(parseFloat(event.target.value))}}/>
                 </div>
             </div>
             <div className={styles.listOuterContainer}>
@@ -157,20 +160,23 @@ function FacilityList(props: any) {
                     props?.loading ? (
                         <div className="loader"></div>
                     ) : (
-                        <>
+                        <div className={styles.listInnerContainer}>
                             {props.facilities.map((facility: any, index: number) => {
                                 const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
                                 const distance = getMiles(distanceInMeters);
                                 return (
-                                    <div key={facility.id}>
+                                    <div key={facility.id} className={styles.listItemContainer}>
                                         <div>{`NAME: ${facility.name}`}</div>
                                         <div>{`ADDRESS: ${facility.address}`}</div>
                                         <div>{`PHONE: ${facility.phone}`}</div>
                                         <div>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
+                                        <div className={styles.listItemButtonsContainer}>
+                                            <button className={styles.primaryBtnListView} onClick={() => {navigate(k_facility_page_route + '/' + facility.id || 'none')}}>More Info</button>
+                                        </div>
                                     </div>
                                 );
                             })}
-                        </>
+                        </div>
                     )
                 }
             </div>
