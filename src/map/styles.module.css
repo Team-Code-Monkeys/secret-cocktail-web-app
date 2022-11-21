@@ -116,6 +116,7 @@
 .listInnerContainer {
     display: flex;
     flex-direction: column;
+    padding: 10px;
 }
 
 .listItemContainer {
@@ -155,4 +156,14 @@
 .listItemButtonsContainer {
     display: flex;
     flex-direction: row;
+}
+
+.listItemText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: #000000;
 }

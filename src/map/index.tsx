@@ -166,10 +166,11 @@ function FacilityList(props: any) {
                                 const distance = getMiles(distanceInMeters);
                                 return (
                                     <div key={facility.id} className={styles.listItemContainer}>
-                                        <div>{`NAME: ${facility.name}`}</div>
-                                        <div>{`ADDRESS: ${facility.address}`}</div>
-                                        <div>{`PHONE: ${facility.phone}`}</div>
-                                        <div>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
+                                        <div className={styles.listItemText}>{`NAME: ${facility.name}`}</div>
+                                        <div className={styles.listItemText}>{`ADDRESS:`}</div>
+                                        <div className={styles.listItemText}>{`${facility.address}`}</div>
+                                        <div className={styles.listItemText}>{`PHONE: ${facility.phone}`}</div>
+                                        <div className={styles.listItemText}>{`DISTANCE: ${parseFloat(distance.toString()).toFixed(2)} miles away`}</div>
                                         <div className={styles.listItemButtonsContainer}>
                                             <button className={styles.primaryBtnListView} onClick={() => {navigate(k_facility_page_route + '/' + facility.id || 'none')}}>More Info</button>
                                         </div>
