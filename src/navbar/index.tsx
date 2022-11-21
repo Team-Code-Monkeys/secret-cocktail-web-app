@@ -1,8 +1,9 @@
 import React from 'react';
-import styles from './navstyles.module.css';
+import styles from './styles.module.css';
 import logo from '../logo.png';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {
+    k_admin_portal_page_route, k_facility_page_route, k_facility_report_correction_page_route,
     k_landing_page_route,
     k_login_page_trainee_route,
     k_map_page_route,
@@ -15,14 +16,14 @@ function Navbar() {
     const location = useLocation();
     const pathname = location?.pathname;
     return (
-        <div className={styles.navbarContainer}>
+        <div className={styles.container}>
             <div className={styles.navbarInnerContainer}>
                 <Logo/>
                 <TitleText/>
                 {(pathname === k_landing_page_route) &&
                     <AuthButtons/>
                 }
-                {(pathname === k_map_page_route) &&
+                {([k_admin_portal_page_route, k_facility_page_route, k_facility_report_correction_page_route, k_map_page_route].includes(pathname)) &&
                     <SignOutButton/>
                 }
             </div>

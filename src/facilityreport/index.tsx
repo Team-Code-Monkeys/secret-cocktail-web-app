@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 
-function MapPage() {
+function ReportFacilityCorrectionPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
 
@@ -17,9 +17,9 @@ function MapPage() {
     return (
         <div className={styles.container}>
             <Navbar/>
-            <div>TODO: map of facilities to view and admin can edit (for 'regular' and 'admin' user types)</div>
+            <div>TODO: page to report correction about facility information (for 'facility' user type only)</div>
         </div>
     );
 }
 
-export default MapPage;
+export default ReportFacilityCorrectionPage;
