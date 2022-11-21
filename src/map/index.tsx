@@ -135,7 +135,7 @@ function MapPage() {
 
     useEffect(() => {
         debouncedSearchInput(locationInput);
-    }, [locationInput]);
+    }, [locationInput, debouncedSearchInput]);
 
     return (
         <div className={styles.container}>
@@ -252,7 +252,7 @@ function FacilityList(props: any) {
                                                     }}>Delete</button>
                                                 }
                                                 <button className={styles.primaryBtnListView} onClick={() => {
-                                                    navigate(k_facility_page_route + '/' + facility.id || 'none')
+                                                    navigate(k_facility_page_route + '/' + facility.id || 'none', {state: {distance: distance}})
                                                 }}>More Info
                                                 </button>
                                             </div>
@@ -333,7 +333,7 @@ const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
                 }
             });
         }
-    }, [marker, options]);
+    }, [marker, options, navigate]);
 
     return null;
 };
