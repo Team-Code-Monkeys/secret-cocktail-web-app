@@ -19,7 +19,9 @@ function MapPage() {
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
-
+    const [center, setCenter] = useState<any>([33.78010647946605, -84.38955018824828]);
+    const [zoom, setZoom] = useState<number>(16.0);
+    const [facilities, setFacilities] = useState<any>([])
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // const [facilities, setFacilities] = useState([{
     //     id: "bhRZIgLYzeIgv2PD5SEZD",
@@ -32,7 +34,6 @@ function MapPage() {
     //         _long: -84.38955018824828
     //     }
     // }])
-    const [facilities, setFacilities] = useState<any>([])
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
@@ -43,9 +44,9 @@ function MapPage() {
         const queryLocations = async () => {
             // setFacilities([]);
             if (db) {
-                const center = [33.78010647946605, -84.38955018824828] as Geopoint;
+                const c = center as Geopoint;
                 const radiusInM = 50 * 1000;
-                const bounds = geohashQueryBounds(center, radiusInM);
+                const bounds = geohashQueryBounds(c, radiusInM);
                 const newFacilities: any = [];
                 for (const b of bounds) {
                     const lowerPointHash = b[1];
@@ -59,7 +60,7 @@ function MapPage() {
                         const lon = doc?.data()?.geopoint?.longitude;
                         if (lat && lon) {
                             // geo hash not 100% accurate, do double-check distance
-                            if (distanceBetween([lat, lon] as Geopoint, center) <= radiusInM) {
+                            if (distanceBetween([lat, lon] as Geopoint, c) <= radiusInM) {
                                 newFacilities.push(doc.data());
                             }
                         }
@@ -79,7 +80,7 @@ function MapPage() {
                 <FacilityList facilities={facilities}/>
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
-                        <MapComponent>
+                        <MapComponent center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom}>
                             {
                                 facilities.map((facility: any, index: number) => {
                                     return (
@@ -124,6 +125,10 @@ function FacilityList(props: any) {
 }
 
 interface MapComponentProps {
+    center: any,
+    setCenter: Function,
+    zoom: number,
+    setZoom: Function,
     children: any
 }
 
@@ -134,8 +139,8 @@ function MapComponent(props: MapComponentProps) {
     React.useEffect(() => {
         if (ref.current && !map) {
             setMap(new window.google.maps.Map(ref.current, {
-                center: new google.maps.LatLng(33.78010647946605, -84.38955018824828),
-                zoom: 16,
+                center: new google.maps.LatLng(props.center[0], props.center[1]),
+                zoom: props.zoom,
             }));
         }
     }, [ref, map]);
