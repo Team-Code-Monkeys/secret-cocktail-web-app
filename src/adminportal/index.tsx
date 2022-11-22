@@ -6,6 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
+import wave from "../wave.png";
 
 function AdminPortalPage() {
     const auth = getAuth(firebaseApp);
@@ -19,8 +20,17 @@ function AdminPortalPage() {
     return (
         <div className={styles.container}>
             <Navbar/>
-            <div>TODO: page to select phone survey editor page or view facilities [use existing facility page, but add options for admin to delete facilities] (for 'admin' user only)</div>
+            <div className={styles.innerContainer}>
+                <div className={styles.title}>Admin Portal</div>
+            </div>
+            <Waves/>
         </div>
+    );
+}
+
+function Waves() {
+    return (
+        <img src={wave} className={styles.wave} alt={'Wave for styling webpage.'}/>
     );
 }
 
