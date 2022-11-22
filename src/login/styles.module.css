@@ -72,6 +72,14 @@
     }
 }
 
+@supports (-webkit-touch-callout: none) {
+    .inputIcon {
+        visibility: hidden !important;
+        width: 1px;
+    }
+}
+
+
 .input {
     font-family: 'Inter', sans-serif;
     font-style: normal;
