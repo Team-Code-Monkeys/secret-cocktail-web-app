@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import styles from './loginstyles.module.css';
+import styles from './styles.module.css';
 import Navbar from "../navbar";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
@@ -57,7 +57,7 @@ function LoginPage() {
     }
 
     return (
-        <div className={styles.loginPageContainer}>
+        <div className={styles.container}>
             <Navbar/>
             <div className={styles.titleContainer}>
                 <div className={styles.title}>CNA Facilities</div>

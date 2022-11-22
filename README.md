@@ -1,6 +1,4 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# web app
 
 ## Available Scripts
 
@@ -17,3 +15,11 @@ You will also see any lint errors in the console.
 ### `npm install -g firebase-tools`
 
 Install firebase tools to machine
+
+Optional environment variables:
+
+```shell
+API_URL="..."
+REACT_APP_GOOGLE_MAPS_API_KEY="..."
+REACT_APP_GOOGLE_GEOCODING_API_KEY="..."
+```

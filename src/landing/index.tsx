@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import Navbar from '../navbar';
-import styles from './landingstyles.module.css';
+import styles from './styles.module.css';
 import wave from '../wave.png';
 import {setupAuthListener} from "../authredirect/setup-auth-listener";
 import {getAuth} from "firebase/auth";
@@ -16,7 +16,7 @@ function LandingPage() {
     }, [auth, navigate]);
 
     return (
-        <div className={styles.landingPageContainer}>
+        <div className={styles.container}>
             <Navbar/>
             <Title/>
             <SubTitle/>

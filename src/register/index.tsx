@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import styles from './registerstyles.module.css';
+import styles from './styles.module.css';
 import Navbar from '../navbar';
 import {useLocation, useNavigate} from "react-router-dom";
 import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
@@ -56,7 +56,7 @@ function RegisterPage() {
     }
 
     return (
-        <div className={styles.registerPageContainer}>
+        <div className={styles.container}>
             <Navbar/>
             <div className={styles.titleContainer}>
                 <div className={styles.title}>CNA Facilities</div>

@@ -1,0 +1,243 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.innerContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.listView {
+    width: 410px;
+    max-width: 100%;
+    overflow-y: scroll;
+}
+
+.mapView {
+    height: 100%;
+    flex-grow: 1;
+}
+
+/*on small screen make list view take up entire space*/
+@media (max-width: 500px) {
+    .listView {
+        width: 100% !important;
+        flex-grow: 1 !important;
+    }
+    .mapView {
+        flex-grow: 0 !important;
+        width: 0 !important;
+        visibility: hidden !important;
+        display: none !important;
+        overflow: hidden !important;
+    }
+}
+
+.filterContainer {
+    max-width: 100%;
+    padding: 10px;
+}
+
+.filterHeader {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 56px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -1px;
+    color: #2D3436;
+}
+
+.listOuterContainer {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.distanceSliderContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.distanceSliderContainer > input {
+    flex-grow: 1;
+    -webkit-appearance: none;
+    height: 15px;
+    background: rgba(211, 211, 211, 0.7);
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 10px;
+}
+
+.distanceSliderContainer > input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #6C5CE7;
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+.distanceSliderContainer > input::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #6C5CE7;
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+.distanceSliderContainer > div {
+    width: 100px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 56px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -1px;
+    color: #2D3436;
+}
+
+.listInnerContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-bottom: 100px;
+    overflow-y: scroll;
+}
+
+.listItemContainer {
+    margin-bottom: 20px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.primaryBtnListView:hover {
+    cursor: pointer;
+}
+
+.primaryBtnListView:active {
+    filter: brightness(80%);
+}
+
+.primaryBtnListView {
+    margin-left: 10px;
+    width: 100px;
+    height: 40px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: white;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #6C5CE7;
+    border-radius: 16px;
+    background: #6C5CE7;
+}
+
+.secondaryBtnListView:hover {
+    cursor: pointer;
+}
+
+.secondaryBtnListView:active {
+    filter: brightness(80%);
+}
+
+.secondaryBtnListView {
+    margin-left: 10px;
+    width: 100px;
+    height: 40px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: white;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #e13d3d;
+    border-radius: 16px;
+    background: #e13d3d;
+}
+
+.listItemButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.listItemText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: #000000;
+}
+
+.searchContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.searchLocation {
+    flex-grow: 1;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    background: rgba(194, 194, 194, 0.24);
+    /*opacity: 0.24;*/
+    border-radius: 14px;
+    /*font-weight: 400;*/
+    /*font-size: 18px;*/
+    /*line-height: 32px;*/
+    outline: 0;
+    border: none;
+    padding: 5px 10px;
+}
+
+.searchLocation::placeholder {
+    color: rgba(45, 52, 54, 0.68);
+}
+
+.invalidLocationText {
+    margin-left: 10px;
+    flex-grow: 1;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    outline: 0;
+    border: none;
+    color: #c50000;
+    text-align: center;
+}

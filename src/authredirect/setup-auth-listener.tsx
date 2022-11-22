@@ -1,5 +1,5 @@
 // import React from 'react';
-import {k_landing_page_route, k_map_page_route} from "../index";
+import {k_admin_portal_page_route, k_facility_page_route, k_landing_page_route, k_map_page_route} from "../index";
 import {Auth} from "@firebase/auth";
 import {NavigateFunction} from "react-router/dist/lib/hooks";
 
@@ -14,13 +14,30 @@ export const setupAuthListener = (auth: Auth, navigate: NavigateFunction, redire
     if (auth) {
         auth.onAuthStateChanged((user: any) => {
             if (user && redirectIfLoggedIn) {
-                console.log('redirecting to home page of user');
-                // TODO: check user role (trainee, facility, or admin) to determine which page to navigate to
-                navigate(k_map_page_route);
-                // console.log(user);
+                user.getIdTokenResult()
+                    .then((idTokenResult: any) => {
+                        const isAdmin = idTokenResult?.claims?.admin === true;
+                        const isFacility = idTokenResult?.claims?.facility === true;
+                        if (isAdmin) {
+                            navigate(k_admin_portal_page_route);
+                            return;
+                        } else if (isFacility) {
+                            navigate(k_facility_page_route);
+                            return;
+                        } else {
+                            navigate(k_map_page_route);
+                            return;
+                        }
+                    })
+                    .catch((error: any) => {
+                        console.log('Error verifying user information', error);
+                        alert('Error verifying user information');
+                        navigate(k_landing_page_route);
+                        return;
+                    });
             } else if (!user && redirectIfNotLoggedIn) {
-                console.log('redirecting to landing page');
                 navigate(k_landing_page_route);
+                return;
             }
         });
     }
