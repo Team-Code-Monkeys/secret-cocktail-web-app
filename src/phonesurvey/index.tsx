@@ -38,6 +38,13 @@ function AdminPhoneSurveyPage() {
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
 
+    const hashCode = (s: string) => {
+        return s.split("").reduce(function (a, b) {
+            a = ((a << 5) - a) + b.charCodeAt(0);
+            return a & a
+        }, 0);
+    }
+
     return (
         <div className={styles.container}>
             <Navbar/>
@@ -92,8 +99,27 @@ function AdminPhoneSurveyPage() {
                         title: `Question ${questions.length + 1}`
                     }, {merge: true}).then(() => {
                         window.location.reload();
+                    }).then((err) => {
+                        alert('Error adding question');
                     });
                 }}>Add
+                </button>
+            </div>
+            <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
+                <button style={{width: 300}} className={styles.primaryBtnListView} onClick={() => {
+                    const phoneNumberToContact = prompt("Number to Contact", "(+1) ");
+                    if (phoneNumberToContact) {
+                        const phoneRef = doc(db, 'to-contact-for-survey', hashCode(phoneNumberToContact).toString() + Math.round(new Date().getTime()).toString());
+                        setDoc(phoneRef, {
+                            contacted: false,
+                            phone: phoneNumberToContact.toString()
+                        }, {merge: true}).then(() => {
+                            alert(`${phoneNumberToContact} will be sent a survey!`);
+                        }).catch((err) => {
+                            alert('Error sending phone survey');
+                        });
+                    }
+                }}>Send
                 </button>
             </div>
             <div className={styles.innerContainer}>
