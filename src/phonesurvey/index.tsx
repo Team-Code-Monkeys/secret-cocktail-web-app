@@ -31,7 +31,7 @@ function AdminPhoneSurveyPage() {
         }
 
         fetchQuestions();
-    }, []);
+    }, [db]);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);

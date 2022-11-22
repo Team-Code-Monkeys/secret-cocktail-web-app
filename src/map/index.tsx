@@ -11,7 +11,7 @@ import {collection, query, getFirestore, where, getDocs} from 'firebase/firestor
 import {GOOGLE_GEOCODING_API_KEY, GOOGLE_MAPS_API_KEY} from '../api';
 import {distanceBetween, geohashQueryBounds, Geopoint} from "geofire-common";
 import {useDebouncedCallback} from "use-debounce";
-import {k_admin_portal_page_route, k_facility_page_route, k_landing_page_route} from "../index";
+import {k_admin_portal_page_route, k_facility_page_route} from "../index";
 import {doc, deleteDoc} from "firebase/firestore";
 import Geocode from "react-geocode";
 
