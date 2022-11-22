@@ -1,5 +1,7 @@
 # web app
 
+[https://secret-cocktail.web.app](https://secret-cocktail.web.app)
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -12,17 +14,15 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm install -g firebase-tools`
-
-Install firebase tools to machine
-
-Optional environment variables:
+## Optional Environment Variables
 
 ```shell
 API_URL="..."
 REACT_APP_GOOGLE_MAPS_API_KEY="..."
 REACT_APP_GOOGLE_GEOCODING_API_KEY="..."
 ```
+
+## Screenshots
 
 ![screenshot](screenshot/0.png)
 
