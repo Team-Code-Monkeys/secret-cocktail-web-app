@@ -65,7 +65,12 @@ function AdminPhoneSurveyPage() {
                                     <button className={styles.primaryBtnListView} onClick={() => {
                                         const newQuestionText = prompt("Edit Question", question.question || "");
                                         if (newQuestionText) {
-                                            console.log(newQuestionText);
+                                            const questionRef = doc(db, 'question', question.id || '');
+                                            setDoc(questionRef, {
+                                                question: newQuestionText,
+                                            }, {merge: true}).then(() => {
+                                                window.location.reload();
+                                            });
                                         }
                                     }}>Edit
                                     </button>
