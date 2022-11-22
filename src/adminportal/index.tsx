@@ -7,6 +7,7 @@ import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import wave from "../wave.png";
+import {k_admin_phone_survey_page_route, k_map_page_route} from "../index";
 
 function AdminPortalPage() {
     const auth = getAuth(firebaseApp);
@@ -41,6 +42,10 @@ function AdminPortalPage() {
                             <div className={styles.pageContainerText3}>Delete questions</div>
                         </div>
                     </div>
+                    <button className={styles.primaryBtn} onClick={() => {
+                        navigate(k_admin_phone_survey_page_route);
+                    }}>Customize Survey
+                    </button>
                 </div>
                 <div className={styles.pageContainer}>
                     <div className={styles.pageContainerText1}>👤 Manage Facilities</div>
@@ -59,6 +64,10 @@ function AdminPortalPage() {
                             <div className={styles.pageContainerText3}>Delete facilities</div>
                         </div>
                     </div>
+                    <button className={styles.primaryBtn} onClick={() => {
+                        navigate(k_map_page_route);
+                    }}>Open Dashboard
+                    </button>
                 </div>
             </div>
             <Waves/>

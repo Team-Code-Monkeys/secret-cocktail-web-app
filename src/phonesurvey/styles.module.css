@@ -1,0 +1,18 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 605px) {
+    .wave {
+        visibility: hidden !important;
+    }
+}
+
+.wave {
+    margin-top: auto;
+    width: 100%;
+    z-index: -1;
+}
