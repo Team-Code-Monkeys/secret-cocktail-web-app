@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import wave from '../wave.png';
@@ -12,6 +12,20 @@ import {k_admin_portal_page_route} from "../index";
 function AdminPhoneSurveyPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
+    const [questions, setQuestions] = useState<any>([
+        {
+            id: 'id-1',
+            title: 'Question 1',
+            question: 'sample question text',
+            order: 0
+        },
+        {
+            id: 'id-2',
+            title: 'Question 2',
+            question: 'sample question text 2',
+            order: 1
+        }
+    ]);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -25,7 +39,19 @@ function AdminPhoneSurveyPage() {
                 <div className={styles.title}>Phone Survey Dashboard</div>
             </div>
             <div className={styles.innerContainer3}>
-
+                {
+                    questions.map((question: any, _: number) => {
+                        return (
+                            <div className={styles.listItemContainer} key={question.id}>
+                                <div className={styles.listItemText}>{question.title || 'No title'}</div>
+                                <div className={styles.listItemText2}>{question.question || 'No text'}</div>
+                                <div className={styles.listItemButtonsContainer}>
+                                    <button className={styles.primaryBtnListView} onClick={() => {}}>Edit</button>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
             </div>
             <div className={styles.innerContainer}>
                 <div className={styles.backBtnContainer} onClick={() => {
