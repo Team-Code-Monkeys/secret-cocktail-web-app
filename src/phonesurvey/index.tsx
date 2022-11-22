@@ -8,24 +8,30 @@ import {useNavigate} from "react-router-dom";
 import firebaseApp from "../firebase";
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import {k_admin_portal_page_route} from "../index";
+import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where} from "firebase/firestore";
 
 function AdminPhoneSurveyPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
-    const [questions, setQuestions] = useState<any>([
-        {
-            id: 'id-1',
-            title: 'Question 1',
-            question: 'sample question text',
-            order: 0
-        },
-        {
-            id: 'id-2',
-            title: 'Question 2',
-            question: 'sample question text 2',
-            order: 1
+    const db = getFirestore();
+
+    const [questions, setQuestions] = useState<any>([]);
+
+    useEffect(() => {
+        async function fetchQuestions() {
+            const q = query(collection(db, "question"), where("order", ">=", 0));
+            const querySnapshot = await getDocs(q);
+            const questionsList: any = [];
+            querySnapshot.forEach((doc) => {
+                const question = doc.data();
+                question.id = doc.id;
+                questionsList.push(question);
+            });
+            setQuestions(questionsList);
         }
-    ]);
+
+        fetchQuestions();
+    }, []);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -46,12 +52,44 @@ function AdminPhoneSurveyPage() {
                                 <div className={styles.listItemText}>{question.title || 'No title'}</div>
                                 <div className={styles.listItemText2}>{question.question || 'No text'}</div>
                                 <div className={styles.listItemButtonsContainer}>
-                                    <button className={styles.primaryBtnListView} onClick={() => {}}>Edit</button>
+                                    <button style={{border: '#e13d3d', background: '#e13d3d'}}
+                                            className={styles.primaryBtnListView} onClick={() => {
+                                        deleteDoc(doc(db, 'question', question.id || "")).then(() => {
+                                            window.location.reload();
+                                        }).catch((error: any) => {
+                                            alert("Error deleting question.");
+                                            console.error("Error deleting question", error);
+                                        });
+                                    }}>Delete
+                                    </button>
+                                    <button className={styles.primaryBtnListView} onClick={() => {
+                                        const newQuestionText = prompt("Edit Question", question.question || "");
+                                        if (newQuestionText) {
+                                            console.log(newQuestionText);
+                                        }
+                                    }}>Edit
+                                    </button>
                                 </div>
                             </div>
                         )
                     })
                 }
+            </div>
+            <div className={styles.innerContainer4}>
+                <button style={{width: 300}} className={styles.primaryBtnListView} onClick={() => {
+                    const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
+                    const time = Math.round(new Date().getTime());
+                    setDoc(questionRef, {
+                        createdAt: time,
+                        updatedAt: time,
+                        order: questions.length,
+                        question: 'Sample question text.',
+                        title: `Question ${questions.length + 1}`
+                    }, {merge: true}).then(() => {
+                        window.location.reload();
+                    });
+                }}>Add
+                </button>
             </div>
             <div className={styles.innerContainer}>
                 <div className={styles.backBtnContainer} onClick={() => {
