@@ -64,6 +64,21 @@
     top: -40px;
 }
 
+@media (max-width: 740px) {
+    .inputIcon {
+        visibility: hidden;
+        width: 1px;
+    }
+}
+
+@supports (-webkit-touch-callout: none) {
+    .inputIcon {
+        visibility: hidden !important;
+        width: 1px;
+    }
+}
+
+
 .input {
     font-family: 'Inter', sans-serif;
     font-style: normal;

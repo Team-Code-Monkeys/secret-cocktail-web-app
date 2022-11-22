@@ -3,6 +3,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 .innerContainer {
@@ -240,4 +241,30 @@
     border: none;
     color: #c50000;
     text-align: center;
+}
+
+.backBtnContainer:hover {
+    cursor: pointer;
+}
+
+.backBtnContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    margin-top: 20px;
+
+}
+
+.backBtnText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 12px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -0.5px;
+    color: #6C5CE7;
 }
