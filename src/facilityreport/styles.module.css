@@ -70,6 +70,7 @@
     align-items: center;
     letter-spacing: -0.25px;
     color: rgba(45, 52, 54, 0.79);
+    margin-bottom: 20px;
 }
 
 .innerContainerHeader {

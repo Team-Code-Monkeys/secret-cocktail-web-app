@@ -47,6 +47,7 @@ function FacilityPage() {
                     if (facilityData?.about) {
                         facilityData.about = facilityData.about.replaceAll("\\n", "\n");
                     }
+                    facilityData.id = doc.id;
                     setFacility(facilityData);
                 });
             }
@@ -61,6 +62,7 @@ function FacilityPage() {
                     if (facilityData?.about) {
                         facilityData.about = facilityData.about.replaceAll("\\n", "\n");
                     }
+                    facilityData.id = docSnap.id;
                     setFacility(facilityData);
                 } else {
                     console.log("No facility with ID: ", facilityID);
@@ -114,7 +116,7 @@ function FacilityPage() {
                 isFacility && facility &&
                 <div className={styles.btnOuterContainer}>
                     <div className={styles.btnContainer}>
-                        <button className={styles.primaryBtn} onClick={() => {navigate(k_facility_report_correction_page_route)}}>Report a Correction</button>
+                        <button className={styles.primaryBtn} onClick={() => {navigate(k_facility_report_correction_page_route, {state: {facilityId: facility.id}})}}>Report a Correction</button>
                     </div>
                 </div>
             }
