@@ -79,7 +79,7 @@ function MapPage() {
                 setLoading(false);
             });
         },
-        1000
+        500
     );
 
     // redirect user if not allowed on page
@@ -297,6 +297,7 @@ function MapComponent(props: MapComponentProps) {
                 lat: props.center[0] || 0.0,
                 lng: props.center[1] || 0.0
             });
+            map.setZoom(16.0);
         }
     }, [map, props.center]);
 

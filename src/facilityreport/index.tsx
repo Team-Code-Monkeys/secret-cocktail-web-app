@@ -23,19 +23,27 @@ function ReportFacilityCorrectionPage() {
             <Navbar/>
             {
                 !reportSent &&
-                <div>
-                    <div>Report a correction about your facility to the Admin team!</div>
-                    <textarea placeholder={'Leave your message'}>Report a correction</textarea>
-                    <div>
-                        <button onClick={() => {navigate(k_facility_page_route)}}>Cancel</button>
-                        <button onClick={() => {setReportSent(true)}}>Send Message</button>
+                <div className={styles.innerContainer}>
+                    <div className={styles.innerContainerHeader}>
+                        <div className={styles.helpText}>Report a correction about your facility to the Admin team!</div>
+                    </div>
+                    <textarea className={styles.textArea} placeholder={'Leave your message'}></textarea>
+                    {/*<div>*/}
+                    {/*    <button onClick={() => {navigate(k_facility_page_route)}}>Cancel</button>*/}
+                    {/*    <button onClick={() => {setReportSent(true)}}>Send Message</button>*/}
+                    {/*</div>*/}
+                    <div className={styles.btnOuterContainer}>
+                        <div className={styles.btnContainer}>
+                            <button className={styles.primaryBtn} onClick={() => {navigate(k_facility_page_route)}} style={{width: '150px', marginRight: '10px', background: '#D2042D', borderColor: '#D2042D'}}>Cancel</button>
+                            <button className={styles.primaryBtn} onClick={() => {setReportSent(true)}} style={{background: '#50C878', borderColor: '#50C878'}}>Send Message</button>
+                        </div>
                     </div>
                 </div>
             }
             {
                 reportSent &&
-                <div>
-                    <div>Thank you for contacting the Admin team! We will be processing your request soon and will be in touch!</div>
+                <div className={styles.innerContainer}>
+                    <div className={styles.helpText}>Thank you for contacting the Admin team! We will be processing your request soon and will be in touch!</div>
                     <div className={styles.backBtnContainer} onClick={() => {
                         navigate(k_facility_page_route)
                     }}>

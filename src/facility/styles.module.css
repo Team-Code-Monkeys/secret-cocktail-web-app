@@ -85,6 +85,7 @@
 }
 
 .primaryBtn {
+    margin-right: 50px;
     margin-top: 50px;
     width: 250px;
     height: 45px;
@@ -104,6 +105,7 @@
 
 @media (max-width: 605px) {
     .primaryBtn {
+        margin-right: 0 !important;
         width: 100% !important;
     }
 }
