@@ -99,7 +99,7 @@ function AdminPhoneSurveyPage() {
                         title: `Question ${questions.length + 1}`
                     }, {merge: true}).then(() => {
                         window.location.reload();
-                    }).then((err) => {
+                    }).catch((err) => {
                         alert('Error adding question');
                     });
                 }}>Add
