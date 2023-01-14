@@ -8,6 +8,7 @@ import {
 } from '../index';
 import {setupAuthListener} from "../authredirect/setup-auth-listener";
 import firebaseApp from '../firebase';
+import wave from "../wave.png";
 
 function RegisterPage() {
     const auth = getAuth(firebaseApp);
@@ -80,7 +81,7 @@ function RegisterPage() {
                            value={confirmPassword}
                            onChange={(event) => setConfirmPassword(event.target.value)}/>
                 </div>
-                <button className={styles.primaryBtn} onClick={() => {
+                <button className='primaryBtn' onClick={() => {
                     signUp()
                 }}>Sign Up
                 </button>
@@ -96,6 +97,7 @@ function RegisterPage() {
                     <div className={styles.backBtnText}>Back</div>
                 </div>
             </div>
+            <Waves />
         </div>
     );
 }
@@ -115,6 +117,12 @@ function UserIcon(props: any) {
                 </svg>
             }
         </>
+    );
+}
+
+function Waves() {
+    return (
+        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
     );
 }
 

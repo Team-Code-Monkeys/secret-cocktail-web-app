@@ -84,7 +84,7 @@ function LoginPage() {
                     <input placeholder={'Password'} type={'password'} className={styles.input} value={password}
                            onChange={(event) => setPassword(event.target.value)}/>
                 </div>
-                <button className={styles.primaryBtn} onClick={() => {
+                <button className={'primaryBtn'} onClick={() => {
                     signIn()
                 }}>Sign In
                 </button>

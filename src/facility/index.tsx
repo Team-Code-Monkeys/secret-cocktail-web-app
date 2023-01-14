@@ -116,7 +116,7 @@ function FacilityPage() {
                 isFacility && facility &&
                 <div className={styles.btnOuterContainer}>
                     <div className={styles.btnContainer}>
-                        <button className={styles.primaryBtn} onClick={() => {navigate(k_facility_report_correction_page_route, {state: {facilityId: facility.id}})}}>Report a Correction</button>
+                        <button className='primaryBtn' onClick={() => {navigate(k_facility_report_correction_page_route, {state: {facilityId: facility.id}})}}>Report a Correction</button>
                     </div>
                 </div>
             }
@@ -127,7 +127,7 @@ function FacilityPage() {
 
 function Waves() {
     return (
-        <img src={wave} className={styles.wave} alt={'Wave for styling webpage.'}/>
+        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
     );
 }
 

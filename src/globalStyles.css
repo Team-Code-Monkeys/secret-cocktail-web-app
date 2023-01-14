@@ -1,0 +1,41 @@
+.primaryBtn:hover {
+    cursor: pointer;
+    box-shadow: rgba(108, 92, 231, 0.48) 0px 7px 29px 0px;
+    border-radius: 20px;
+}
+
+.primaryBtn:active {
+    filter: brightness(80%);
+}
+
+.primaryBtn {
+    transition: all 0.3s ease-in;
+    margin-top: 50px;
+    width: 150px;
+    height: 45px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: white;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #6C5CE7;
+    border-radius: 12px;
+    background: #6C5CE7;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.wave {
+    margin-top: auto;
+    width: 100%;
+    z-index: 0;
+}
+
+@media (max-width: 605px) {
+    .wave {
+        visibility: hidden !important;
+    }
+}

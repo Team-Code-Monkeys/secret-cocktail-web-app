@@ -88,7 +88,7 @@ function AdminPhoneSurveyPage() {
                 }
             </div>
             <div className={styles.innerContainer4}>
-                <button style={{width: 300}} className={styles.primaryBtnListView} onClick={() => {
+                <button style={{width: 300}} className={styles.primaryBtn} onClick={() => {
                     const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
                     const time = Math.round(new Date().getTime());
                     setDoc(questionRef, {
@@ -106,7 +106,7 @@ function AdminPhoneSurveyPage() {
                 </button>
             </div>
             <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
-                <button style={{width: 300}} className={styles.primaryBtnListView} onClick={() => {
+                <button style={{width: 300}} className={styles.primaryBtn} onClick={() => {
                     const phoneNumberToContact = prompt("Number to Contact", "(+1) ");
                     if (phoneNumberToContact) {
                         const phoneRef = doc(db, 'to-contact-for-survey', hashCode(phoneNumberToContact).toString() + Math.round(new Date().getTime()).toString());
@@ -142,7 +142,7 @@ function AdminPhoneSurveyPage() {
 
 function Waves() {
     return (
-        <img src={wave} className={styles.wave} alt={'Wave for styling webpage.'}/>
+        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
     );
 }
 
