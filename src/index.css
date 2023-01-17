@@ -1,3 +1,5 @@
+@import "globalStyles.css";
+
 html, body {
     min-width: fit-content;
     width: 100%;
@@ -5,7 +7,7 @@ html, body {
     margin: 0;
     padding: 0;
     min-height: 100%;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 #root {
@@ -13,7 +15,8 @@ html, body {
     height: 100%;
     display: flex;
     align-items: flex-start;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
+    background-color: #f3f3f3;
 }
 
 .loader {
