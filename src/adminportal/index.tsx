@@ -70,6 +70,10 @@ function AdminPortalPage() {
                     </button>
                 </div>
             </div>
+            <button className={styles.downloadBtn} onClick={() => {
+                alert('Data Downloaded')
+            }}>Download Data
+            </button>
             <Waves/>
         </div>
     );
