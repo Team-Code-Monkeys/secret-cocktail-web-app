@@ -7,7 +7,7 @@ import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import wave from "../wave.png";
-import {k_admin_phone_survey_page_route, k_map_page_route} from "../index";
+import {k_admin_phone_survey_page_route, k_admin_facility_page_route} from "../index";
 
 function AdminPortalPage() {
     const auth = getAuth(firebaseApp);
@@ -65,7 +65,7 @@ function AdminPortalPage() {
                         </div>
                     </div>
                     <button className={styles.primaryBtn} onClick={() => {
-                        navigate(k_map_page_route);
+                        navigate(k_admin_facility_page_route);
                     }}>Open Dashboard
                     </button>
                 </div>
