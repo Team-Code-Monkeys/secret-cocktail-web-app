@@ -16,6 +16,7 @@ import ReportFacilityCorrectionPage from './facilityreport';
 import AdminPortalPage from './adminportal';
 import {API_URL} from "./api";
 import AdminPhoneSurveyPage from "./phonesurvey";
+import AdminFacilities from "./adminfacilitydashboard";
 
 // define routes
 export const k_root_page_route = '/';
@@ -29,6 +30,7 @@ export const k_facility_page_route = '/facility';
 export const k_facility_report_correction_page_route = '/facility-report-correction';
 export const k_admin_portal_page_route = '/admin-portal';
 export const k_admin_phone_survey_page_route = '/admin-phone-survey';
+export const k_admin_facility_page_route = '/admin-facility-dashboard';
 
 // TODO: remove this once verified for production and dev
 console.log('API_URL:', API_URL);
@@ -81,6 +83,10 @@ const router = createBrowserRouter([
     {
         path: k_admin_phone_survey_page_route,
         element: <AdminPhoneSurveyPage/>,
+    },
+    {
+        path: k_admin_facility_page_route,
+        element: <AdminFacilities/>,
     },
 ]);
 
