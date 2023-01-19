@@ -8,8 +8,8 @@ import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import wave from "../wave.png";
 import {k_admin_phone_survey_page_route, k_admin_facility_page_route} from "../index";
-import { CSVLink, CSVDownload } from "react-csv";
-import {collection, getDocs, getFirestore, query, where} from "firebase/firestore";
+import { CSVLink } from "react-csv";
+import {collection, getDocs, getFirestore, query} from "firebase/firestore";
 
 const CSV_FIELDS = ["name", "email", "phone", "address", "about", "geohash", "geopoint"];
 
@@ -17,7 +17,7 @@ function AdminPortalPage() {
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
-    const [facilityData, setFacilityData] = React.useState<Array<Array<string>>>([]);
+    const [facilityData, setFacilityData] = useState<Array<Array<string>>>([]);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -53,7 +53,7 @@ function AdminPortalPage() {
     function makeStringCSVCompliant(str: string) {
         let result = str;
         result = result.replace(/"/g, '""');
-        result = result.replace(/,/g, '\,');
+        result = result.replace(/,/g, ',');
         result = result.replace(/'/g, '\'');
         return result;
     }
