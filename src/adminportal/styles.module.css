@@ -125,3 +125,20 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.downloadBtn:disabled, .downloadBtn[disabled] {
+    border: 1px solid #a59de1;
+    background: #a59de1;
+}
+
+a,button {
+    -moz-box-sizing: border-box;
+    width: 150px;
+    height: 150px;
+    display: flex; /* CSS3 */
+    align-items: center; /* Vertical align */
+    justify-content: center; /* Horizontal align */
+    border: 1px solid #000;
+    text-align: center;
+    text-decoration: none;
+}

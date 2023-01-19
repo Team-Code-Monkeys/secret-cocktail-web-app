@@ -57,12 +57,6 @@ function AdminFacilities() {
       <div className={styles.innerContainer3}>
         {facilities.map((facility: any) => {
           return (
-            // <div className={styles.pageInnerContainer} key={facility.id}>
-            //   <div className={styles.pageTitle}>{facility.name}</div>
-            //   <div className={styles.pageSubtitle}>{facility.address}</div>
-            //   <div className={styles.pageSubtitle}>{facility.phone}</div>
-            // </div>
-
             <div className={styles.listItemContainer} key={facility.id}>
               <div className={styles.listItemText2}>
                 NAME: {facility.name || "No text"}

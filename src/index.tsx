@@ -14,7 +14,6 @@ import AuthRedirectPage from './authredirect';
 import FacilityPage from './facility';
 import ReportFacilityCorrectionPage from './facilityreport';
 import AdminPortalPage from './adminportal';
-import {API_URL} from "./api";
 import AdminPhoneSurveyPage from "./phonesurvey";
 import AdminFacilities from "./adminfacilitydashboard";
 
@@ -31,9 +30,6 @@ export const k_facility_report_correction_page_route = '/facility-report-correct
 export const k_admin_portal_page_route = '/admin-portal';
 export const k_admin_phone_survey_page_route = '/admin-phone-survey';
 export const k_admin_facility_page_route = '/admin-facility-dashboard';
-
-// TODO: remove this once verified for production and dev
-console.log('API_URL:', API_URL);
 
 const router = createBrowserRouter([
     {
