@@ -25,7 +25,7 @@
       <a href="#introduction">Introduction</a>
     </li>
     <li>
-      <a href="#v0.1.0-release-notes">v0.1.0 Release Notes</a>
+      <a href="#v010-release-notes">v0.1.0 Release Notes</a>
       <ul>
         <li><a href="#features">Features</a></li>
         <li><a href="#bug-fixes">Bug Fixes</a></li>
