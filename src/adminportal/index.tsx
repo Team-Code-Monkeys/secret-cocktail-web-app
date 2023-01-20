@@ -50,7 +50,10 @@ function AdminPortalPage() {
         });
     }, [db]);
 
-    function makeStringCSVCompliant(str: string) {
+    function makeStringCSVCompliant(str: string | undefined) {
+        if (!str) {
+            return "";
+        }
         let result = str;
         result = result.replace(/"/g, '""');
         result = result.replace(/,/g, ',');
@@ -113,7 +116,7 @@ function AdminPortalPage() {
             {
                 (facilityData && facilityData.length > 0) ?
                 <CSVLink data={facilityData} filename={'facilities.csv'} className={styles.downloadBtn}>
-                    <span>Download Facilities CSV File</span>
+                    <span>Download CSV</span>
                 </CSVLink>
                 :
                 <button className={styles.downloadBtn} disabled={true}>Loading...</button>
