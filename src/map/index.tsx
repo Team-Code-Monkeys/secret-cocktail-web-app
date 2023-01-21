@@ -24,6 +24,7 @@ function MapPage() {
     const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
     const { search } = useLocation();
+    const [hasParsedQueryParams, setHasParsedQueryParams] = useState<boolean>(false);
     const [center, setCenter] = useState<any>([33.78010647946605, -84.38955018824828]);
     const [zoom, setZoom] = useState<number>(16.0);
     const [radius, setRadius] = useState<number>(444);
@@ -35,13 +36,20 @@ function MapPage() {
 
     // use query parameter to set the center location of the map (if they are defined)
     const setLocationFromQueryParams = () => {
-        try {
-            const searchParams = new URLSearchParams(search);
-            const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
-            const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
-            setCenter([lat, lon]);
-        } catch (e) {
-            console.error("Unable to parse latitude and longitude query parameters");
+        if (!hasParsedQueryParams) {
+            try {
+                const searchParams = new URLSearchParams(search);
+                const validSearchParams = searchParams.get("lat") && searchParams.get("lon");
+                if (validSearchParams) {
+                    const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
+                    const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
+                    setCenter([lat, lon]);
+                    setLocationInput(`(${lat}, ${lon})`);
+                }
+            } catch (e) {
+                console.error("Unable to parse latitude and longitude query parameters");
+            }
+            setHasParsedQueryParams(true);
         }
     }
 
@@ -99,16 +107,14 @@ function MapPage() {
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
-        setLocationFromQueryParams();
-    }, [auth, navigate, setLocationFromQueryParams]);
+    }, [auth, navigate]);
 
     // request for new list of facilities nearby location
     useEffect(() => {
         // search facilities when center or radius is updated
         setLoading(true);
         debounced(radius);
-        setLocationFromQueryParams();
-    }, [center, radius, debounced, setLocationFromQueryParams]);
+    }, [center, radius, debounced]);
 
     // check if admin (to allow them to delete facilities)
     useEffect(() => {
@@ -134,6 +140,7 @@ function MapPage() {
                     setLoading(false);
                     const { lat, lng } = response.results[0].geometry.location;
                     setCenter([lat, lng]);
+                    setLocationFromQueryParams();
                 },
                 (error) => {
                     setLoading(false);
@@ -244,7 +251,7 @@ function FacilityList(props: any) {
             </div>
             {
                 props.isUnknownLocation &&
-                <div className={styles.invalidLocationText}>Invalid location</div>
+                <div className={styles.invalidLocationText}>Unlabeled location</div>
             }
             {
                 !props.isUnknownLocation &&
