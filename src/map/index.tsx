@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import {getAuth} from 'firebase/auth';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from '../authredirect/auth-check';
@@ -23,6 +23,7 @@ function MapPage() {
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
+    const { search } = useLocation();
     const [center, setCenter] = useState<any>([33.78010647946605, -84.38955018824828]);
     const [zoom, setZoom] = useState<number>(16.0);
     const [radius, setRadius] = useState<number>(444);
@@ -107,6 +108,18 @@ function MapPage() {
             }
         });
     }, [auth]);
+
+    // use query parameter to set the center location of the map (if they are defined)
+    useEffect(() => {
+        try {
+            const searchParams = new URLSearchParams(search);
+            const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
+            const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
+            setCenter([lat, lon]);
+        } catch (e) {
+            console.error("Unable to parse latitude and longitude query parameters");
+        }
+    }, [search]);
 
     // rate limit the frequency at which we query search input
     const debouncedSearchInput = useDebouncedCallback(
