@@ -33,6 +33,18 @@ function MapPage() {
     const [locationInput, setLocationInput] = useState<string>('930 Spring St NW, Atlanta, GA 30309');
     const [isUnknownLocation, setIsUnknownLocation] = useState<boolean>(false);
 
+    // use query parameter to set the center location of the map (if they are defined)
+    const setLocationFromQueryParams = () => {
+        try {
+            const searchParams = new URLSearchParams(search);
+            const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
+            const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
+            setCenter([lat, lon]);
+        } catch (e) {
+            console.error("Unable to parse latitude and longitude query parameters");
+        }
+    }
+
     const queryLocations = async () => {
         // setFacilities([]);
         if (db) {
@@ -87,14 +99,16 @@ function MapPage() {
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
-    }, [auth, navigate]);
+        setLocationFromQueryParams();
+    }, [auth, navigate, setLocationFromQueryParams]);
 
     // request for new list of facilities nearby location
     useEffect(() => {
         // search facilities when center or radius is updated
         setLoading(true);
         debounced(radius);
-    }, [center, radius, debounced]);
+        setLocationFromQueryParams();
+    }, [center, radius, debounced, setLocationFromQueryParams]);
 
     // check if admin (to allow them to delete facilities)
     useEffect(() => {
@@ -108,18 +122,6 @@ function MapPage() {
             }
         });
     }, [auth]);
-
-    // use query parameter to set the center location of the map (if they are defined)
-    useEffect(() => {
-        try {
-            const searchParams = new URLSearchParams(search);
-            const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
-            const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
-            setCenter([lat, lon]);
-        } catch (e) {
-            console.error("Unable to parse latitude and longitude query parameters");
-        }
-    }, [search]);
 
     // rate limit the frequency at which we query search input
     const debouncedSearchInput = useDebouncedCallback(
