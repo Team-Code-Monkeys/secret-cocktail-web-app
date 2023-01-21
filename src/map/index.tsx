@@ -44,7 +44,25 @@ function MapPage() {
                     const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
                     const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
                     setCenter([lat, lon]);
-                    setLocationInput(`(${lat}, ${lon})`);
+
+                    Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
+                    Geocode.fromLatLng(lat.toString(), lon.toString()).then(
+                        (response) => {
+                            if (response.results && response.results.length > 0 && response.results[0].formatted_address) {
+                                setLocationInput(`${response.results[0].formatted_address}`);
+                            } else {
+                                setLocationInput(`(${lat}, ${lon})`);
+                            }
+                        },
+                        (error) => {
+                            setLoading(false);
+                            if ((error?.message || '').includes('ZERO_RESULTS') || (error?.message || '').includes('Provided address is invalid')) {
+                                setIsUnknownLocation(true);
+                            } else {
+                                console.error(error);
+                            }
+                        }
+                    );
                 }
             } catch (e) {
                 console.error("Unable to parse latitude and longitude query parameters");
