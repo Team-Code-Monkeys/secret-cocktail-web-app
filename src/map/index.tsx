@@ -41,10 +41,12 @@ function MapPage() {
                 const searchParams = new URLSearchParams(search);
                 const validSearchParams = searchParams.get("lat") && searchParams.get("lon");
                 if (validSearchParams) {
+                    // set latitude and longitude of marker
                     const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
                     const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
                     setCenter([lat, lon]);
 
+                    // set search text of place (query Google Geo Decoding API to get the address of a place from latitude and longitude values)
                     Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
                     Geocode.fromLatLng(lat.toString(), lon.toString()).then(
                         (response) => {
