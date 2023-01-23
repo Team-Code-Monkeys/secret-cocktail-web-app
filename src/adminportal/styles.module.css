@@ -124,4 +124,16 @@
     width: clamp(20vw, 10em, 25vh);
     margin-left: auto;
     margin-right: auto;
+    -moz-box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #6C5CE7;
+}
+
+.downloadBtn:disabled, .downloadBtn[disabled] {
+    border: 1px solid #a59de1;
+    background: #a59de1;
 }
