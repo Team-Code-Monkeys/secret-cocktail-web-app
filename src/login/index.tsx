@@ -77,12 +77,22 @@ function LoginPage() {
             <div className={styles.formContainer}>
                 <div className={styles.inputContainer}>
                     <input placeholder={'Email'} type={'email'} className={styles.input} value={email}
-                           onChange={(event) => setEmail(event.target.value)}/>
+                           onChange={(event) => setEmail(event.target.value)}
+                           onKeyDown={(event) => {
+                               if (event.key === 'Enter') {
+                                   signIn();
+                               }
+                           }}/>
                     <UserIcon field={email}/>
                 </div>
                 <div className={styles.inputContainer}>
                     <input placeholder={'Password'} type={'password'} className={styles.input} value={password}
-                           onChange={(event) => setPassword(event.target.value)}/>
+                           onChange={(event) => setPassword(event.target.value)}
+                           onKeyDown={(event) => {
+                               if (event.key === 'Enter') {
+                                   signIn();
+                               }
+                           }}/>
                 </div>
                 <button className={'primaryBtn'} onClick={() => {
                     signIn()
