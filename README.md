@@ -44,7 +44,7 @@
 <p align="center">
   <strong align="center">Why use us?</strong>
   <br>
-  <img width="320" height="320" src="https://github.com/Team-Code-Monkeys/secret-cocktail-web-app/raw/master/screenshot/mockup.jpg">
+  <img width="500" height="320" src="https://github.com/Team-Code-Monkeys/secret-cocktail-web-app/raw/main/screenshot/mockup.jpg">
 </p>
 
 The Secret Cocktail Webapp is an automated phone survey system to help nursing trainees find facilities near them to complete
