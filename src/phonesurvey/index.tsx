@@ -9,6 +9,7 @@ import firebaseApp from "../firebase";
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import {k_admin_portal_page_route} from "../index";
 import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where} from "firebase/firestore";
+import {Button, Form, Modal} from "react-bootstrap";
 
 function AdminPhoneSurveyPage() {
     const auth = getAuth(firebaseApp);
@@ -16,6 +17,11 @@ function AdminPhoneSurveyPage() {
     const db = getFirestore();
 
     const [questions, setQuestions] = useState<any>([]);
+
+    const [showModal, setShowModal] = useState(false);
+    const [facilityName, setFacilityName] = useState('');
+    const [facilityPhoneNumber, setFacilityPhoneNumber] = useState('');
+    const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         async function fetchQuestions() {
@@ -106,21 +112,11 @@ function AdminPhoneSurveyPage() {
                 </button>
             </div>
             <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
-                <button style={{width: 300}} className={styles.primaryBtn} onClick={() => {
-                    const phoneNumberToContact = prompt("Number to Contact", "(+1) ");
-                    if (phoneNumberToContact) {
-                        const phoneRef = doc(db, 'to-contact-for-survey', hashCode(phoneNumberToContact).toString() + Math.round(new Date().getTime()).toString());
-                        setDoc(phoneRef, {
-                            contacted: false,
-                            phone: phoneNumberToContact.toString()
-                        }, {merge: true}).then(() => {
-                            alert(`${phoneNumberToContact} will be sent a survey!`);
-                        }).catch((err) => {
-                            alert('Error sending phone survey');
-                        });
-                    }
-                }}>Send
-                </button>
+                <Button style={{width: 300}} className={styles.sendBtn} variant="primary" onClick={() => {
+                    setShowModal(true);
+                }}>
+                    Send
+                </Button>
             </div>
             <div className={styles.innerContainer}>
                 <div className={styles.backBtnContainer} onClick={() => {
@@ -134,6 +130,48 @@ function AdminPhoneSurveyPage() {
                     </svg>
                     <div className={styles.backBtnText}>Back</div>
                 </div>
+                <Modal
+                    show={showModal}
+                    onHide={handleCloseModal}
+                    keyboard={false}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Send Phone Survey to Facility</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control type="text" placeholder="Enter facility name" value={facilityName} onChange={(event) => {
+                                    setFacilityName(event?.target?.value || '');
+                                }} />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicPassword">
+                                <Form.Label>Phone</Form.Label>
+                                <Form.Control type="tel" placeholder="Enter facility phone number" value={facilityPhoneNumber} onChange={(event) => {
+                                    setFacilityPhoneNumber(event?.target?.value || '');
+                                }} />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button className={styles.sendBtn} variant="primary" onClick={() => {
+                            const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
+                            setDoc(phoneRef, {
+                                contacted: false,
+                                name: facilityName,
+                                phone: facilityPhoneNumber.toString()
+                            }, {merge: true}).then(() => {
+                                alert(`${facilityPhoneNumber} will be sent a survey!`);
+                                setFacilityPhoneNumber('');
+                                setFacilityName('');
+                                setShowModal(false);
+                            }).catch((err) => {
+                                alert('Error sending phone survey');
+                            });
+                        }}>Send</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
             <Waves/>
         </div>
