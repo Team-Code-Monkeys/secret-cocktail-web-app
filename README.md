@@ -62,9 +62,19 @@ training hours.
 
 ### Features
 
+- Added ability to download data as .csv
+- Added admin dashboard of facilities
+  - Ability to see location
+  - Ability to see services
+- Added ability to upload facility contact list as .csv
+
 ### Bug Fixes
 
+- Fixed triple scrollbar showing on home page
+
 ### Known Issues
+
+No known issues as of now, please report using GitHub issues.
 
 <!-- How To Run -->
 
