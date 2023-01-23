@@ -5,7 +5,7 @@
     <img src="https://thesecretcocktail.com/wp-content/uploads/2021/01/Logo.png" alt="Logo" width="120" height="120" >
   </a>
 
-<h3 align="center">The Secret Cocktail Webapp</h3>
+<h1 align="center">The Secret Cocktail Webapp</h1>
 
   <p align="center">
     Custom built automated phone survey to find CNA facilities
