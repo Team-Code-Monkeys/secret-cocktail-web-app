@@ -9,7 +9,7 @@ import firebaseApp from "../firebase";
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import {k_admin_portal_page_route} from "../index";
 import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where, writeBatch} from "firebase/firestore";
-import {Form, Modal} from "react-bootstrap";
+import {Button, Form, Modal} from "react-bootstrap";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import {useCSVReader} from "react-papaparse";
@@ -125,8 +125,7 @@ function AdminPhoneSurveyPage() {
                 </button>
             </div>
             <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
-                <Button style={{width: 300}} className={styles.downloadBtn} variant="primary" 
-                >
+                <Button style={{width: 300}} className={styles.downloadBtn} variant="primary">
                     Download CSV
                 </Button>
             </div>
