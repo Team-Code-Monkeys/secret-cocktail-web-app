@@ -170,3 +170,27 @@
     border: 1px solid #6C5CE7 !important;
     background: #6C5CE7 !important;
 }
+
+.coloredBtn {
+    margin-bottom: 10px;
+}
+
+.coloredBtn > button {
+    color: black !important;
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+}
+
+.browseBtn {
+    margin-right: 8px;
+    color: white;
+    border: 1px solid #6C5CE7 !important;
+    background: #6C5CE7 !important;
+    border-radius: 10px;
+}
+
+.removeBtn {
+    color: red;
+    border: none;
+    background: rgba(0, 0, 0, 0);
+}
