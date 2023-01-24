@@ -164,7 +164,7 @@
     margin-top: 0;
 }
 
-.sendBtn {
+.sendBtn,.downloadBtn {
     composes: primaryBtn from '/src/globalStyles.css';
     margin-top: 0;
     border: 1px solid #6C5CE7 !important;
