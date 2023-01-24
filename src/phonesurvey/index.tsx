@@ -118,6 +118,12 @@ function AdminPhoneSurveyPage() {
                     Send
                 </Button>
             </div>
+            <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
+                <Button style={{width: 300}} className={styles.downloadBtn} variant="primary" 
+                >
+                    Download CSV
+                </Button>
+            </div>
             <div className={styles.innerContainer}>
                 <div className={styles.backBtnContainer} onClick={() => {
                     navigate(k_admin_portal_page_route)
