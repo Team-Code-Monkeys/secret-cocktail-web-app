@@ -6,7 +6,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import wave from '../wave.png';
-import {k_facility_report_correction_page_route, k_map_page_route} from "../index";
+import {k_admin_facility_page_route, k_facility_report_correction_page_route, k_map_page_route} from "../index";
 import {collection, doc, getDoc, getDocs, getFirestore, query, where} from "firebase/firestore";
 import ReactMarkdown from 'react-markdown'
 
@@ -15,6 +15,7 @@ function FacilityPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const db = getFirestore(firebaseApp);
+    const [isAdmin, setIsAdmin] = useState<any>(undefined);
     const [isFacility, setIsFacility] = useState<any>(undefined);
     const [facility, setFacility] = useState<any>(undefined);
     const [email, setEmail] = useState<any>(undefined);
@@ -29,6 +30,8 @@ function FacilityPage() {
                 setEmail(user?.email);
                 user.getIdTokenResult()
                     .then((idTokenResult: any) => {
+                        const isAdmin = idTokenResult?.claims?.admin === true;
+                        setIsAdmin(isAdmin);
                         const isFacility = idTokenResult?.claims?.facility === true;
                         setIsFacility(isFacility);
                     });
@@ -85,7 +88,7 @@ function FacilityPage() {
             {
                 (isFacility === false) &&
                 <div className={styles.backBtnContainer} onClick={() => {
-                    navigate(k_map_page_route)
+                    navigate(isAdmin ? k_admin_facility_page_route : k_map_page_route)
                 }}>
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M27 20H13" stroke="#5C5C5C" strokeWidth="2" strokeLinecap="round"

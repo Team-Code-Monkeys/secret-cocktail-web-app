@@ -108,14 +108,14 @@ function AdminPhoneSurveyPage() {
                     }).catch((err) => {
                         alert('Error adding question');
                     });
-                }}>Add
+                }}>Add Question
                 </button>
             </div>
             <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
                 <Button style={{width: 300}} className={styles.sendBtn} variant="primary" onClick={() => {
                     setShowModal(true);
                 }}>
-                    Send
+                    Send Survey
                 </Button>
             </div>
             <div className={styles.innerContainer}>

@@ -9,7 +9,7 @@ import {
     checkedIfAllowedOnPage,
     k_admin_role,
 } from "../authredirect/auth-check";
-import {k_admin_portal_page_route} from "../index";
+import {k_admin_portal_page_route, k_facility_page_route} from "../index";
 import {
     collection,
     getDocs,
@@ -106,12 +106,6 @@ function AdminFacilities() {
                 }
                 {facilities.map((facility: any) => {
                     return (
-                        // <div className={styles.pageInnerContainer} key={facility.id}>
-                        //   <div className={styles.pageTitle}>{facility.name}</div>
-                        //   <div className={styles.pageSubtitle}>{facility.address}</div>
-                        //   <div className={styles.pageSubtitle}>{facility.phone}</div>
-                        // </div>
-
                         <div className={styles.listItemContainer} key={facility.id}>
                             <div className={styles.listItemText2}>
                                 NAME: {facility.name || "No text"}
@@ -126,10 +120,10 @@ function AdminFacilities() {
                                 <button
                                     className={styles.primaryBtnListView}
                                     onClick={() => {
-                                        alert('Phone Survey Sent!')
+                                        navigate(k_facility_page_route + '/' + facility.id || 'none', {state: {distance: undefined, goBackToAdminPage: true}})
                                     }}
                                 >
-                                    Send Survey
+                                    More Info
                                 </button>
                                 <button
                                     style={{border: "#e13d3d", background: "#e13d3d"}}
