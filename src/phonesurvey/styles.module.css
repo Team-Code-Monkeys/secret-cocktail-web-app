@@ -1,172 +1,173 @@
 .container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 605px) {
-    .wave {
-        visibility: hidden !important;
-    }
+  .wave {
+    visibility: hidden !important;
+  }
 }
 
 .wave {
-    margin-top: auto;
-    width: 100%;
-    z-index: -1;
+  margin-top: auto;
+  width: 100%;
+  z-index: -1;
 }
 
 .title {
-    margin-top: 20px;
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 50px;
-    line-height: 77px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    letter-spacing: -1px;
-    color: #2D3436;
+  margin-top: 20px;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 50px;
+  line-height: 77px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -1px;
+  color: #2d3436;
 }
 
 .innerContainer {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    /*justify-content: center;*/
-    margin-top: 40px;
-    align-items: center;
-    align-content: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /*justify-content: center;*/
+  margin-top: 40px;
+  align-items: center;
+  align-content: center;
 }
 
 .innerContainer2 {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .innerContainer3 {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .innerContainer4 {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .helpText {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 36px;
-    display: flex;
-    align-items: center;
-    letter-spacing: -0.25px;
-    color: rgba(45, 52, 54, 0.79);
-    margin-bottom: 20px;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.25px;
+  color: rgba(45, 52, 54, 0.79);
+  margin-bottom: 20px;
 }
 
 .backBtnContainer:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .backBtnContainer {
-    margin-left: 20px;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    align-content: center;
+  margin-left: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
 }
 
 .backBtnText {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 12px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    letter-spacing: -0.5px;
-    color: #6C5CE7;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.5px;
+  color: #6c5ce7;
 }
 
 .listItemContainer {
-    margin-bottom: 20px;
-    background: #FFFFFF;
-    box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 15px 0px;
-    border-radius: 15px;
-    padding: 10px;
-    width: min(90%, 400px);
+  margin-bottom: 20px;
+  background: #ffffff;
+  box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 15px 0px;
+  border-radius: 15px;
+  padding: 10px;
+  width: min(90%, 400px);
 }
 
 @media (max-width: 605px) {
-    .listItemContainer {
-        width: 300px !important;
-    }
+  .listItemContainer {
+    width: 300px !important;
+  }
 }
 
 .listItemText {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 36px;
-    letter-spacing: 0.25px;
-    color: #000000;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 36px;
+  letter-spacing: 0.25px;
+  color: #000000;
 }
 
 .listItemText2 {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 36px;
-    letter-spacing: 0.25px;
-    color: #000000;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 36px;
+  letter-spacing: 0.25px;
+  color: #000000;
 }
 
 .listItemButtonsContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .primaryBtnListView {
-    composes: primaryBtn from '/src/globalStyles.css';
-    margin-top: 0;
-    margin-left: 10px;
-    width: 100px;
-    height: 40px;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 16px;
+  composes: primaryBtn from "/src/globalStyles.css";
+  margin-top: 0;
+  margin-left: 10px;
+  width: 100px;
+  height: 40px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .primaryBtnListView:hover {
-    box-shadow: None;
+  box-shadow: None;
 }
 
 .primaryBtn {
-    composes: primaryBtn from '/src/globalStyles.css';
-    margin-top: 0;
+  composes: primaryBtn from "/src/globalStyles.css";
+  margin-top: 0;
 }
 
-.sendBtn {
-    composes: primaryBtn from '/src/globalStyles.css';
-    margin-top: 0;
-    border: 1px solid #6C5CE7 !important;
-    background: #6C5CE7 !important;
+.sendBtn,
+.downloadBtn {
+  composes: primaryBtn from "/src/globalStyles.css";
+  margin-top: 0;
+  border: 1px solid #6c5ce7 !important;
+  background: #6c5ce7 !important;
 }
