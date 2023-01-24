@@ -19,6 +19,9 @@ import {
     deleteDoc,
     doc,
 } from "firebase/firestore";
+import {CSVLink} from "react-csv";
+
+const CSV_FIELDS = ["name", "email", "phone", "address", "about", "geohash", "geopoint"];
 
 function AdminFacilities() {
     const auth = getAuth(firebaseApp);
@@ -26,6 +29,18 @@ function AdminFacilities() {
     const db = getFirestore();
 
     const [facilities, setFacilities] = useState<any>([]);
+    const [facilityData, setFacilityData] = useState<Array<Array<string>>>([]);
+
+    function makeStringCSVCompliant(str: string | undefined) {
+        if (!str) {
+            return "";
+        }
+        let result = str;
+        result = result.replace(/"/g, '""');
+        result = result.replace(/,/g, ',');
+        result = result.replace(/'/g, '\'');
+        return result;
+    }
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -48,6 +63,32 @@ function AdminFacilities() {
         fetchFacilities();
     }, [db]);
 
+    useEffect(() => {
+        async function fetchFacilityData() {
+            try {
+                const newFacilityData: Array<Array<string>> = [CSV_FIELDS];
+                const querySnapshot = await getDocs(query(collection(db, "facility")));
+                querySnapshot.forEach((doc) => {
+                    const facility = doc.data();
+                    const facilityDataArr: Array<string> = [];
+                    for (const field of CSV_FIELDS) {
+                        facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : "");
+                    }
+                    newFacilityData.push(facilityDataArr);
+                });
+                return newFacilityData;
+            } catch (e: any) {
+                throw Error(e?.message || "unable to query database");
+            }
+        }
+
+        fetchFacilityData().then((res) => {
+            setFacilityData(res)
+        }).catch((err) => {
+            alert("Unable to generate CSV file for facilities " + err?.message || "");
+        });
+    }, [db]);
+
     return (
         <div className={styles.container}>
             <Navbar/>
@@ -55,6 +96,14 @@ function AdminFacilities() {
                 <div className={styles.title}>Facility Dashboard</div>
             </div>
             <div className={styles.innerContainer3}>
+                {
+                    (facilityData && facilityData.length > 0) ?
+                        <CSVLink data={facilityData} filename={'facilities.csv'} className={styles.downloadBtn}>
+                            <span>Download CSV</span>
+                        </CSVLink>
+                        :
+                        <button className={styles.downloadBtn} disabled={true}>Loading...</button>
+                }
                 {facilities.map((facility: any) => {
                     return (
                         // <div className={styles.pageInnerContainer} key={facility.id}>

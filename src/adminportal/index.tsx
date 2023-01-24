@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import {getAuth} from 'firebase/auth';
@@ -8,58 +8,15 @@ import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import wave from "../wave.png";
 import {k_admin_phone_survey_page_route, k_admin_facility_page_route} from "../index";
-import { CSVLink } from "react-csv";
-import {collection, getDocs, getFirestore, query} from "firebase/firestore";
-
-const CSV_FIELDS = ["name", "email", "phone", "address", "about", "geohash", "geopoint"];
 
 function AdminPortalPage() {
     const auth = getAuth(firebaseApp);
-    const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
-    const [facilityData, setFacilityData] = useState<Array<Array<string>>>([]);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
-
-    useEffect(() => {
-        async function fetchFacilityData() {
-            try {
-                const newFacilityData: Array<Array<string>> = [CSV_FIELDS];
-                const querySnapshot = await getDocs(query(collection(db, "facility")));
-                querySnapshot.forEach((doc) => {
-                    const facility = doc.data();
-                    const facilityDataArr: Array<string> = [];
-                    for (const field of CSV_FIELDS) {
-                        facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : "");
-                    }
-                    newFacilityData.push(facilityDataArr);
-                });
-                return newFacilityData;
-            } catch (e: any) {
-                throw Error(e?.message || "unable to query database");
-            }
-        }
-
-        fetchFacilityData().then((res) => {
-            setFacilityData(res)
-        }).catch((err) => {
-            alert("Unable to generate CSV file for facilities " + err?.message || "");
-        });
-    }, [db]);
-
-    function makeStringCSVCompliant(str: string | undefined) {
-        if (!str) {
-            return "";
-        }
-        let result = str;
-        result = result.replace(/"/g, '""');
-        result = result.replace(/,/g, ',');
-        result = result.replace(/'/g, '\'');
-        return result;
-    }
 
     return (
         <div className={styles.container}>
@@ -113,14 +70,6 @@ function AdminPortalPage() {
                     </button>
                 </div>
             </div>
-            {
-                (facilityData && facilityData.length > 0) ?
-                <CSVLink data={facilityData} filename={'facilities.csv'} className={styles.downloadBtn}>
-                    <span>Download CSV</span>
-                </CSVLink>
-                :
-                <button className={styles.downloadBtn} disabled={true}>Loading...</button>
-            }
             <Waves/>
         </div>
     );
