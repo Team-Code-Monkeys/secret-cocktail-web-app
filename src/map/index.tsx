@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import {getAuth} from 'firebase/auth';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role, k_regular_user_role} from '../authredirect/auth-check';
@@ -23,6 +23,8 @@ function MapPage() {
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
+    const { search } = useLocation();
+    const [hasParsedQueryParams, setHasParsedQueryParams] = useState<boolean>(false);
     const [center, setCenter] = useState<any>([33.78010647946605, -84.38955018824828]);
     const [zoom, setZoom] = useState<number>(16.0);
     const [radius, setRadius] = useState<number>(444);
@@ -31,6 +33,45 @@ function MapPage() {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [locationInput, setLocationInput] = useState<string>('930 Spring St NW, Atlanta, GA 30309');
     const [isUnknownLocation, setIsUnknownLocation] = useState<boolean>(false);
+
+    // use query parameter to set the center location of the map (if they are defined)
+    const setLocationFromQueryParams = () => {
+        if (!hasParsedQueryParams) {
+            try {
+                const searchParams = new URLSearchParams(search);
+                const validSearchParams = searchParams.get("lat") && searchParams.get("lon");
+                if (validSearchParams) {
+                    // set latitude and longitude of marker
+                    const lat = parseFloat(searchParams.get("lat") || "33.78010647946605");
+                    const lon = parseFloat(searchParams.get("lon") || "-84.38955018824828");
+                    setCenter([lat, lon]);
+
+                    // set search text of place (query Google Geo Decoding API to get the address of a place from latitude and longitude values)
+                    Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
+                    Geocode.fromLatLng(lat.toString(), lon.toString()).then(
+                        (response) => {
+                            if (response.results && response.results.length > 0 && response.results[0].formatted_address) {
+                                setLocationInput(`${response.results[0].formatted_address}`);
+                            } else {
+                                setLocationInput(`(${lat}, ${lon})`);
+                            }
+                        },
+                        (error) => {
+                            setLoading(false);
+                            if ((error?.message || '').includes('ZERO_RESULTS') || (error?.message || '').includes('Provided address is invalid')) {
+                                setIsUnknownLocation(true);
+                            } else {
+                                console.error(error);
+                            }
+                        }
+                    );
+                }
+            } catch (e) {
+                console.error("Unable to parse latitude and longitude query parameters");
+            }
+            setHasParsedQueryParams(true);
+        }
+    }
 
     const queryLocations = async () => {
         // setFacilities([]);
@@ -119,6 +160,7 @@ function MapPage() {
                     setLoading(false);
                     const { lat, lng } = response.results[0].geometry.location;
                     setCenter([lat, lng]);
+                    setLocationFromQueryParams();
                 },
                 (error) => {
                     setLoading(false);
@@ -229,7 +271,7 @@ function FacilityList(props: any) {
             </div>
             {
                 props.isUnknownLocation &&
-                <div className={styles.invalidLocationText}>Invalid location</div>
+                <div className={styles.invalidLocationText}>Unlabeled location</div>
             }
             {
                 !props.isUnknownLocation &&
