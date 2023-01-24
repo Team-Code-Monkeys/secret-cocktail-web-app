@@ -1,11 +1,11 @@
 .primaryBtn:hover {
-    cursor: pointer;
-    box-shadow: rgba(108, 92, 231, 0.48) 0px 7px 29px 0px;
-    border-radius: 20px;
+    cursor: pointer !important;
+    box-shadow: rgba(108, 92, 231, 0.48) 0px 7px 29px 0px !important;
+    border-radius: 20px !important;
 }
 
 .primaryBtn:active {
-    filter: brightness(80%);
+    filter: brightness(80%) !important;
 }
 
 .primaryBtn {
