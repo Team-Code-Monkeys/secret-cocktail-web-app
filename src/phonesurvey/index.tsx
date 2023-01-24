@@ -9,7 +9,7 @@ import firebaseApp from "../firebase";
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import {k_admin_portal_page_route} from "../index";
 import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where} from "firebase/firestore";
-import {Button, Form, Modal} from "react-bootstrap";
+import {Form, Modal} from "react-bootstrap";
 
 function AdminPhoneSurveyPage() {
     const auth = getAuth(firebaseApp);
@@ -112,11 +112,11 @@ function AdminPhoneSurveyPage() {
                 </button>
             </div>
             <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
-                <Button style={{width: 300}} className={styles.sendBtn} variant="primary" onClick={() => {
+                <button style={{width: 300}} className={styles.sendBtn} onClick={() => {
                     setShowModal(true);
                 }}>
                     Send Survey
-                </Button>
+                </button>
             </div>
             <div className={styles.innerContainer}>
                 <div className={styles.backBtnContainer} onClick={() => {
@@ -136,7 +136,7 @@ function AdminPhoneSurveyPage() {
                     keyboard={false}
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Send Phone Survey to Facility</Modal.Title>
+                        <Modal.Title>Send Phone Survey to Facilities</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
@@ -155,7 +155,7 @@ function AdminPhoneSurveyPage() {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button className={styles.sendBtn} variant="primary" onClick={() => {
+                        <button className={styles.sendBtn} onClick={() => {
                             const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
                             setDoc(phoneRef, {
                                 contacted: false,
@@ -169,7 +169,7 @@ function AdminPhoneSurveyPage() {
                             }).catch((err) => {
                                 alert('Error sending phone survey');
                             });
-                        }}>Send</Button>
+                        }}>Send</button>
                     </Modal.Footer>
                 </Modal>
             </div>
