@@ -25,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-geocode": "^0.2.3",
     "react-markdown": "^8.0.3",
+    "react-papaparse": "^4.1.0",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",

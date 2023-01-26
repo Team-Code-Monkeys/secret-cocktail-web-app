@@ -8,17 +8,23 @@ import {useNavigate} from "react-router-dom";
 import firebaseApp from "../firebase";
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import {k_admin_portal_page_route} from "../index";
-import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where, writeBatch} from "firebase/firestore";
 import {Button, Form, Modal} from "react-bootstrap";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import {useCSVReader} from "react-papaparse";
 
 function AdminPhoneSurveyPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
+    const { CSVReader } = useCSVReader();
     const db = getFirestore();
 
     const [questions, setQuestions] = useState<any>([]);
 
     const [showModal, setShowModal] = useState(false);
+    const [sendToMultipleFacilities, setSendToMultipleFacilities] = useState(true);
+    const [facilitiesToSendSurveyTo, setFacilitiesToSendSurveyTo] = useState([]);
     const [facilityName, setFacilityName] = useState('');
     const [facilityPhoneNumber, setFacilityPhoneNumber] = useState('');
     const handleCloseModal = () => setShowModal(false);
@@ -108,19 +114,18 @@ function AdminPhoneSurveyPage() {
                     }).catch((err) => {
                         alert('Error adding question');
                     });
-                }}>Add
+                }}>Add Question
                 </button>
             </div>
             <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
-                <Button style={{width: 300}} className={styles.sendBtn} variant="primary" onClick={() => {
+                <button style={{width: 300}} className={styles.sendBtn} onClick={() => {
                     setShowModal(true);
                 }}>
-                    Send
-                </Button>
+                    Send Survey
+                </button>
             </div>
             <div className={styles.innerContainer4} style={{marginTop: '20px'}}>
-                <Button style={{width: 300}} className={styles.downloadBtn} variant="primary" 
-                >
+                <Button style={{width: 300}} className={styles.downloadBtn} variant="primary">
                     Download CSV
                 </Button>
             </div>
@@ -142,40 +147,124 @@ function AdminPhoneSurveyPage() {
                     keyboard={false}
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Send Phone Survey to Facility</Modal.Title>
+                        <Modal.Title>Send Phone Survey to Facilities</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form>
-                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                                <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" placeholder="Enter facility name" value={facilityName} onChange={(event) => {
-                                    setFacilityName(event?.target?.value || '');
-                                }} />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicPassword">
-                                <Form.Label>Phone</Form.Label>
-                                <Form.Control type="tel" placeholder="Enter facility phone number" value={facilityPhoneNumber} onChange={(event) => {
-                                    setFacilityPhoneNumber(event?.target?.value || '');
-                                }} />
-                            </Form.Group>
-                        </Form>
+                        <DropdownButton id="dropdown-button"
+                                        title={sendToMultipleFacilities ? "Send to Multiple Facilities" : "Send to Single Facility"}
+                                        className={styles.coloredBtn}>
+                            {
+                                sendToMultipleFacilities
+                                ?
+                                    <Dropdown.Item onClick={() => {setSendToMultipleFacilities(false)}}>Send to Single Facility</Dropdown.Item>
+                                :
+                                    <Dropdown.Item onClick={() => {setSendToMultipleFacilities(true)}}>Send to Multiple Facilities</Dropdown.Item>
+                            }
+                        </DropdownButton>
+                        {
+                            sendToMultipleFacilities
+                            ?
+                                <>
+                                    <Form>
+                                        <CSVReader
+                                            onUploadAccepted={(results: any) => {
+                                                // convert CSV to JSON data
+                                                const data = results?.data || [];
+                                                let keys = data.shift()
+                                                let jsonResult = data.map((data: any[]) =>
+                                                    Object.assign({}, ...data.map((x: any, i: any) => ({ [keys[i]]: x })))
+                                                );
+                                                for (let i = 0; i < jsonResult.length; i++) {
+                                                    jsonResult[i]['contacted'] = false;
+                                                }
+                                                setFacilitiesToSendSurveyTo(jsonResult);
+                                            }}
+                                        >
+                                            {({
+                                                  getRootProps,
+                                                  acceptedFile,
+                                                  getRemoveFileProps,
+                                              }: any) => (
+                                                <>
+                                                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                                                        <button type='button' {...getRootProps()} className={styles.browseBtn}>
+                                                            Upload CSV File
+                                                        </button>
+                                                        <div>
+                                                            {acceptedFile && acceptedFile.name}
+                                                        </div>
+                                                        {
+                                                            acceptedFile &&
+                                                            <button {...getRemoveFileProps()} className={styles.removeBtn}>
+                                                                X
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        <span>Confused about the format? Refer to this </span>
+                                                        <a style={{marginTop: "10px"}} href={'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4o7EvXy3qVhg4LTBA6rbxGS0oHIR4vJCW0QKnu-I9gFmWEXxZDaWLOz7Zxv1tL_A_lqQoNTo-AwCY/pub?output=csv'}
+                                                           target="_blank" rel="noreferrer">sample file</a>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </CSVReader>
+                                    </Form>
+                                </>
+                            :
+                                <>
+                                    <Form>
+                                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                            <Form.Label>Name</Form.Label>
+                                            <Form.Control type="text" placeholder="Enter facility name" value={facilityName} onChange={(event) => {
+                                                setFacilityName(event?.target?.value || '');
+                                            }} />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                                            <Form.Label>Phone</Form.Label>
+                                            <Form.Control type="tel" placeholder="Enter facility phone number" value={facilityPhoneNumber} onChange={(event) => {
+                                                setFacilityPhoneNumber(event?.target?.value || '');
+                                            }} />
+                                        </Form.Group>
+                                    </Form>
+                                </>
+                        }
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button className={styles.sendBtn} variant="primary" onClick={() => {
-                            const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
-                            setDoc(phoneRef, {
-                                contacted: false,
-                                name: facilityName,
-                                phone: facilityPhoneNumber.toString()
-                            }, {merge: true}).then(() => {
-                                alert(`${facilityPhoneNumber} will be sent a survey!`);
-                                setFacilityPhoneNumber('');
-                                setFacilityName('');
-                                setShowModal(false);
-                            }).catch((err) => {
-                                alert('Error sending phone survey');
-                            });
-                        }}>Send</Button>
+                        <button className={styles.sendBtn} onClick={() => {
+                            if (sendToMultipleFacilities) {
+                                const batch = writeBatch(db);
+                                facilitiesToSendSurveyTo.forEach((facilityInfo: any) => {
+                                    if (facilityInfo?.phone && facilityInfo?.name) {
+                                        const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityInfo?.phone).toString() + Math.round(new Date().getTime()).toString());
+                                        batch.set(phoneRef, facilityInfo);
+                                    }
+                                });
+                                batch.commit().then(() => {
+                                    alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
+                                    setShowModal(false);
+                                    setFacilitiesToSendSurveyTo([]);
+                                }).catch((err) => {
+                                    alert('Error sending phone surveys');
+                                    console.error('Error sending phone surveys', err);
+                                });
+                            } else {
+                                setFacilitiesToSendSurveyTo([]);
+                                const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
+                                setDoc(phoneRef, {
+                                    contacted: false,
+                                    name: facilityName,
+                                    phone: facilityPhoneNumber.toString()
+                                }, {merge: true}).then(() => {
+                                    alert(`${facilityPhoneNumber} will be sent a survey!`);
+                                    setFacilityPhoneNumber('');
+                                    setFacilityName('');
+                                    setShowModal(false);
+                                }).catch((err) => {
+                                    alert('Error sending phone survey');
+                                    console.error('Error sending phone survey', err);
+                                });
+                            }
+                        }}>Send</button>
                     </Modal.Footer>
                 </Modal>
             </div>
