@@ -104,9 +104,9 @@ function FacilityPage() {
                 <div className={styles.facilityOuterContainer}>
                     <div className={styles.facilityContainer}>
                         <div className={styles.facilityInnerContainer}>
-                            <div className={styles.facilityText}>NAME: {facility.name}</div>
-                            <div className={styles.facilityText}>ADDRESS: {facility.address}</div>
-                            <div className={styles.facilityText}>PHONE: {facility.phone}</div>
+                            <div className={styles.facilityText}>{`NAME: ${facility.name}`}</div>
+                            <div className={styles.facilityText}>{`ADDRESS: ${facility.address}`}</div>
+                            <div className={styles.facilityText}>{`PHONE: ${facility.phone}`}</div>
                         </div>
                         {
                             facility?.about &&
