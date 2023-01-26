@@ -8,6 +8,7 @@ import {
 } from '../index';
 import {setupAuthListener} from "../authredirect/setup-auth-listener";
 import firebaseApp from '../firebase';
+import wave from "../wave.png";
 
 function RegisterPage() {
     const auth = getAuth(firebaseApp);
@@ -68,19 +69,34 @@ function RegisterPage() {
             <div className={styles.formContainer}>
                 <div className={styles.inputContainer}>
                     <input placeholder={'Email'} type={'email'} className={styles.input} value={email}
-                           onChange={(event) => setEmail(event.target.value)}/>
+                           onChange={(event) => setEmail(event.target.value)}
+                           onKeyDown={(event) => {
+                               if (event.key === 'Enter') {
+                                   signUp();
+                               }
+                           }}/>
                     <UserIcon field={email}/>
                 </div>
                 <div className={styles.inputContainer}>
                     <input placeholder={'Password'} type={'password'} className={styles.input} value={password}
-                           onChange={(event) => setPassword(event.target.value)}/>
+                           onChange={(event) => setPassword(event.target.value)}
+                           onKeyDown={(event) => {
+                               if (event.key === 'Enter') {
+                                   signUp();
+                               }
+                           }}/>
                 </div>
                 <div className={styles.inputContainer}>
                     <input placeholder={'Confirm Password'} type={'password'} className={styles.input}
                            value={confirmPassword}
-                           onChange={(event) => setConfirmPassword(event.target.value)}/>
+                           onChange={(event) => setConfirmPassword(event.target.value)}
+                           onKeyDown={(event) => {
+                               if (event.key === 'Enter') {
+                                   signUp();
+                               }
+                           }}/>
                 </div>
-                <button className={styles.primaryBtn} onClick={() => {
+                <button className='primaryBtn' onClick={() => {
                     signUp()
                 }}>Sign Up
                 </button>
@@ -96,6 +112,7 @@ function RegisterPage() {
                     <div className={styles.backBtnText}>Back</div>
                 </div>
             </div>
+            <Waves />
         </div>
     );
 }
@@ -115,6 +132,12 @@ function UserIcon(props: any) {
                 </svg>
             }
         </>
+    );
+}
+
+function Waves() {
+    return (
+        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
     );
 }
 

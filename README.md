@@ -1,8 +1,84 @@
-# web app
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/Team-Code-Monkeys/secret-cocktail-web-app">
+    <img src="https://thesecretcocktail.com/wp-content/uploads/2021/01/Logo.png" alt="Logo" width="120" height="120" >
+  </a>
 
-[https://secret-cocktail.web.app](https://secret-cocktail.web.app)
+<h1 align="center">The Secret Cocktail Webapp</h1>
 
-## Available Scripts
+  <p align="center">
+    Custom built automated phone survey to find CNA facilities
+    <br />
+    <br />
+    <a href="https://secret-cocktail.web.app/"><strong>Check out the deployed site »</strong></a>
+    <br />
+    <br />
+  </p>
+</p>
+
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#introduction">Introduction</a>
+    </li>
+    <li>
+      <a href="#v010-release-notes">v0.1.0 Release Notes</a>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#bug-fixes">Bug Fixes</a></li>
+        <li><a href="#known-issues">Known Issues</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-to-run">How To Run</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+  </ol>
+</details>
+
+<!-- INTRODUCTION -->
+
+## Introduction
+
+<p align="center">
+  <strong align="center">Why use us?</strong>
+  <br>
+  <img width="500" height="320" src="https://github.com/Team-Code-Monkeys/secret-cocktail-web-app/raw/main/screenshot/mockup.jpg">
+</p>
+
+The Secret Cocktail Webapp is an automated phone survey system to help nursing trainees find facilities near them to complete
+their required training hours. Our software features a phone survey system that sends questionnaires to facilities and
+based on their responses, they can be added to our database of facilities hosting nursing training. We also have a web
+application that allows nursing trainees to easily find nearby facilities where they can complete their required
+training hours.
+
+
+<!-- Release Notes -->
+
+# Release Notes
+
+## v0.1.0 Release Notes
+
+### Features
+
+- Added ability to download data as .csv
+- Added admin dashboard of facilities
+  - Ability to see location
+  - Ability to see services
+- Added ability to upload facility contact list as .csv
+
+### Bug Fixes
+
+- Fixed triple scrollbar showing on home page
+
+### Known Issues
+
+No known issues as of now, please report using GitHub issues.
+
+<!-- How To Run -->
+
+## How To Run
 
 In the project directory, you can run:
 
@@ -14,7 +90,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-## Optional Environment Variables
+**Optional Environment Variables**
 
 ```shell
 API_URL="..."

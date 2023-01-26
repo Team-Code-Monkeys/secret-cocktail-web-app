@@ -161,7 +161,7 @@ function Dots() {
 
 function Waves() {
     return (
-        <img src={wave} className={styles.wave} alt={'Wave for styling webpage.'}/>
+        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
     );
 }
 

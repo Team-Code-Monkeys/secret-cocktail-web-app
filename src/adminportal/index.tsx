@@ -7,7 +7,7 @@ import {setupAuthListener} from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import {checkedIfAllowedOnPage, k_admin_role} from "../authredirect/auth-check";
 import wave from "../wave.png";
-import {k_admin_phone_survey_page_route, k_map_page_route} from "../index";
+import {k_admin_phone_survey_page_route, k_admin_facility_page_route} from "../index";
 
 function AdminPortalPage() {
     const auth = getAuth(firebaseApp);
@@ -65,7 +65,7 @@ function AdminPortalPage() {
                         </div>
                     </div>
                     <button className={styles.primaryBtn} onClick={() => {
-                        navigate(k_map_page_route);
+                        navigate(k_admin_facility_page_route);
                     }}>Open Dashboard
                     </button>
                 </div>
@@ -82,8 +82,8 @@ function Circle() {
                 <rect x="0.540527" width="32" height="32" rx="16" fill="#FDCB6E"/>
             </g>
             <defs>
-                <filter id="filter0_b_65_2560" x="-47.4595" y="-48" width="128" height="128" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <filter id="filter0_b_65_2560" x="-47.4595" y="-48" width="128" height="128" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
                     <feGaussianBlur in="BackgroundImageFix" stdDeviation="24"/>
                     <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_65_2560"/>
                     <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_65_2560" result="shape"/>
@@ -95,7 +95,7 @@ function Circle() {
 
 function Waves() {
     return (
-        <img src={wave} className={styles.wave} alt={'Wave for styling webpage.'}/>
+        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
     );
 }
 
