@@ -1,15 +1,6 @@
-import React, {useEffect, useState} from "react";
-import Navbar from "../navbar";
-import styles from "./styles.module.css";
-import {getAuth} from "firebase/auth";
-import {useNavigate} from "react-router-dom";
-import {setupAuthListener} from "../authredirect/setup-auth-listener";
-import firebaseApp from "../firebase";
-import {
-    checkedIfAllowedOnPage,
-    k_admin_role,
-} from "../authredirect/auth-check";
-import {k_admin_portal_page_route, k_facility_page_route} from "../index";
+import React, { useEffect, useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import {
     collection,
     getDocs,
@@ -18,10 +9,19 @@ import {
     getFirestore,
     deleteDoc,
     doc,
-} from "firebase/firestore";
-import {CSVLink} from "react-csv";
+} from 'firebase/firestore';
+import { CSVLink } from 'react-csv';
+import Navbar from '../navbar';
+import styles from './styles.module.css';
+import { setupAuthListener } from '../authredirect/setup-auth-listener';
+import firebaseApp from '../firebase';
+import {
+    checkedIfAllowedOnPage,
+    k_admin_role,
+} from '../authredirect/auth-check';
+import { k_admin_portal_page_route, k_facility_page_route } from '../index';
 
-const CSV_FIELDS = ["name", "email", "phone", "address", "about", "geohash", "geopoint"];
+const CSV_FIELDS = ['name', 'email', 'phone', 'address', 'about', 'geohash', 'geopoint'];
 
 function AdminFacilities() {
     const auth = getAuth(firebaseApp);
@@ -33,7 +33,7 @@ function AdminFacilities() {
 
     function makeStringCSVCompliant(str: string | undefined) {
         if (!str) {
-            return "";
+            return '';
         }
         let result = str;
         result = result.replace(/"/g, '""');
@@ -49,7 +49,7 @@ function AdminFacilities() {
 
     useEffect(() => {
         async function fetchFacilities() {
-            const q = query(collection(db, "facility"), where("name", ">=", ""));
+            const q = query(collection(db, 'facility'), where('name', '>=', ''));
             const querySnapshot = await getDocs(q);
             const facilitiesList: any = [];
             querySnapshot.forEach((doc) => {
@@ -67,84 +67,89 @@ function AdminFacilities() {
         async function fetchFacilityData() {
             try {
                 const newFacilityData: Array<Array<string>> = [CSV_FIELDS];
-                const querySnapshot = await getDocs(query(collection(db, "facility")));
+                const querySnapshot = await getDocs(query(collection(db, 'facility')));
                 querySnapshot.forEach((doc) => {
                     const facility = doc.data();
                     const facilityDataArr: Array<string> = [];
                     for (const field of CSV_FIELDS) {
-                        facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : "");
+                        facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : '');
                     }
                     newFacilityData.push(facilityDataArr);
                 });
                 return newFacilityData;
             } catch (e: any) {
-                throw Error(e?.message || "unable to query database");
+                throw Error(e?.message || 'unable to query database');
             }
         }
 
         fetchFacilityData().then((res) => {
-            setFacilityData(res)
+            setFacilityData(res);
         }).catch((err) => {
-            alert("Unable to generate CSV file for facilities " + err?.message || "");
+            alert(`Unable to generate CSV file for facilities ${err?.message}` || '');
         });
     }, [db]);
 
     return (
         <div className={styles.container}>
-            <Navbar/>
+            <Navbar />
             <div className={styles.innerContainer}>
                 <div className={styles.title}>Facility Dashboard</div>
             </div>
             <div className={styles.innerContainer3}>
                 {
-                    (facilityData && facilityData.length > 0) ?
-                        <CSVLink data={facilityData} filename={'facilities.csv'} className={styles.downloadBtn}>
-                            <span>Download CSV</span>
-                        </CSVLink>
-                        :
-                        <button className={styles.downloadBtn} disabled={true}>Loading...</button>
+                    (facilityData && facilityData.length > 0)
+                        ? (
+                            <CSVLink data={facilityData} filename="facilities.csv" className={styles.downloadBtn}>
+                                <span>Download CSV</span>
+                            </CSVLink>
+                        )
+                        : <button className={styles.downloadBtn} disabled>Loading...</button>
                 }
-                {facilities.map((facility: any) => {
-                    return (
-                        <div className={styles.listItemContainer} key={facility.id}>
-                            <div className={styles.listItemText2}>
-                                NAME: {facility.name || "No text"}
-                            </div>
-                            <div className={styles.listItemText2}>
-                                ADDRESS: {facility.address || "No text"}
-                            </div>
-                            <div className={styles.listItemText2}>
-                                PHONE: {facility.phone || "No text"}
-                            </div>
-                            <div className={styles.listItemButtonsContainer}>
-                                <button
-                                    className={styles.primaryBtnListView}
-                                    onClick={() => {
-                                        navigate(k_facility_page_route + '/' + facility.id || 'none', {state: {distance: undefined, goBackToAdminPage: true}})
-                                    }}
-                                >
-                                    More Info
-                                </button>
-                                <button
-                                    style={{border: "#e13d3d", background: "#e13d3d"}}
-                                    className={styles.primaryBtnListView}
-                                    onClick={() => {
-                                        deleteDoc(doc(db, "facility", facility.id || ""))
-                                            .then(() => {
-                                                window.location.reload();
-                                            })
-                                            .catch((error: any) => {
-                                                alert("Error deleting facility.");
-                                                console.error("Error deleting facility", error);
-                                            });
-                                    }}
-                                >
-                                    Delete
-                                </button>
-                            </div>
+                {facilities.map((facility: any) => (
+                    <div className={styles.listItemContainer} key={facility.id}>
+                        <div className={styles.listItemText2}>
+                            NAME:
+                            {' '}
+                            {facility.name || 'No text'}
                         </div>
-                    );
-                })}
+                        <div className={styles.listItemText2}>
+                            ADDRESS:
+                            {' '}
+                            {facility.address || 'No text'}
+                        </div>
+                        <div className={styles.listItemText2}>
+                            PHONE:
+                            {' '}
+                            {facility.phone || 'No text'}
+                        </div>
+                        <div className={styles.listItemButtonsContainer}>
+                            <button
+                                className={styles.primaryBtnListView}
+                                onClick={() => {
+                                    navigate(`${k_facility_page_route}/${facility.id}` || 'none', { state: { distance: undefined, goBackToAdminPage: true } });
+                                }}
+                            >
+                                More Info
+                            </button>
+                            <button
+                                style={{ border: '#e13d3d', background: '#e13d3d' }}
+                                className={styles.primaryBtnListView}
+                                onClick={() => {
+                                    deleteDoc(doc(db, 'facility', facility.id || ''))
+                                        .then(() => {
+                                            window.location.reload();
+                                        })
+                                        .catch((error: any) => {
+                                            alert('Error deleting facility.');
+                                            console.error('Error deleting facility', error);
+                                        });
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
             <div className={styles.innerContainer}>
                 <div

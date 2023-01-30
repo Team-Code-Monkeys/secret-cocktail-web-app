@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
+import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import firebaseApp from '../firebase';
-import {getAuth} from 'firebase/auth';
-import {useNavigate} from "react-router-dom";
-import {setupAuthListener} from "./setup-auth-listener";
+import { setupAuthListener } from './setup-auth-listener';
 
 /**
  * Page that shows blank content until auth state is finalized.
@@ -20,15 +20,15 @@ function AuthRedirectPage() {
     useEffect(() => {
         const slowWiFiLimitSeconds = 3;
         const timeoutID = setTimeout(() => {
-            alert('Slow Wi-Fi detected')
+            alert('Slow Wi-Fi detected');
         }, slowWiFiLimitSeconds * 1000.0);
         return () => {
             clearTimeout(timeoutID);
         };
-    }, [])
+    }, []);
 
     return (
-        <div/>
+        <div />
     );
 }
 
