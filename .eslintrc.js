@@ -6,7 +6,8 @@ module.exports = {
         'react/jsx-indent': ["error", 4],
         'react/jsx-indent-props': ["error", 4],
         'react/function-component-definition': [2, { "namedComponents": "arrow-function" }],
-        'import/no-cycle': 'off'
+        'import/no-cycle': 'off',
+        'react/button-has-type': 'off',
 },
     parserOptions: {
         project: './tsconfig.json',
