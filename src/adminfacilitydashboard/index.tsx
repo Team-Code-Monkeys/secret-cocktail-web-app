@@ -20,6 +20,7 @@ import {
     doc,
 } from "firebase/firestore";
 import {CSVLink} from "react-csv";
+import wave from "../wave.png";
 
 const CSV_FIELDS = ["name", "email", "phone", "address", "about", "geohash", "geopoint"];
 
@@ -126,8 +127,7 @@ function AdminFacilities() {
                                     More Info
                                 </button>
                                 <button
-                                    style={{border: "#e13d3d", background: "#e13d3d"}}
-                                    className={styles.primaryBtnListView}
+                                    className={styles.deleteBtnListView}
                                     onClick={() => {
                                         deleteDoc(doc(db, "facility", facility.id || ""))
                                             .then(() => {
@@ -178,7 +178,14 @@ function AdminFacilities() {
                     <div className={styles.backBtnText}>Back</div>
                 </div>
             </div>
+            <Waves />
         </div>
+    );
+}
+
+function Waves() {
+    return (
+        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
     );
 }
 
