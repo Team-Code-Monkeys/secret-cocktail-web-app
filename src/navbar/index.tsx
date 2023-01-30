@@ -13,7 +13,7 @@ import {
 } from '../index';
 import firebaseApp from '../firebase';
 
-function Navbar() {
+const Navbar = () => {
     const location = useLocation();
     const pathname = location?.pathname;
     return (
@@ -28,34 +28,32 @@ function Navbar() {
             </div>
         </div>
     );
-}
+};
 
-function Logo() {
-    return (
-        <img src={logo} alt="The Secret Cocktail company logo" className={styles.navbarLogo} />
-    );
-}
+const Logo = () => (
+    <img src={logo} alt="The Secret Cocktail company logo" className={styles.navbarLogo} />
+);
 
-function TitleText() {
-    return (
-        <div className={styles.navbarTitleText}>The Secret Cocktail</div>
-    );
-}
+const TitleText = () => (
+    <div className={styles.navbarTitleText}>The Secret Cocktail</div>
+);
 
-function AuthButtons() {
+const AuthButtons = () => {
     const navigate = useNavigate();
 
     return (
         <div className={styles.navbarBtnsContainer}>
             <button
-              className={styles.btnSecondary} onClick={() => {
+                className={styles.btnSecondary}
+                onClick={() => {
                     navigate(k_login_page_trainee_route);
                 }}
             >
                 Login
             </button>
             <button
-              className={styles.btnPrimary} onClick={() => {
+                className={styles.btnPrimary}
+                onClick={() => {
                     navigate(k_register_page_trainee_route);
                 }}
             >
@@ -63,16 +61,17 @@ function AuthButtons() {
             </button>
         </div>
     );
-}
+};
 
-function SignOutButton() {
+const SignOutButton = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
 
     return (
         <div className={styles.navbarBtnsContainer}>
             <button
-              className={styles.btnPrimary} onClick={() => {
+                className={styles.btnPrimary}
+                onClick={() => {
                     if (auth) {
                         auth.signOut()
                             .then((response) => {
@@ -88,6 +87,6 @@ function SignOutButton() {
             </button>
         </div>
     );
-}
+};
 
 export default Navbar;

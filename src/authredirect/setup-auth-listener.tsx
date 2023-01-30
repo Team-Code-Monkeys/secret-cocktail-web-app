@@ -12,7 +12,13 @@ import {
  * @param redirectIfNotLoggedIn redirect to landing page if not logged in
  * @param redirectIfLoggedIn redirect to user's home page if logged in
  */
-export const setupAuthListener = (auth: Auth, navigate: NavigateFunction, redirectIfNotLoggedIn: boolean, redirectIfLoggedIn: boolean) => {
+// eslint-disable-next-line import/prefer-default-export
+export const setupAuthListener = (
+    auth: Auth,
+    navigate: NavigateFunction,
+    redirectIfNotLoggedIn: boolean,
+    redirectIfLoggedIn: boolean,
+) => {
     if (auth) {
         auth.onAuthStateChanged((user: any) => {
             if (user && redirectIfLoggedIn) {

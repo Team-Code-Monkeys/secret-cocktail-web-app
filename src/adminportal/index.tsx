@@ -9,39 +9,35 @@ import { checkedIfAllowedOnPage, k_admin_role } from '../authredirect/auth-check
 import wave from '../wave.png';
 import { k_admin_phone_survey_page_route, k_admin_facility_page_route } from '../index';
 
-function Circle() {
-    return (
-        <svg width="27" height="27" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g filter="url(#filter0_b_65_2560)">
-                <rect x="0.540527" width="32" height="32" rx="16" fill="#FDCB6E" />
-            </g>
-            <defs>
-                <filter
-                    id="filter0_b_65_2560"
-                    x="-47.4595"
-                    y="-48"
-                    width="128"
-                    height="128"
-                    filterUnits="userSpaceOnUse"
-                    colorInterpolationFilters="sRGB"
-                >
-                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="24" />
-                    <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_65_2560" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_65_2560" result="shape" />
-                </filter>
-            </defs>
-        </svg>
-    );
-}
+const Circle = () => (
+    <svg width="27" height="27" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_b_65_2560)">
+            <rect x="0.540527" width="32" height="32" rx="16" fill="#FDCB6E" />
+        </g>
+        <defs>
+            <filter
+                id="filter0_b_65_2560"
+                x="-47.4595"
+                y="-48"
+                width="128"
+                height="128"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB"
+            >
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                <feGaussianBlur in="BackgroundImageFix" stdDeviation="24" />
+                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_65_2560" />
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_65_2560" result="shape" />
+            </filter>
+        </defs>
+    </svg>
+);
 
-function Waves() {
-    return (
-        <img src={wave} className="wave" alt="Wave for styling webpage." />
-    );
-}
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
 
-function AdminPortalPage() {
+const AdminPortalPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
 
@@ -113,6 +109,6 @@ function AdminPortalPage() {
             <Waves />
         </div>
     );
-}
+};
 
 export default AdminPortalPage;

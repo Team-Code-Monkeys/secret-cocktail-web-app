@@ -19,7 +19,7 @@ import Navbar from '../navbar';
 
 const render = (status: Status) => <h1>{status}</h1>;
 
-function MapPage() {
+const MapPage = () => {
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
@@ -240,9 +240,9 @@ function MapPage() {
             </div>
         </div>
     );
-}
+};
 
-function FacilityList(props: any) {
+const FacilityList = (props: any) => {
     const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
 
@@ -380,7 +380,7 @@ function FacilityList(props: any) {
             }
         </div>
     );
-}
+};
 
 interface MapComponentProps {
     center: any,
@@ -392,7 +392,7 @@ interface MapComponentProps {
     children: any
 }
 
-function MapComponent(props: MapComponentProps) {
+const MapComponent = (props: MapComponentProps) => {
     const ref = React.useRef<HTMLDivElement>(null);
     const [map, setMap] = React.useState<google.maps.Map>();
 
@@ -428,7 +428,7 @@ function MapComponent(props: MapComponentProps) {
             })}
         </>
     );
-}
+};
 
 const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
     const [marker, setMarker] = React.useState<google.maps.Marker>();

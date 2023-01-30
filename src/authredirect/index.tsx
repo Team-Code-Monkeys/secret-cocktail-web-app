@@ -9,7 +9,7 @@ import { setupAuthListener } from './setup-auth-listener';
  * If the user is logged in, go to their home page. Otherwise, go to the landing page.
  * Note: for slow Wi-Fi this will show a blank page for a while, so I added a 3 second timeout.
  */
-function AuthRedirectPage() {
+const AuthRedirectPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
 
@@ -30,6 +30,6 @@ function AuthRedirectPage() {
     return (
         <div />
     );
-}
+};
 
 export default AuthRedirectPage;

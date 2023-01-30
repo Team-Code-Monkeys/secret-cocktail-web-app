@@ -9,7 +9,7 @@ import firebaseApp from '../firebase';
 import { checkedIfAllowedOnPage, k_facility_role } from '../authredirect/auth-check';
 import { k_facility_page_route } from '../index';
 
-function ReportFacilityCorrectionPage() {
+const ReportFacilityCorrectionPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const location = useLocation();
@@ -36,14 +36,17 @@ function ReportFacilityCorrectionPage() {
                         <div className={styles.btnOuterContainer}>
                             <div className={styles.btnContainer}>
                                 <button
-                                    className={styles.primaryBtn} onClick={() => { navigate(k_facility_page_route); }} style={{
+                                    className={styles.primaryBtn}
+                                    onClick={() => { navigate(k_facility_page_route); }}
+                                    style={{
                                         width: '150px', marginRight: '10px', background: '#D2042D', borderColor: '#D2042D',
                                     }}
                                 >
                                     Cancel
                                 </button>
                                 <button
-                                    className={styles.primaryBtn} onClick={() => {
+                                    className={styles.primaryBtn}
+                                    onClick={() => {
                                         const facilityId = location?.state?.facilityId;
                                         const currentTimestamp = Math.round(new Date().getTime());
 
@@ -65,7 +68,8 @@ function ReportFacilityCorrectionPage() {
                                             alert('Error sending report. Please try again.');
                                             navigate(k_facility_page_route);
                                         }
-                                    }} style={{ background: '#50C878', borderColor: '#50C878' }}
+                                    }}
+                                    style={{ background: '#50C878', borderColor: '#50C878' }}
                                 >
                                     Send Message
                                 </button>
@@ -80,18 +84,25 @@ function ReportFacilityCorrectionPage() {
                     <div className={styles.innerContainer}>
                         <div className={styles.helpText}>Thank you for contacting the Admin team! We will be processing your request soon and will be in touch!</div>
                         <div
-                            className={styles.backBtnContainer} onClick={() => {
+                            className={styles.backBtnContainer}
+                            onClick={() => {
                                 navigate(k_facility_page_route);
                             }}
                         >
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                    d="M27 20H13" stroke="#5C5C5C" strokeWidth="2" strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                    d="M27 20H13"
+                                    stroke="#5C5C5C"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                 />
                                 <path
-                                    d="M20 27L13 20L20 13" stroke="#5C5C5C" strokeWidth="2" strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                    d="M20 27L13 20L20 13"
+                                    stroke="#5C5C5C"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                 />
                             </svg>
                             <div className={styles.backBtnText}>Back</div>
@@ -101,6 +112,6 @@ function ReportFacilityCorrectionPage() {
             }
         </div>
     );
-}
+};
 
 export default ReportFacilityCorrectionPage;

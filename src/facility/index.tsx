@@ -12,7 +12,7 @@ import firebaseApp from '../firebase';
 import wave from '../wave.png';
 import { k_admin_facility_page_route, k_facility_report_correction_page_route, k_map_page_route } from '../index';
 
-function FacilityPage() {
+const FacilityPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const location = useLocation();
@@ -156,12 +156,10 @@ function FacilityPage() {
             <Waves />
         </div>
     );
-}
+};
 
-function Waves() {
-    return (
-        <img src={wave} className="wave" alt="Wave for styling webpage." />
-    );
-}
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
 
 export default FacilityPage;

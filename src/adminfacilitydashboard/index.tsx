@@ -23,7 +23,7 @@ import { k_admin_portal_page_route, k_facility_page_route } from '../index';
 
 const CSV_FIELDS = ['name', 'email', 'phone', 'address', 'about', 'geohash', 'geopoint'];
 
-function AdminFacilities() {
+const AdminFacilities = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const db = getFirestore();
@@ -71,9 +71,11 @@ function AdminFacilities() {
                 querySnapshot.forEach((doc) => {
                     const facility = doc.data();
                     const facilityDataArr: Array<string> = [];
-                    for (const field of CSV_FIELDS) {
+
+                    CSV_FIELDS.forEach(((field) => {
                         facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : '');
-                    }
+                    }));
+
                     newFacilityData.push(facilityDataArr);
                 });
                 return newFacilityData;
@@ -126,7 +128,12 @@ function AdminFacilities() {
                             <button
                                 className={styles.primaryBtnListView}
                                 onClick={() => {
-                                    navigate(`${k_facility_page_route}/${facility.id}` || 'none', { state: { distance: undefined, goBackToAdminPage: true } });
+                                    navigate(`${k_facility_page_route}/${facility.id}` || 'none', {
+                                        state: {
+                                            distance: undefined,
+                                            goBackToAdminPage: true,
+                                        },
+                                    });
                                 }}
                             >
                                 More Info
@@ -185,6 +192,6 @@ function AdminFacilities() {
             </div>
         </div>
     );
-}
+};
 
 export default AdminFacilities;

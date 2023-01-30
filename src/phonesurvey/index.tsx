@@ -16,7 +16,7 @@ import firebaseApp from '../firebase';
 import { checkedIfAllowedOnPage, k_admin_role } from '../authredirect/auth-check';
 import { k_admin_portal_page_route } from '../index';
 
-function AdminPhoneSurveyPage() {
+const AdminPhoneSurveyPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const { CSVReader } = useCSVReader();
@@ -72,7 +72,8 @@ function AdminPhoneSurveyPage() {
                             <div className={styles.listItemButtonsContainer}>
                                 <button
                                     style={{ border: '#e13d3d', background: '#e13d3d' }}
-                                    className={styles.primaryBtnListView} onClick={() => {
+                                    className={styles.primaryBtnListView}
+                                    onClick={() => {
                                         deleteDoc(doc(db, 'question', question.id || '')).then(() => {
                                             window.location.reload();
                                         }).catch((error: any) => {
@@ -84,7 +85,8 @@ function AdminPhoneSurveyPage() {
                                     Delete
                                 </button>
                                 <button
-                                    className={styles.primaryBtnListView} onClick={() => {
+                                    className={styles.primaryBtnListView}
+                                    onClick={() => {
                                         const newQuestionText = prompt('Edit Question', question.question || '');
                                         if (newQuestionText) {
                                             const questionRef = doc(db, 'question', question.id || '');
@@ -105,7 +107,9 @@ function AdminPhoneSurveyPage() {
             </div>
             <div className={styles.innerContainer4}>
                 <button
-                  style={{ width: 300 }} className={styles.primaryBtn} onClick={() => {
+                    style={{ width: 300 }}
+                    className={styles.primaryBtn}
+                    onClick={() => {
                         const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
                         const time = Math.round(new Date().getTime());
                         setDoc(questionRef, {
@@ -126,7 +130,9 @@ function AdminPhoneSurveyPage() {
             </div>
             <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
                 <button
-                  style={{ width: 300 }} className={styles.sendBtn} onClick={() => {
+                    style={{ width: 300 }}
+                    className={styles.sendBtn}
+                    onClick={() => {
                         setShowModal(true);
                     }}
                 >
@@ -140,18 +146,25 @@ function AdminPhoneSurveyPage() {
             </div>
             <div className={styles.innerContainer}>
                 <div
-                  className={styles.backBtnContainer} onClick={() => {
+                    className={styles.backBtnContainer}
+                    onClick={() => {
                         navigate(k_admin_portal_page_route);
                     }}
                 >
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
-                          d="M27 20H13" stroke="#5C5C5C" strokeWidth="2" strokeLinecap="round"
-                          strokeLinejoin="round"
+                            d="M27 20H13"
+                            stroke="#5C5C5C"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         />
                         <path
-                          d="M20 27L13 20L20 13" stroke="#5C5C5C" strokeWidth="2" strokeLinecap="round"
-                          strokeLinejoin="round"
+                            d="M20 27L13 20L20 13"
+                            stroke="#5C5C5C"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         />
                     </svg>
                     <div className={styles.backBtnText}>Back</div>
@@ -166,9 +179,9 @@ function AdminPhoneSurveyPage() {
                     </Modal.Header>
                     <Modal.Body>
                         <DropdownButton
-                          id="dropdown-button"
-                          title={sendToMultipleFacilities ? 'Send to Multiple Facilities' : 'Send to Single Facility'}
-                          className={styles.coloredBtn}
+                            id="dropdown-button"
+                            title={sendToMultipleFacilities ? 'Send to Multiple Facilities' : 'Send to Single Facility'}
+                            className={styles.coloredBtn}
                         >
                             {
                                 sendToMultipleFacilities
@@ -217,8 +230,10 @@ function AdminPhoneSurveyPage() {
                                                     <div>
                                                         <span>Confused about the format? Refer to this </span>
                                                         <a
-                                                            style={{ marginTop: '10px' }} href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT4o7EvXy3qVhg4LTBA6rbxGS0oHIR4vJCW0QKnu-I9gFmWEXxZDaWLOz7Zxv1tL_A_lqQoNTo-AwCY/pub?output=csv"
-                                                            target="_blank" rel="noreferrer"
+                                                            style={{ marginTop: '10px' }}
+                                                            href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT4o7EvXy3qVhg4LTBA6rbxGS0oHIR4vJCW0QKnu-I9gFmWEXxZDaWLOz7Zxv1tL_A_lqQoNTo-AwCY/pub?output=csv"
+                                                            target="_blank"
+                                                            rel="noreferrer"
                                                         >
                                                             sample file
                                                         </a>
@@ -233,7 +248,10 @@ function AdminPhoneSurveyPage() {
                                         <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                             <Form.Label>Name</Form.Label>
                                             <Form.Control
-                                                type="text" placeholder="Enter facility name" value={facilityName} onChange={(event) => {
+                                                type="text"
+                                                placeholder="Enter facility name"
+                                                value={facilityName}
+                                                onChange={(event) => {
                                                     setFacilityName(event?.target?.value || '');
                                                 }}
                                             />
@@ -241,7 +259,10 @@ function AdminPhoneSurveyPage() {
                                         <Form.Group className="mb-3" controlId="formBasicPassword">
                                             <Form.Label>Phone</Form.Label>
                                             <Form.Control
-                                                type="tel" placeholder="Enter facility phone number" value={facilityPhoneNumber} onChange={(event) => {
+                                                type="tel"
+                                                placeholder="Enter facility phone number"
+                                                value={facilityPhoneNumber}
+                                                onChange={(event) => {
                                                     setFacilityPhoneNumber(event?.target?.value || '');
                                                 }}
                                             />
@@ -252,7 +273,8 @@ function AdminPhoneSurveyPage() {
                     </Modal.Body>
                     <Modal.Footer>
                         <button
-                          className={styles.sendBtn} onClick={() => {
+                            className={styles.sendBtn}
+                            onClick={() => {
                                 if (sendToMultipleFacilities) {
                                     const batch = writeBatch(db);
                                     facilitiesToSendSurveyTo.forEach((facilityInfo: any) => {
@@ -296,12 +318,10 @@ function AdminPhoneSurveyPage() {
             <Waves />
         </div>
     );
-}
+};
 
-function Waves() {
-    return (
-        <img src={wave} className="wave" alt="Wave for styling webpage." />
-    );
-}
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
 
 export default AdminPhoneSurveyPage;
