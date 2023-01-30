@@ -17,7 +17,7 @@ import {useCSVReader} from "react-papaparse";
 function AdminPhoneSurveyPage() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
-    const {CSVReader} = useCSVReader();
+    const { CSVReader } = useCSVReader();
     const db = getFirestore();
 
     const [questions, setQuestions] = useState<any>([]);
@@ -155,19 +155,15 @@ function AdminPhoneSurveyPage() {
                                         className={styles.coloredBtn}>
                             {
                                 sendToMultipleFacilities
-                                    ?
-                                    <Dropdown.Item onClick={() => {
-                                        setSendToMultipleFacilities(false)
-                                    }}>Send to Single Facility</Dropdown.Item>
-                                    :
-                                    <Dropdown.Item onClick={() => {
-                                        setSendToMultipleFacilities(true)
-                                    }}>Send to Multiple Facilities</Dropdown.Item>
+                                ?
+                                    <Dropdown.Item onClick={() => {setSendToMultipleFacilities(false)}}>Send to Single Facility</Dropdown.Item>
+                                :
+                                    <Dropdown.Item onClick={() => {setSendToMultipleFacilities(true)}}>Send to Multiple Facilities</Dropdown.Item>
                             }
                         </DropdownButton>
                         {
                             sendToMultipleFacilities
-                                ?
+                            ?
                                 <>
                                     <Form>
                                         <CSVReader
@@ -176,7 +172,7 @@ function AdminPhoneSurveyPage() {
                                                 const data = results?.data || [];
                                                 let keys = data.shift()
                                                 let jsonResult = data.map((data: any[]) =>
-                                                    Object.assign({}, ...data.map((x: any, i: any) => ({[keys[i]]: x})))
+                                                    Object.assign({}, ...data.map((x: any, i: any) => ({ [keys[i]]: x })))
                                                 );
                                                 for (let i = 0; i < jsonResult.length; i++) {
                                                     jsonResult[i]['contacted'] = false;
@@ -190,13 +186,8 @@ function AdminPhoneSurveyPage() {
                                                   getRemoveFileProps,
                                               }: any) => (
                                                 <>
-                                                    <div style={{
-                                                        display: "flex",
-                                                        flexDirection: "row",
-                                                        alignItems: "center"
-                                                    }}>
-                                                        <button type='button' {...getRootProps()}
-                                                                className={styles.browseBtn}>
+                                                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                                                        <button type='button' {...getRootProps()} className={styles.browseBtn}>
                                                             Upload CSV File
                                                         </button>
                                                         <div>
@@ -204,16 +195,14 @@ function AdminPhoneSurveyPage() {
                                                         </div>
                                                         {
                                                             acceptedFile &&
-                                                            <button {...getRemoveFileProps()}
-                                                                    className={styles.removeBtn}>
+                                                            <button {...getRemoveFileProps()} className={styles.removeBtn}>
                                                                 X
                                                             </button>
                                                         }
                                                     </div>
                                                     <div>
                                                         <span>Confused about the format? Refer to this </span>
-                                                        <a style={{marginTop: "10px"}}
-                                                           href={'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4o7EvXy3qVhg4LTBA6rbxGS0oHIR4vJCW0QKnu-I9gFmWEXxZDaWLOz7Zxv1tL_A_lqQoNTo-AwCY/pub?output=csv'}
+                                                        <a style={{marginTop: "10px"}} href={'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4o7EvXy3qVhg4LTBA6rbxGS0oHIR4vJCW0QKnu-I9gFmWEXxZDaWLOz7Zxv1tL_A_lqQoNTo-AwCY/pub?output=csv'}
                                                            target="_blank" rel="noreferrer">sample file</a>
                                                     </div>
                                                 </>
@@ -221,22 +210,20 @@ function AdminPhoneSurveyPage() {
                                         </CSVReader>
                                     </Form>
                                 </>
-                                :
+                            :
                                 <>
                                     <Form>
                                         <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                             <Form.Label>Name</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter facility name"
-                                                          value={facilityName} onChange={(event) => {
+                                            <Form.Control type="text" placeholder="Enter facility name" value={facilityName} onChange={(event) => {
                                                 setFacilityName(event?.target?.value || '');
-                                            }}/>
+                                            }} />
                                         </Form.Group>
                                         <Form.Group className="mb-3" controlId="formBasicPassword">
                                             <Form.Label>Phone</Form.Label>
-                                            <Form.Control type="tel" placeholder="Enter facility phone number"
-                                                          value={facilityPhoneNumber} onChange={(event) => {
+                                            <Form.Control type="tel" placeholder="Enter facility phone number" value={facilityPhoneNumber} onChange={(event) => {
                                                 setFacilityPhoneNumber(event?.target?.value || '');
-                                            }}/>
+                                            }} />
                                         </Form.Group>
                                     </Form>
                                 </>
@@ -277,8 +264,7 @@ function AdminPhoneSurveyPage() {
                                     console.error('Error sending phone survey', err);
                                 });
                             }
-                        }}>Send
-                        </button>
+                        }}>Send</button>
                     </Modal.Footer>
                 </Modal>
             </div>
