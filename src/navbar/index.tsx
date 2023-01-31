@@ -76,9 +76,14 @@ const SignOutButton = () => {
                         auth.signOut()
                             .then((response) => {
                                 navigate(k_landing_page_route);
+                                // eslint-disable-next-line no-console
+                                console.log('Sign out response', response);
                             })
                             .catch((error) => {
+                                // eslint-disable-next-line no-alert
                                 alert('Unable to sign out.');
+                                // eslint-disable-next-line no-console
+                                console.error('Unable to sign out.', error);
                             });
                     }
                 }}

@@ -14,6 +14,7 @@ const UserIcon = (props: any) => (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
         {
+            // eslint-disable-next-line react/destructuring-assignment
             (!props.field || props.field.length === 0)
             && (
                 <svg width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.inputIcon}>
@@ -56,10 +57,12 @@ const RegisterPage = () => {
 
     function signUp() {
         if (!email || !password) {
+            // eslint-disable-next-line no-alert
             alert('Username and password cannot be blank');
             return;
         }
         if (confirmPassword !== password) {
+            // eslint-disable-next-line no-alert
             alert('Password and confirm password fields must match');
             return;
         }
@@ -73,15 +76,21 @@ const RegisterPage = () => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+                // eslint-disable-next-line no-console
                 console.error('error creating account');
+                // eslint-disable-next-line no-console
                 console.error(errorCode, errorMessage);
                 if (errorCode === 'auth/email-already-in-use') {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to create account. An account already exists with this email.');
                 } else if (errorCode === 'auth/invalid-email') {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to create account. Invalid email provided.');
                 } else if (errorCode === 'auth/weak-password') {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to create account. Password should be at least 6 characters long.');
                 } else {
+                    // eslint-disable-next-line no-alert
                     alert(`Unable to create account. ${errorMessage || 'Unknown server error.'}`);
                 }
             });
@@ -149,6 +158,9 @@ const RegisterPage = () => {
                 >
                     Sign Up
                 </button>
+                {/* TODO: make this a button */}
+                {/* eslint-disable-next-line max-len */}
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
                 <div
                     className={styles.backBtnContainer}
                     onClick={() => {

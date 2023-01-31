@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -40,6 +41,7 @@ const AdminPhoneSurveyPage = () => {
             const q = query(collection(db, 'question'), where('order', '>=', 0));
             const querySnapshot = await getDocs(q);
             const questionsList: any = [];
+            // eslint-disable-next-line @typescript-eslint/no-shadow
             querySnapshot.forEach((doc) => {
                 const question = doc.data();
                 question.id = doc.id;
@@ -57,7 +59,9 @@ const AdminPhoneSurveyPage = () => {
     }, [auth, navigate]);
 
     const hashCode = (s: string) => s.split('').reduce((a, b) => {
+        // eslint-disable-next-line no-param-reassign,no-bitwise
         a = ((a << 5) - a) + b.charCodeAt(0);
+        // eslint-disable-next-line no-bitwise
         return a & a;
     }, 0);
 
@@ -69,6 +73,7 @@ const AdminPhoneSurveyPage = () => {
             </div>
             <div className={styles.innerContainer3}>
                 {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     questions.map((question: any, _: number) => (
                         <div className={styles.listItemContainer} key={question.id}>
                             <div className={styles.listItemText}>{question.title || 'No title'}</div>
@@ -81,7 +86,9 @@ const AdminPhoneSurveyPage = () => {
                                         deleteDoc(doc(db, 'question', question.id || '')).then(() => {
                                             window.location.reload();
                                         }).catch((error: any) => {
+                                            // eslint-disable-next-line no-alert
                                             alert('Error deleting question.');
+                                            // eslint-disable-next-line no-console
                                             console.error('Error deleting question', error);
                                         });
                                     }}
@@ -91,6 +98,7 @@ const AdminPhoneSurveyPage = () => {
                                 <button
                                     className={styles.primaryBtnListView}
                                     onClick={() => {
+                                        // eslint-disable-next-line no-alert
                                         const newQuestionText = prompt('Edit Question', question.question || '');
                                         if (newQuestionText) {
                                             const questionRef = doc(db, 'question', question.id || '');
@@ -125,7 +133,10 @@ const AdminPhoneSurveyPage = () => {
                         }, { merge: true }).then(() => {
                             window.location.reload();
                         }).catch((err) => {
+                            // eslint-disable-next-line no-alert
                             alert('Error adding question');
+                            // eslint-disable-next-line no-console
+                            console.error('Error adding question', err);
                         });
                     }}
                 >
@@ -149,6 +160,8 @@ const AdminPhoneSurveyPage = () => {
                 </Button>
             </div>
             <div className={styles.innerContainer}>
+                {/* eslint-disable-next-line max-len */}
+                {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}
                 <div
                     className={styles.backBtnContainer}
                     onClick={() => {
@@ -216,8 +229,10 @@ const AdminPhoneSurveyPage = () => {
                                                 // convert CSV to JSON data
                                                 const data = results?.data || [];
                                                 const keys = data.shift();
+                                                // eslint-disable-next-line max-len
+                                                // eslint-disable-next-line @typescript-eslint/no-shadow,max-len
                                                 const jsonResult = data.map((data: any[]) => Object.assign({}, ...data.map((x: any, i: any) => ({ [keys[i]]: x }))));
-                                                for (let i = 0; i < jsonResult.length; i++) {
+                                                for (let i = 0; i < jsonResult.length; i += 1) {
                                                     jsonResult[i].contacted = false;
                                                 }
                                                 setFacilitiesToSendSurveyTo(jsonResult);
@@ -248,6 +263,8 @@ const AdminPhoneSurveyPage = () => {
                                                         {
                                                             acceptedFile
                                                             && (
+                                                                // eslint-disable-next-line max-len
+                                                                // eslint-disable-next-line max-len,react/jsx-props-no-spreading
                                                                 <button {...getRemoveFileProps()} className={styles.removeBtn}>
                                                                     X
                                                                 </button>
@@ -255,6 +272,7 @@ const AdminPhoneSurveyPage = () => {
                                                         }
                                                     </div>
                                                     <div>
+                                                        {/* eslint-disable-next-line max-len */}
                                                         <span>Confused about the format? Refer to this </span>
                                                         <a
                                                             style={{ marginTop: '10px' }}
@@ -311,11 +329,14 @@ const AdminPhoneSurveyPage = () => {
                                         }
                                     });
                                     batch.commit().then(() => {
+                                        // eslint-disable-next-line no-alert
                                         alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
                                         setShowModal(false);
                                         setFacilitiesToSendSurveyTo([]);
                                     }).catch((err) => {
+                                        // eslint-disable-next-line no-alert
                                         alert('Error sending phone surveys');
+                                        // eslint-disable-next-line no-console
                                         console.error('Error sending phone surveys', err);
                                     });
                                 } else {
@@ -326,12 +347,15 @@ const AdminPhoneSurveyPage = () => {
                                         name: facilityName,
                                         phone: facilityPhoneNumber.toString(),
                                     }, { merge: true }).then(() => {
+                                        // eslint-disable-next-line no-alert
                                         alert(`${facilityPhoneNumber} will be sent a survey!`);
                                         setFacilityPhoneNumber('');
                                         setFacilityName('');
                                         setShowModal(false);
                                     }).catch((err) => {
+                                        // eslint-disable-next-line no-alert
                                         alert('Error sending phone survey');
+                                        // eslint-disable-next-line no-console
                                         console.error('Error sending phone survey', err);
                                     });
                                 }

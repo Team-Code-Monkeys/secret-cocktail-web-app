@@ -345,6 +345,7 @@ const FacilityList = (props: any) => {
                                                         <button
                                                             className={styles.secondaryBtnListView}
                                                             onClick={() => {
+                                                                // eslint-disable-next-line max-len
                                                                 // eslint-disable-next-line no-restricted-globals
                                                                 if (confirm(`Delete ${facility.name} facility?`)) {
                                                                     deleteDoc(doc(db, 'facility', facility.id || '')).then(() => {
@@ -384,10 +385,13 @@ const FacilityList = (props: any) => {
 
 interface MapComponentProps {
     center: any,
+    // eslint-disable-next-line react/no-unused-prop-types
     setCenter: Function,
     radius: number,
+    // eslint-disable-next-line react/no-unused-prop-types
     setRadius: Function,
     zoom: number,
+    // eslint-disable-next-line react/no-unused-prop-types
     setZoom: Function,
     children: any
 }
@@ -399,26 +403,33 @@ const MapComponent = (props: MapComponentProps) => {
     React.useEffect(() => {
         if (ref.current && !map) {
             setMap(new window.google.maps.Map(ref.current, {
+                // eslint-disable-next-line react/destructuring-assignment
                 center: new google.maps.LatLng(props.center[0], props.center[1]),
+                // eslint-disable-next-line react/destructuring-assignment
                 zoom: props.zoom,
             }));
         }
+        // eslint-disable-next-line react/destructuring-assignment
     }, [ref, map, props.radius, props.center, props.zoom]);
 
     useEffect(() => {
         if (map) {
             map.panTo({
+                // eslint-disable-next-line react/destructuring-assignment
                 lat: props.center[0] || 0.0,
+                // eslint-disable-next-line react/destructuring-assignment
                 lng: props.center[1] || 0.0,
             });
             map.setZoom(16.0);
         }
+        // eslint-disable-next-line react/destructuring-assignment
     }, [map, props.center]);
 
     return (
         // <div ref={ref} style={{width: '100%', height: '100%'}} {...props}/>
         <>
             <div ref={ref} style={{ width: '100%', height: '100%' }} />
+            {/* eslint-disable-next-line consistent-return,react/destructuring-assignment */}
             {React.Children.map(props.children, (child) => {
                 if (React.isValidElement(child)) {
                     // set the map prop on the child component

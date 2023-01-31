@@ -52,6 +52,7 @@ const AdminFacilities = () => {
             const q = query(collection(db, 'facility'), where('name', '>=', ''));
             const querySnapshot = await getDocs(q);
             const facilitiesList: any = [];
+            // eslint-disable-next-line @typescript-eslint/no-shadow
             querySnapshot.forEach((doc) => {
                 const facility = doc.data();
                 facility.id = doc.id;
@@ -68,6 +69,7 @@ const AdminFacilities = () => {
             try {
                 const newFacilityData: Array<Array<string>> = [CSV_FIELDS];
                 const querySnapshot = await getDocs(query(collection(db, 'facility')));
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 querySnapshot.forEach((doc) => {
                     const facility = doc.data();
                     const facilityDataArr: Array<string> = [];
@@ -87,6 +89,7 @@ const AdminFacilities = () => {
         fetchFacilityData().then((res) => {
             setFacilityData(res);
         }).catch((err) => {
+            // eslint-disable-next-line no-alert
             alert(`Unable to generate CSV file for facilities ${err?.message}` || '');
         });
     }, [db]);
@@ -147,6 +150,7 @@ const AdminFacilities = () => {
                                             window.location.reload();
                                         })
                                         .catch((error: any) => {
+                                            // eslint-disable-next-line no-alert
                                             alert('Error deleting facility.');
                                             console.error('Error deleting facility', error);
                                         });
@@ -159,6 +163,9 @@ const AdminFacilities = () => {
                 ))}
             </div>
             <div className={styles.innerContainer}>
+                {/* TODO: make this a button */}
+                {/* eslint-disable-next-line max-len */}
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
                     className={styles.backBtnContainer}
                     onClick={() => {
