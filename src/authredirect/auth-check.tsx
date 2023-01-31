@@ -1,11 +1,17 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Auth } from '@firebase/auth';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { NavigateFunction } from 'react-router/dist/lib/hooks';
 import { k_root_page_route } from '../index';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const k_regular_user_role = 'regular';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const k_admin_role = 'admin';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const k_facility_role = 'facility';
 
+// eslint-disable-next-line max-len
 export const checkedIfAllowedOnPage = (auth: Auth, navigate: NavigateFunction, allowed_roles = [k_regular_user_role, k_admin_role, k_facility_role]) => {
     if (auth) {
         auth.onAuthStateChanged((user: any) => {
@@ -29,7 +35,9 @@ export const checkedIfAllowedOnPage = (auth: Auth, navigate: NavigateFunction, a
                         }
                     })
                     .catch((error: any) => {
+                        // eslint-disable-next-line no-console
                         console.log('Error verifying user information', error);
+                        // eslint-disable-next-line no-alert
                         alert('Error verifying user information');
                         navigate(k_root_page_route);
                     });

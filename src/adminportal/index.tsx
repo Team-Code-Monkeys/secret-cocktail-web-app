@@ -85,10 +85,12 @@ const AdminPortalPage = () => {
                     <div className={styles.bulletPointContainer}>
                         <div className={styles.bulletPoint}>
                             <Circle />
+                            {/* eslint-disable-next-line max-len */}
                             <div className={styles.pageContainerText3}>View facility information</div>
                         </div>
                         <div className={styles.bulletPoint}>
                             <Circle />
+                            {/* eslint-disable-next-line max-len */}
                             <div className={styles.pageContainerText3}>Verify facility information</div>
                         </div>
                         <div className={styles.bulletPoint}>

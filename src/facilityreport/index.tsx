@@ -30,6 +30,7 @@ const ReportFacilityCorrectionPage = () => {
                 && (
                     <div className={styles.innerContainer}>
                         <div className={styles.innerContainerHeader}>
+                            {/* eslint-disable-next-line max-len */}
                             <div className={styles.helpText}>Report a correction about your facility to the Admin team!</div>
                         </div>
                         <textarea value={report} onChange={(event) => { setReport(event.target.value); }} className={styles.textArea} placeholder="Leave your message" />
@@ -51,6 +52,7 @@ const ReportFacilityCorrectionPage = () => {
                                         const currentTimestamp = Math.round(new Date().getTime());
 
                                         if (!report || report.length <= 0) {
+                                            // eslint-disable-next-line no-alert
                                             alert('Report cannot be empty');
                                             return;
                                         }
@@ -65,6 +67,7 @@ const ReportFacilityCorrectionPage = () => {
                                                 setReportSent(true);
                                             });
                                         } else {
+                                            // eslint-disable-next-line no-alert
                                             alert('Error sending report. Please try again.');
                                             navigate(k_facility_page_route);
                                         }
@@ -82,7 +85,10 @@ const ReportFacilityCorrectionPage = () => {
                 reportSent
                 && (
                     <div className={styles.innerContainer}>
+                        {/* eslint-disable-next-line max-len */}
                         <div className={styles.helpText}>Thank you for contacting the Admin team! We will be processing your request soon and will be in touch!</div>
+                        {/* eslint-disable-next-line max-len */}
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
                             className={styles.backBtnContainer}
                             onClick={() => {

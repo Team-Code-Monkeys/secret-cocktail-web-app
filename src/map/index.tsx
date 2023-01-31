@@ -1,3 +1,6 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
+/* eslint-disable react/destructuring-assignment */
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -46,10 +49,12 @@ const MapPage = () => {
                     const lon = parseFloat(searchParams.get('lon') || '-84.38955018824828');
                     setCenter([lat, lon]);
 
+                    // eslint-disable-next-line max-len
                     // set search text of place (query Google Geo Decoding API to get the address of a place from latitude and longitude values)
                     Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
                     Geocode.fromLatLng(lat.toString(), lon.toString()).then(
                         (response) => {
+                            // eslint-disable-next-line max-len
                             if (response.results && response.results.length > 0 && response.results[0].formatted_address) {
                                 setLocationInput(`${response.results[0].formatted_address}`);
                             } else {
@@ -80,12 +85,15 @@ const MapPage = () => {
             const radiusInM = radius;
             const bounds = geohashQueryBounds(c, radiusInM);
             const newFacilities: any = [];
+            // eslint-disable-next-line no-restricted-syntax
             for (const b of bounds) {
                 const lowerPointHash = b[1];
                 const upperPointHash = b[0];
                 const documentGeohashField = 'geohash';
                 const q = query(collection(db, 'facility'), where(documentGeohashField, '>=', upperPointHash), where(documentGeohashField, '<=', lowerPointHash));
+                // eslint-disable-next-line no-await-in-loop
                 const querySnapshot = await getDocs(q);
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 querySnapshot.forEach((doc) => {
                     const lat = doc?.data()?.geopoint?.latitude;
                     const lon = doc?.data()?.geopoint?.longitude;
@@ -114,7 +122,7 @@ const MapPage = () => {
 
     // rate limit the frequency at which we query for nearby facilities
     const debounced = useDebouncedCallback(
-        (radius) => {
+        () => {
             setLoading(true);
             queryLocations().then(() => {
                 setLoading(false);
@@ -133,7 +141,7 @@ const MapPage = () => {
     useEffect(() => {
         // search facilities when center or radius is updated
         setLoading(true);
-        debounced(radius);
+        debounced();
     }, [center, radius, debounced]);
 
     // check if admin (to allow them to delete facilities)
@@ -142,6 +150,7 @@ const MapPage = () => {
             if (user) {
                 user.getIdTokenResult()
                     .then((idTokenResult: any) => {
+                        // eslint-disable-next-line @typescript-eslint/no-shadow
                         const isAdmin = idTokenResult?.claims?.admin === true;
                         setIsAdmin(isAdmin);
                     });
@@ -151,6 +160,7 @@ const MapPage = () => {
 
     // rate limit the frequency at which we query search input
     const debouncedSearchInput = useDebouncedCallback(
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         (locationInput) => {
             setLoading(true);
             Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
@@ -183,6 +193,7 @@ const MapPage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
+                {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                 <FacilityList
                     facilities={facilities}
                     center={center}
@@ -196,6 +207,7 @@ const MapPage = () => {
                 />
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
+                        {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                         <MapComponent
                             center={center}
                             setCenter={setCenter}
@@ -206,6 +218,8 @@ const MapPage = () => {
                         >
                             {
                                 facilities.map((facility: any, index: number) => (
+                                    // eslint-disable-next-line max-len
+                                    // eslint-disable-next-line @typescript-eslint/no-use-before-define
                                     <Marker
                                         key={facility?.id || index}
                                         position={{
@@ -217,6 +231,7 @@ const MapPage = () => {
                                     />
                                 ))
                             }
+                            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                             <Marker
                                 key="user"
                                 position={{
@@ -225,6 +240,7 @@ const MapPage = () => {
                                 }}
                                 label={{ color: 'black', text: 'You' }}
                             />
+                            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                             <Circle
                                 center={{
                                     lat: center[0],
@@ -253,8 +269,11 @@ const FacilityList = (props: any) => {
     return (
         <div className={styles.listView}>
             {
+                // eslint-disable-next-line react/destructuring-assignment
                 props.isAdmin
                 && (
+                    // eslint-disable-next-line max-len
+                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
                     <div
                         className={styles.backBtnContainer}
                         onClick={() => {
@@ -324,10 +343,14 @@ const FacilityList = (props: any) => {
                                 <div className="loader" />
                             ) : (
                                 <div className={styles.listInnerContainer}>
+                                    {/* eslint-disable-next-line max-len */}
+                                    {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
                                     {props.facilities.map((facility: any, index: number) => {
+                                        // eslint-disable-next-line max-len
                                         const distanceInMeters = Math.round(distanceBetween(props?.center || [0, 0], [facility?.geopoint?.latitude || 0.0, facility?.geopoint?.longitude || 0.0]) * 1000.0);
                                         const distance = getMiles(distanceInMeters);
                                         return (
+                                            // eslint-disable-next-line max-len
                                             <div key={facility.id} className={styles.listItemContainer}>
                                                 <div className={styles.listItemText}>{`NAME: ${facility.name}`}</div>
                                                 <div className={styles.listItemText}>ADDRESS:</div>

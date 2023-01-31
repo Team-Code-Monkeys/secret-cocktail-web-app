@@ -19,11 +19,16 @@ const Navbar = () => {
     return (
         <div className={styles.container}>
             <div className={styles.navbarInnerContainer}>
+                {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                 <Logo />
+                {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                 <TitleText />
                 {(pathname === k_landing_page_route)
+                    // eslint-disable-next-line @typescript-eslint/no-use-before-define
                     && <AuthButtons />}
+                {/* eslint-disable-next-line max-len */}
                 {([k_admin_portal_page_route, k_facility_page_route, k_facility_report_correction_page_route, k_map_page_route, k_admin_phone_survey_page_route].includes(pathname) || pathname?.includes(k_facility_page_route))
+                    // eslint-disable-next-line @typescript-eslint/no-use-before-define
                     && <SignOutButton />}
             </div>
         </div>

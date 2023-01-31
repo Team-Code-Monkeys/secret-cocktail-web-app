@@ -18,10 +18,15 @@ const LandingPage = () => {
     return (
         <div className={styles.container}>
             <Navbar />
+            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Title />
+            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <SubTitle />
+            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Rectangle />
+            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Dots />
+            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Waves />
         </div>
     );

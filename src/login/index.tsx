@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
@@ -29,6 +30,7 @@ const LoginPage = () => {
 
     function signIn() {
         if (!email || !password) {
+            // eslint-disable-next-line no-alert
             alert('Username and password cannot be blank');
             return;
         }
@@ -42,15 +44,21 @@ const LoginPage = () => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+                // eslint-disable-next-line no-console
                 console.error('error creating account');
+                // eslint-disable-next-line no-console
                 console.error(errorCode, errorMessage);
                 if (errorCode === 'auth/wrong-password') {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to login. Incorrect password provided.');
                 } else if (errorCode === 'auth/user-not-found') {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to login. User does not exist with this email.');
                 } else if (errorCode === 'auth/invalid-email') {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to login. Invalid email provided.');
                 } else {
+                    // eslint-disable-next-line no-alert
                     alert(`Unable to login. ${errorMessage || 'Unknown server error.'}`);
                 }
             });
@@ -88,6 +96,7 @@ const LoginPage = () => {
                             }
                         }}
                     />
+                    {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                     <UserIcon field={email} />
                 </div>
                 <div className={styles.inputContainer}>
@@ -113,6 +122,8 @@ const LoginPage = () => {
                     Sign In
                 </button>
                 {/* TODO: make this a button */}
+                {/* eslint-disable-next-line max-len */}
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
                     className={styles.backBtnContainer}
                     onClick={() => {
@@ -143,6 +154,7 @@ const LoginPage = () => {
 };
 
 const UserIcon = (props: any) => (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
         {
             (!props.field || props.field.length === 0)

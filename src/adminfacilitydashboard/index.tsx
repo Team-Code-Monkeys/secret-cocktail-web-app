@@ -152,6 +152,7 @@ const AdminFacilities = () => {
                                         .catch((error: any) => {
                                             // eslint-disable-next-line no-alert
                                             alert('Error deleting facility.');
+                                            // eslint-disable-next-line no-console
                                             console.error('Error deleting facility', error);
                                         });
                                 }}

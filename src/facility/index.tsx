@@ -32,8 +32,10 @@ const FacilityPage = () => {
                 setEmail(user?.email);
                 user.getIdTokenResult()
                     .then((idTokenResult: any) => {
+                        // eslint-disable-next-line @typescript-eslint/no-shadow
                         const isAdmin = idTokenResult?.claims?.admin === true;
                         setIsAdmin(isAdmin);
+                        // eslint-disable-next-line @typescript-eslint/no-shadow
                         const isFacility = idTokenResult?.claims?.facility === true;
                         setIsFacility(isFacility);
                     });
@@ -42,11 +44,12 @@ const FacilityPage = () => {
     }, [auth]);
 
     useEffect(() => {
-        async function findFacilityByEmail(facilityEmail: string) {
+        async function findFacilityByEmail() {
             if (email) {
                 const q = query(collection(db, 'facility'), where('email', '==', email));
 
                 const querySnapshot = await getDocs(q);
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 querySnapshot.forEach((doc) => {
                     const facilityData = doc.data();
                     if (facilityData?.about) {
@@ -70,13 +73,14 @@ const FacilityPage = () => {
                     facilityData.id = docSnap.id;
                     setFacility(facilityData);
                 } else {
+                    // eslint-disable-next-line no-console
                     console.log('No facility with ID: ', facilityID);
                 }
             }
         }
 
         if (isFacility) {
-            findFacilityByEmail(email);
+            findFacilityByEmail();
         } else {
             const splitName = location.pathname.split('/');
             const facilityID = splitName.length > 0 ? splitName[splitName.length - 1] : undefined;
@@ -90,6 +94,8 @@ const FacilityPage = () => {
             {
                 (isFacility === false)
                 && (
+                    // eslint-disable-next-line max-len
+                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
                     <div
                         className={styles.backBtnContainer}
                         onClick={() => {
@@ -153,6 +159,7 @@ const FacilityPage = () => {
                     </div>
                 )
             }
+            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Waves />
         </div>
     );

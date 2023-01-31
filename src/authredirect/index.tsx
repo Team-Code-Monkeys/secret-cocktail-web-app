@@ -20,6 +20,7 @@ const AuthRedirectPage = () => {
     useEffect(() => {
         const slowWiFiLimitSeconds = 3;
         const timeoutID = setTimeout(() => {
+            // eslint-disable-next-line no-alert
             alert('Slow Wi-Fi detected');
         }, slowWiFiLimitSeconds * 1000.0);
         return () => {
