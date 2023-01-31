@@ -9,3 +9,5 @@ jobs:
         run: yarn
       - name: Run ESLint
         run: npx eslint . --ext .js,.jsx,.ts,.tsx
+      - name: Generate Build
+        run: yarn run build
