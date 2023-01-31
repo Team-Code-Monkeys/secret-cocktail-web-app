@@ -16,6 +16,10 @@ import firebaseApp from '../firebase';
 import { checkedIfAllowedOnPage, k_admin_role } from '../authredirect/auth-check';
 import { k_admin_portal_page_route } from '../index';
 
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
+
 const AdminPhoneSurveyPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
@@ -185,8 +189,22 @@ const AdminPhoneSurveyPage = () => {
                         >
                             {
                                 sendToMultipleFacilities
-                                    ? <Dropdown.Item onClick={() => { setSendToMultipleFacilities(false); }}>Send to Single Facility</Dropdown.Item>
-                                    : <Dropdown.Item onClick={() => { setSendToMultipleFacilities(true); }}>Send to Multiple Facilities</Dropdown.Item>
+                                    ? (
+                                        <Dropdown.Item onClick={() => {
+                                            setSendToMultipleFacilities(false);
+                                        }}
+                                        >
+                                            Send to Single Facility
+                                        </Dropdown.Item>
+                                    )
+                                    : (
+                                        <Dropdown.Item onClick={() => {
+                                            setSendToMultipleFacilities(true);
+                                        }}
+                                        >
+                                            Send to Multiple Facilities
+                                        </Dropdown.Item>
+                                    )
                             }
                         </DropdownButton>
                         {
@@ -211,8 +229,17 @@ const AdminPhoneSurveyPage = () => {
                                                 getRemoveFileProps,
                                             }: any) => (
                                                 <>
-                                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                                        <button type="button" {...getRootProps()} className={styles.browseBtn}>
+                                                    <div style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'row',
+                                                        alignItems: 'center',
+                                                    }}
+                                                    >
+                                                        <button
+                                                            type="button"
+                                                            {...getRootProps()}
+                                                            className={styles.browseBtn}
+                                                        >
                                                             Upload CSV File
                                                         </button>
                                                         <div>
@@ -319,9 +346,5 @@ const AdminPhoneSurveyPage = () => {
         </div>
     );
 };
-
-const Waves = () => (
-    <img src={wave} className="wave" alt="Wave for styling webpage." />
-);
 
 export default AdminPhoneSurveyPage;

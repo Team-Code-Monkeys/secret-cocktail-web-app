@@ -15,7 +15,8 @@ import AdminPortalPage from './adminportal';
 import AdminPhoneSurveyPage from './phonesurvey';
 import AdminFacilities from './adminfacilitydashboard';
 
-// define routes
+// Define routes
+/* eslint-disable @typescript-eslint/naming-convention */
 export const k_root_page_route = '/';
 export const k_landing_page_route = '/about';
 export const k_login_page_trainee_route = '/sign-in-trainer';

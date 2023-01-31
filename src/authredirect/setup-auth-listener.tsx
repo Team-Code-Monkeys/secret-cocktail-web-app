@@ -6,7 +6,7 @@ import {
 } from '../index';
 
 /**
- * Automatically redirect the user to their respective homepage if they are already logged in, otherwise go to landing page
+ * Auto redirect the user to their respective homepage if they are already logged in, otherwise go to landing page
  * @param auth Firebase auth state of user
  * @param navigate React Router function to navigate the user to a different page
  * @param redirectIfNotLoggedIn redirect to landing page if not logged in
