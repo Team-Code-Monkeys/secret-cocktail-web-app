@@ -1,18 +1,20 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Auth } from '@firebase/auth';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { NavigateFunction } from 'react-router/dist/lib/hooks';
 import { k_root_page_route } from '../index';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const k_regular_user_role = 'regular';
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const k_admin_role = 'admin';
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const k_facility_role = 'facility';
 
 // eslint-disable-next-line max-len
-export const checkedIfAllowedOnPage = (auth: Auth, navigate: NavigateFunction, allowed_roles = [k_regular_user_role, k_admin_role, k_facility_role]) => {
+export const checkedIfAllowedOnPage = (
+    auth: Auth,
+    navigate: NavigateFunction,
+    allowed_roles = [k_regular_user_role, k_admin_role, k_facility_role],
+) => {
     if (auth) {
         auth.onAuthStateChanged((user: any) => {
             if (user) {

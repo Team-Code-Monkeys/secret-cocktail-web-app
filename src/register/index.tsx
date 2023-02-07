@@ -10,12 +10,17 @@ import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import wave from '../wave.png';
 
-const UserIcon = (props: any) => (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>
-        {
-            // eslint-disable-next-line react/destructuring-assignment
-            (!props.field || props.field.length === 0)
+interface UserIconProps {
+    field: any;
+}
+
+const UserIcon = (props: UserIconProps) => {
+    const { field } = props;
+    return (
+        // eslint-disable-next-line react/jsx-no-useless-fragment
+        <>
+            {
+                (!field || field.length === 0)
             && (
                 <svg width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.inputIcon}>
                     <path
@@ -34,9 +39,10 @@ const UserIcon = (props: any) => (
                     />
                 </svg>
             )
-        }
-    </>
-);
+            }
+        </>
+    );
+};
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />

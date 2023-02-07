@@ -12,6 +12,9 @@ import firebaseApp from '../firebase';
 import wave from '../wave.png';
 import { k_admin_facility_page_route, k_facility_report_correction_page_route, k_map_page_route } from '../index';
 
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
 const FacilityPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
@@ -32,12 +35,8 @@ const FacilityPage = () => {
                 setEmail(user?.email);
                 user.getIdTokenResult()
                     .then((idTokenResult: any) => {
-                        // eslint-disable-next-line @typescript-eslint/no-shadow
-                        const isAdmin = idTokenResult?.claims?.admin === true;
-                        setIsAdmin(isAdmin);
-                        // eslint-disable-next-line @typescript-eslint/no-shadow
-                        const isFacility = idTokenResult?.claims?.facility === true;
-                        setIsFacility(isFacility);
+                        setIsAdmin(idTokenResult?.claims?.admin === true);
+                        setIsFacility(idTokenResult?.claims?.facility === true);
                     });
             }
         });
@@ -159,14 +158,9 @@ const FacilityPage = () => {
                     </div>
                 )
             }
-            {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Waves />
         </div>
     );
 };
-
-const Waves = () => (
-    <img src={wave} className="wave" alt="Wave for styling webpage." />
-);
 
 export default FacilityPage;
