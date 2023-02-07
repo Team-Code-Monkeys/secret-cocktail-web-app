@@ -1,4 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
@@ -30,7 +31,6 @@ const LoginPage = () => {
 
     function signIn() {
         if (!email || !password) {
-            // eslint-disable-next-line no-alert
             alert('Username and password cannot be blank');
             return;
         }
@@ -49,16 +49,12 @@ const LoginPage = () => {
                 // eslint-disable-next-line no-console
                 console.error(errorCode, errorMessage);
                 if (errorCode === 'auth/wrong-password') {
-                    // eslint-disable-next-line no-alert
                     alert('Unable to login. Incorrect password provided.');
                 } else if (errorCode === 'auth/user-not-found') {
-                    // eslint-disable-next-line no-alert
                     alert('Unable to login. User does not exist with this email.');
                 } else if (errorCode === 'auth/invalid-email') {
-                    // eslint-disable-next-line no-alert
                     alert('Unable to login. Invalid email provided.');
                 } else {
-                    // eslint-disable-next-line no-alert
                     alert(`Unable to login. ${errorMessage || 'Unknown server error.'}`);
                 }
             });
