@@ -1,16 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    collection, doc, getDoc, getDocs, getFirestore, query, where,
+} from 'firebase/firestore';
+import ReactMarkdown from 'react-markdown';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
-import {getAuth} from 'firebase/auth';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {setupAuthListener} from '../authredirect/setup-auth-listener';
+import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import wave from '../wave.png';
-import {k_admin_facility_page_route, k_facility_report_correction_page_route, k_map_page_route} from "../index";
-import {collection, doc, getDoc, getDocs, getFirestore, query, where} from "firebase/firestore";
-import ReactMarkdown from 'react-markdown'
+import { k_admin_facility_page_route, k_facility_report_correction_page_route, k_map_page_route } from '../index';
 
-function FacilityPage() {
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
+const FacilityPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const location = useLocation();
@@ -30,25 +35,24 @@ function FacilityPage() {
                 setEmail(user?.email);
                 user.getIdTokenResult()
                     .then((idTokenResult: any) => {
-                        const isAdmin = idTokenResult?.claims?.admin === true;
-                        setIsAdmin(isAdmin);
-                        const isFacility = idTokenResult?.claims?.facility === true;
-                        setIsFacility(isFacility);
+                        setIsAdmin(idTokenResult?.claims?.admin === true);
+                        setIsFacility(idTokenResult?.claims?.facility === true);
                     });
             }
         });
     }, [auth]);
 
     useEffect(() => {
-        async function findFacilityByEmail(facilityEmail: string) {
+        async function findFacilityByEmail() {
             if (email) {
-                const q = query(collection(db, "facility"), where("email", "==", email));
+                const q = query(collection(db, 'facility'), where('email', '==', email));
 
                 const querySnapshot = await getDocs(q);
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 querySnapshot.forEach((doc) => {
                     const facilityData = doc.data();
                     if (facilityData?.about) {
-                        facilityData.about = facilityData.about.replaceAll("\\n", "\n");
+                        facilityData.about = facilityData.about.replaceAll('\\n', '\n');
                     }
                     facilityData.id = doc.id;
                     setFacility(facilityData);
@@ -63,18 +67,19 @@ function FacilityPage() {
                 if (docSnap.exists()) {
                     const facilityData = docSnap.data();
                     if (facilityData?.about) {
-                        facilityData.about = facilityData.about.replaceAll("\\n", "\n");
+                        facilityData.about = facilityData.about.replaceAll('\\n', '\n');
                     }
                     facilityData.id = docSnap.id;
                     setFacility(facilityData);
                 } else {
-                    console.log("No facility with ID: ", facilityID);
+                    // eslint-disable-next-line no-console
+                    console.log('No facility with ID: ', facilityID);
                 }
             }
         }
 
         if (isFacility) {
-            findFacilityByEmail(email);
+            findFacilityByEmail();
         } else {
             const splitName = location.pathname.split('/');
             const facilityID = splitName.length > 0 ? splitName[splitName.length - 1] : undefined;
@@ -84,54 +89,78 @@ function FacilityPage() {
 
     return (
         <div className={styles.container}>
-            <Navbar/>
+            <Navbar />
             {
-                (isFacility === false) &&
-                <div className={styles.backBtnContainer} onClick={() => {
-                    navigate(isAdmin ? k_admin_facility_page_route : k_map_page_route)
-                }}>
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M27 20H13" stroke="#5C5C5C" strokeWidth="2" strokeLinecap="round"
-                              strokeLinejoin="round"/>
-                        <path d="M20 27L13 20L20 13" stroke="#5C5C5C" strokeWidth="2" strokeLinecap="round"
-                              strokeLinejoin="round"/>
-                    </svg>
-                    <div className={styles.backBtnText}>Back</div>
-                </div>
+                (isFacility === false)
+                && (
+                    // eslint-disable-next-line max-len
+                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                    <div
+                        className={styles.backBtnContainer}
+                        onClick={() => {
+                            navigate(isAdmin ? k_admin_facility_page_route : k_map_page_route);
+                        }}
+                    >
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M27 20H13"
+                                stroke="#5C5C5C"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                            <path
+                                d="M20 27L13 20L20 13"
+                                stroke="#5C5C5C"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                        <div className={styles.backBtnText}>Back</div>
+                    </div>
+                )
             }
             {
-                facility &&
-                <div className={styles.facilityOuterContainer}>
-                    <div className={styles.facilityContainer}>
-                        <div className={styles.facilityInnerContainer}>
-                            <div className={styles.facilityText}>NAME: {facility.name}</div>
-                            <div className={styles.facilityText}>ADDRESS: {facility.address}</div>
-                            <div className={styles.facilityText}>PHONE: {facility.phone}</div>
+                facility
+                && (
+                    <div className={styles.facilityOuterContainer}>
+                        <div className={styles.facilityContainer}>
+                            <div className={styles.facilityInnerContainer}>
+                                <div className={styles.facilityText}>
+                                    NAME:
+                                    {facility.name}
+                                </div>
+                                <div className={styles.facilityText}>
+                                    ADDRESS:
+                                    {facility.address}
+                                </div>
+                                <div className={styles.facilityText}>
+                                    PHONE:
+                                    {facility.phone}
+                                </div>
+                            </div>
+                            {
+                                facility?.about
+                            && <ReactMarkdown className={styles.aboutText}>{`${facility.about}`}</ReactMarkdown>
+                            }
                         </div>
-                        {
-                            facility?.about &&
-                            <ReactMarkdown className={styles.aboutText}>{`${facility.about}`}</ReactMarkdown>
-                        }
                     </div>
-                </div>
+                )
             }
             {
-                isFacility && facility &&
-                <div className={styles.btnOuterContainer}>
-                    <div className={styles.btnContainer}>
-                        <button className='primaryBtn' onClick={() => {navigate(k_facility_report_correction_page_route, {state: {facilityId: facility.id}})}}>Report a Correction</button>
+                isFacility && facility
+                && (
+                    <div className={styles.btnOuterContainer}>
+                        <div className={styles.btnContainer}>
+                            <button className="primaryBtn" onClick={() => { navigate(k_facility_report_correction_page_route, { state: { facilityId: facility.id } }); }}>Report a Correction</button>
+                        </div>
                     </div>
-                </div>
+                )
             }
-            <Waves/>
+            <Waves />
         </div>
     );
-}
-
-function Waves() {
-    return (
-        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
-    );
-}
+};
 
 export default FacilityPage;

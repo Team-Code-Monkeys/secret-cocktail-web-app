@@ -57,6 +57,26 @@ training hours.
 <!-- Release Notes -->
 
 # Release Notes
+## v0.2.0 Release Notes
+
+### Features
+
+- Added ability to create phone survey
+  - Ability to change questions
+  - Ability to record data
+  - Ability to record phone call
+- Integrated Twiliio API to make calls
+
+### Bug Fixes
+
+- Fixed wave background showing wrong color
+
+### Known Issues
+
+- Button styling is inconsistent in modals
+
+Please report future issues using GitHub issues.
+
 
 ## v0.1.0 Release Notes
 

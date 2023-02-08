@@ -1,0 +1,13 @@
+name: Lint and Build Check
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
+      - name: Run ESLint
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+      - name: Generate Build
+        run: yarn run build
