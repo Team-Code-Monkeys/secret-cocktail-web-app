@@ -159,6 +159,16 @@
     box-shadow: None;
 }
 
+.deleteBtnListView {
+    composes: primaryBtnListView;
+    border: #e13d3d;
+    background: #e13d3d;
+}
+
+.deleteBtnListView:hover {
+    box-shadow: rgba(138, 24, 24, 0.30) 0px 7px 29px 0px !important;
+}
+
 .primaryBtn {
     composes: primaryBtn from '/src/globalStyles.css';
     margin-top: 0;
@@ -186,7 +196,8 @@
     color: white;
     border: 1px solid #6C5CE7 !important;
     background: #6C5CE7 !important;
-    border-radius: 10px;
+    padding: 8px;
+    border-radius: 8px;
 }
 
 .removeBtn {

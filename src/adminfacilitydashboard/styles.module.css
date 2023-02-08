@@ -79,11 +79,20 @@
   composes: primaryBtn from "/src/globalStyles.css";
   margin-top: 0;
   margin-left: 10px;
-  /*width: 100px;*/
   height: 40px;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
+}
+
+.deleteBtnListView {
+  composes: primaryBtnListView;
+  border: #e13d3d;
+  background: #e13d3d;
+}
+
+.deleteBtnListView:hover {
+  box-shadow: rgba(138, 24, 24, 0.30) 0px 7px 29px 0px !important;
 }
 
 @media (max-width: 605px) {

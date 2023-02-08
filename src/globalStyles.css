@@ -1,7 +1,7 @@
 .primaryBtn:hover {
     cursor: pointer !important;
     box-shadow: rgba(108, 92, 231, 0.48) 0px 7px 29px 0px !important;
-    border-radius: 20px !important;
+    border-radius: 12px !important;
 }
 
 .primaryBtn:active {
@@ -23,7 +23,7 @@
     text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
     box-sizing: border-box;
     border: 1px solid #6C5CE7;
-    border-radius: 12px;
+    border-radius: 8px;
     background: #6C5CE7;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }

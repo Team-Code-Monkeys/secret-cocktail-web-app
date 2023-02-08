@@ -20,8 +20,13 @@ import {
     k_admin_role,
 } from '../authredirect/auth-check';
 import { k_admin_portal_page_route, k_facility_page_route } from '../index';
+import wave from '../wave.png';
 
 const CSV_FIELDS = ['name', 'email', 'phone', 'address', 'about', 'geohash', 'geopoint'];
+
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
 
 const AdminFacilities = () => {
     const auth = getAuth(firebaseApp);
@@ -143,7 +148,7 @@ const AdminFacilities = () => {
                             </button>
                             <button
                                 style={{ border: '#e13d3d', background: '#e13d3d' }}
-                                className={styles.primaryBtnListView}
+                                className={styles.deleteBtnListView}
                                 onClick={() => {
                                     deleteDoc(doc(db, 'facility', facility.id || ''))
                                         .then(() => {
@@ -198,6 +203,7 @@ const AdminFacilities = () => {
                     <div className={styles.backBtnText}>Back</div>
                 </div>
             </div>
+            <Waves />
         </div>
     );
 };
