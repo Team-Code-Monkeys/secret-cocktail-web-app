@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import {
     collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where, writeBatch,
 } from 'firebase/firestore';
-import { Button, Form, Modal } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import {
+    Button, Form, Modal, ToggleButton, Dropdown, DropdownButton,
+} from 'react-bootstrap';
 import { useCSVReader } from 'react-papaparse';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
@@ -35,6 +35,8 @@ const AdminPhoneSurveyPage = () => {
     const [facilityName, setFacilityName] = useState('');
     const [facilityPhoneNumber, setFacilityPhoneNumber] = useState('');
     const handleCloseModal = () => setShowModal(false);
+
+    const [isRecordingEnabled, setIsRecordingEnabled] = useState(0);
 
     useEffect(() => {
         async function fetchQuestions() {
@@ -220,6 +222,22 @@ const AdminPhoneSurveyPage = () => {
                                     )
                             }
                         </DropdownButton>
+                        <ToggleButton
+                            id="toggle-check"
+                            className="mb-3"
+                            value={0}
+                            type="checkbox"
+                            variant="outline-primary"
+                            checked={isRecordingEnabled === 1}
+                            onChange={() => {
+                                // eslint-disable-next-line max-len
+                                setIsRecordingEnabled(isRecordingEnabled === 1 ? 0 : 1);
+                            }}
+                        >
+                            Phone Recording
+                            {' '}
+                            {isRecordingEnabled === 1 ? 'Enabled' : 'Disabled'}
+                        </ToggleButton>
                         {
                             sendToMultipleFacilities
                                 ? (
