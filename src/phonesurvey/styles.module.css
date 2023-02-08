@@ -196,7 +196,8 @@
     color: white;
     border: 1px solid #6C5CE7 !important;
     background: #6C5CE7 !important;
-    border-radius: 10px;
+    padding: 8px;
+    border-radius: 8px;
 }
 
 .removeBtn {

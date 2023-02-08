@@ -20,7 +20,6 @@ import {
     k_admin_role,
 } from '../authredirect/auth-check';
 import { k_admin_portal_page_route, k_facility_page_route } from '../index';
-import wave from "../wave.png";
 
 const CSV_FIELDS = ['name', 'email', 'phone', 'address', 'about', 'geohash', 'geopoint'];
 
@@ -111,43 +110,55 @@ const AdminFacilities = () => {
                         )
                         : <button className={styles.downloadBtn} disabled>Loading...</button>
                 }
-                {facilities.map((facility: any) => {
-                    return (
-                        <div className={styles.listItemContainer} key={facility.id}>
-                            <div className={styles.listItemText2}>
-                                NAME: {facility.name || "No text"}
-                            </div>
-                            <div className={styles.listItemText2}>
-                                ADDRESS: {facility.address || "No text"}
-                            </div>
-                            <div className={styles.listItemText2}>
-                                PHONE: {facility.phone || "No text"}
-                            </div>
-                            <div className={styles.listItemButtonsContainer}>
-                                <button
-                                    className={styles.primaryBtnListView}
-                                    onClick={() => {
-                                        navigate(k_facility_page_route + '/' + facility.id || 'none', {state: {distance: undefined, goBackToAdminPage: true}})
-                                    }}
-                                >
-                                    More Info
-                                </button>
-                                <button
-                                    className={styles.deleteBtnListView}
-                                    onClick={() => {
-                                        deleteDoc(doc(db, "facility", facility.id || ""))
-                                            .then(() => {
-                                                window.location.reload();
-                                            })
-                                            .catch((error: any) => {
-                                                alert("Error deleting facility.");
-                                                console.error("Error deleting facility", error);
-                                            });
-                                    }}
-                                >
-                                    Delete
-                                </button>
-                            </div>
+                {facilities.map((facility: any) => (
+                    <div className={styles.listItemContainer} key={facility.id}>
+                        <div className={styles.listItemText2}>
+                            NAME:
+                            {' '}
+                            {facility.name || 'No text'}
+                        </div>
+                        <div className={styles.listItemText2}>
+                            ADDRESS:
+                            {' '}
+                            {facility.address || 'No text'}
+                        </div>
+                        <div className={styles.listItemText2}>
+                            PHONE:
+                            {' '}
+                            {facility.phone || 'No text'}
+                        </div>
+                        <div className={styles.listItemButtonsContainer}>
+                            <button
+                                className={styles.primaryBtnListView}
+                                onClick={() => {
+                                    navigate(`${k_facility_page_route}/${facility.id}` || 'none', {
+                                        state: {
+                                            distance: undefined,
+                                            goBackToAdminPage: true,
+                                        },
+                                    });
+                                }}
+                            >
+                                More Info
+                            </button>
+                            <button
+                                style={{ border: '#e13d3d', background: '#e13d3d' }}
+                                className={styles.deleteBtnListView}
+                                onClick={() => {
+                                    deleteDoc(doc(db, 'facility', facility.id || ''))
+                                        .then(() => {
+                                            window.location.reload();
+                                        })
+                                        .catch((error: any) => {
+                                            // eslint-disable-next-line no-alert
+                                            alert('Error deleting facility.');
+                                            // eslint-disable-next-line no-console
+                                            console.error('Error deleting facility', error);
+                                        });
+                                }}
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 ))}
@@ -187,15 +198,8 @@ const AdminFacilities = () => {
                     <div className={styles.backBtnText}>Back</div>
                 </div>
             </div>
-            <Waves />
         </div>
     );
 };
-
-function Waves() {
-    return (
-        <img src={wave} className='wave' alt={'Wave for styling webpage.'}/>
-    );
-}
 
 export default AdminFacilities;
