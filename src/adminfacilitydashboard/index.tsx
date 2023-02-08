@@ -1,15 +1,6 @@
-import React, {useEffect, useState} from "react";
-import Navbar from "../navbar";
-import styles from "./styles.module.css";
-import {getAuth} from "firebase/auth";
-import {useNavigate} from "react-router-dom";
-import {setupAuthListener} from "../authredirect/setup-auth-listener";
-import firebaseApp from "../firebase";
-import {
-    checkedIfAllowedOnPage,
-    k_admin_role,
-} from "../authredirect/auth-check";
-import {k_admin_portal_page_route, k_facility_page_route} from "../index";
+import React, { useEffect, useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import {
     collection,
     getDocs,
@@ -18,13 +9,22 @@ import {
     getFirestore,
     deleteDoc,
     doc,
-} from "firebase/firestore";
-import {CSVLink} from "react-csv";
+} from 'firebase/firestore';
+import { CSVLink } from 'react-csv';
+import Navbar from '../navbar';
+import styles from './styles.module.css';
+import { setupAuthListener } from '../authredirect/setup-auth-listener';
+import firebaseApp from '../firebase';
+import {
+    checkedIfAllowedOnPage,
+    k_admin_role,
+} from '../authredirect/auth-check';
+import { k_admin_portal_page_route, k_facility_page_route } from '../index';
 import wave from "../wave.png";
 
-const CSV_FIELDS = ["name", "email", "phone", "address", "about", "geohash", "geopoint"];
+const CSV_FIELDS = ['name', 'email', 'phone', 'address', 'about', 'geohash', 'geopoint'];
 
-function AdminFacilities() {
+const AdminFacilities = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const db = getFirestore();
@@ -34,7 +34,7 @@ function AdminFacilities() {
 
     function makeStringCSVCompliant(str: string | undefined) {
         if (!str) {
-            return "";
+            return '';
         }
         let result = str;
         result = result.replace(/"/g, '""');
@@ -50,9 +50,10 @@ function AdminFacilities() {
 
     useEffect(() => {
         async function fetchFacilities() {
-            const q = query(collection(db, "facility"), where("name", ">=", ""));
+            const q = query(collection(db, 'facility'), where('name', '>=', ''));
             const querySnapshot = await getDocs(q);
             const facilitiesList: any = [];
+            // eslint-disable-next-line @typescript-eslint/no-shadow
             querySnapshot.forEach((doc) => {
                 const facility = doc.data();
                 facility.id = doc.id;
@@ -68,42 +69,47 @@ function AdminFacilities() {
         async function fetchFacilityData() {
             try {
                 const newFacilityData: Array<Array<string>> = [CSV_FIELDS];
-                const querySnapshot = await getDocs(query(collection(db, "facility")));
+                const querySnapshot = await getDocs(query(collection(db, 'facility')));
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 querySnapshot.forEach((doc) => {
                     const facility = doc.data();
                     const facilityDataArr: Array<string> = [];
-                    for (const field of CSV_FIELDS) {
-                        facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : "");
-                    }
+
+                    CSV_FIELDS.forEach(((field) => {
+                        facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : '');
+                    }));
+
                     newFacilityData.push(facilityDataArr);
                 });
                 return newFacilityData;
             } catch (e: any) {
-                throw Error(e?.message || "unable to query database");
+                throw Error(e?.message || 'unable to query database');
             }
         }
 
         fetchFacilityData().then((res) => {
-            setFacilityData(res)
+            setFacilityData(res);
         }).catch((err) => {
-            alert("Unable to generate CSV file for facilities " + err?.message || "");
+            // eslint-disable-next-line no-alert
+            alert(`Unable to generate CSV file for facilities ${err?.message}` || '');
         });
     }, [db]);
 
     return (
         <div className={styles.container}>
-            <Navbar/>
+            <Navbar />
             <div className={styles.innerContainer}>
                 <div className={styles.title}>Facility Dashboard</div>
             </div>
             <div className={styles.innerContainer3}>
                 {
-                    (facilityData && facilityData.length > 0) ?
-                        <CSVLink data={facilityData} filename={'facilities.csv'} className={styles.downloadBtn}>
-                            <span>Download CSV</span>
-                        </CSVLink>
-                        :
-                        <button className={styles.downloadBtn} disabled={true}>Loading...</button>
+                    (facilityData && facilityData.length > 0)
+                        ? (
+                            <CSVLink data={facilityData} filename="facilities.csv" className={styles.downloadBtn}>
+                                <span>Download CSV</span>
+                            </CSVLink>
+                        )
+                        : <button className={styles.downloadBtn} disabled>Loading...</button>
                 }
                 {facilities.map((facility: any) => {
                     return (
@@ -143,10 +149,13 @@ function AdminFacilities() {
                                 </button>
                             </div>
                         </div>
-                    );
-                })}
+                    </div>
+                ))}
             </div>
             <div className={styles.innerContainer}>
+                {/* TODO: make this a button */}
+                {/* eslint-disable-next-line max-len */}
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
                     className={styles.backBtnContainer}
                     onClick={() => {
@@ -181,7 +190,7 @@ function AdminFacilities() {
             <Waves />
         </div>
     );
-}
+};
 
 function Waves() {
     return (
