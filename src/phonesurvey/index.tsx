@@ -233,29 +233,10 @@ const AdminPhoneSurveyPage = () => {
                                 setIsRecordingEnabled(isRecordingEnabled === 1 ? 0 : 1);
                             }}
                         >
-                            Phone Recording
+                            Recording
                             {' '}
                             {isRecordingEnabled === 1 ? 'Enabled' : 'Disabled'}
                         </ToggleButton>
-                        {
-                            sendToMultipleFacilities
-                                ? (
-                                    <Dropdown.Item onClick={() => {
-                                        setSendToMultipleFacilities(false);
-                                    }}
-                                    >
-                                        Send to Single Facility
-                                    </Dropdown.Item>
-                                )
-                                : (
-                                    <Dropdown.Item onClick={() => {
-                                        setSendToMultipleFacilities(true);
-                                    }}
-                                    >
-                                        Send to Multiple Facilities
-                                    </Dropdown.Item>
-                                )
-                        }
                         {
                             sendToMultipleFacilities
                                 ? (
