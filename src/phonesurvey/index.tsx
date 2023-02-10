@@ -30,11 +30,24 @@ const AdminPhoneSurveyPage = () => {
     const [questions, setQuestions] = useState<any>([]);
 
     const [showModal, setShowModal] = useState(false);
+    const [showQuestionEditModal, setShowQuestionEditModal] = useState(false);
     const [sendToMultipleFacilities, setSendToMultipleFacilities] = useState(true);
     const [facilitiesToSendSurveyTo, setFacilitiesToSendSurveyTo] = useState([]);
     const [facilityName, setFacilityName] = useState('');
     const [facilityPhoneNumber, setFacilityPhoneNumber] = useState('');
-    const handleCloseModal = () => setShowModal(false);
+
+    // question modal variables
+    const [questionToEditID, setQuestionToEditID] = useState('');
+    const [questionText, setQuestionText] = useState('');
+    const [title, setTitle] = useState('');
+    const [transcribe, setTranscribe] = useState(false);
+    const [type, setType] = useState('keypad');
+    const [voiceRecordingTimeout, setVoiceRecordingTimeout] = useState(5);
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setShowQuestionEditModal(false);
+    };
 
     const [isRecordingEnabled, setIsRecordingEnabled] = useState(0);
 
@@ -116,16 +129,13 @@ const AdminPhoneSurveyPage = () => {
                                 <button
                                     className={styles.primaryBtnListView}
                                     onClick={() => {
-                                        // eslint-disable-next-line no-alert
-                                        const newQuestionText = prompt('Edit Question', question.question || '');
-                                        if (newQuestionText) {
-                                            const questionRef = doc(db, 'question', question.id || '');
-                                            setDoc(questionRef, {
-                                                question: newQuestionText,
-                                            }, { merge: true }).then(() => {
-                                                fetchQuestions();
-                                            });
-                                        }
+                                        setShowQuestionEditModal(true);
+                                        setQuestionToEditID((question?.id || '').toString());
+                                        setQuestionText(question?.question);
+                                        setTitle(question?.title);
+                                        setTranscribe(question?.transcribe);
+                                        setType(question?.type);
+                                        setVoiceRecordingTimeout(question?.voiceRecordingTimeout);
                                     }}
                                 >
                                     Edit
@@ -179,23 +189,22 @@ const AdminPhoneSurveyPage = () => {
                     style={{ width: 300 }}
                     className={styles.primaryBtn}
                     onClick={() => {
-                        const question = 'Sample question text.';
-                        const title = `Question ${questions.length + 1}`;
-                        const transcribe = false;
-                        const type = 'keypad';
-                        const voiceRecordingTimeout = 5;
-
+                        const defaultQuestion = 'Sample question text.';
+                        const defaultTitle = `Question ${questions.length + 1}`;
+                        const defaultTranscribe = false;
+                        const defaultType = 'keypad';
+                        const defaultVoiceRecordingTimeout = 5;
                         const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
                         const time = Math.round(new Date().getTime());
                         setDoc(questionRef, {
                             createdAt: time,
                             updatedAt: time,
                             order: questions.length,
-                            question,
-                            title,
-                            transcribe,
-                            type,
-                            voiceRecordingTimeout,
+                            question: defaultQuestion,
+                            title: defaultTitle,
+                            transcribe: defaultTranscribe,
+                            type: defaultType,
+                            voiceRecordingTimeout: defaultVoiceRecordingTimeout,
                         }, { merge: true }).then(() => {
                             fetchQuestions();
                         }).catch((err) => {
@@ -252,6 +261,106 @@ const AdminPhoneSurveyPage = () => {
                     </svg>
                     <div className={styles.backBtnText}>Back</div>
                 </div>
+                {/* Edit Question Modal */}
+                <Modal
+                    show={showQuestionEditModal}
+                    onHide={handleCloseModal}
+                    keyboard={false}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Question</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                <Form.Label>Question Title</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Question Title"
+                                    value={title}
+                                    onChange={(event) => {
+                                        setTitle(event?.target?.value || '');
+                                    }}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                <Form.Label>Question</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Question to Ask User"
+                                    value={questionText}
+                                    onChange={(event) => {
+                                        setQuestionText(event?.target?.value || '');
+                                    }}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                <Form.Label>Transcribe Text to Speech</Form.Label>
+                                <Form.Check
+                                    type="switch"
+                                    id="custom-switch"
+                                    label={transcribe ? 'Enabled' : 'Disabled'}
+                                    value={transcribe ? 'on' : 'off'}
+                                    checked={transcribe}
+                                    onChange={(event) => {
+                                        // eslint-disable-next-line max-len
+                                        setTranscribe(event?.target?.checked);
+                                    }}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                <Form.Label>Survey Question Type</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Survey Question Type"
+                                    value={type}
+                                    onChange={(event) => {
+                                        setType(event?.target?.value || 'keypad');
+                                    }}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                <Form.Label>Voice Recording Timeout</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Voice Recording Timeout"
+                                    value={voiceRecordingTimeout}
+                                    onChange={(event) => {
+                                        setVoiceRecordingTimeout(parseInt(event?.target?.value || '5', 10));
+                                    }}
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button
+                            className={styles.sendBtn}
+                            onClick={() => {
+                                const questionRef = doc(db, 'question', questionToEditID);
+                                const time = Math.round(new Date().getTime());
+                                setDoc(questionRef, {
+                                    updatedAt: time,
+                                    order: questions.length - 1,
+                                    question: questionText,
+                                    title,
+                                    transcribe,
+                                    type,
+                                    voiceRecordingTimeout,
+                                }, { merge: true }).then(() => {
+                                    fetchQuestions();
+                                }).catch((err) => {
+                                    // eslint-disable-next-line no-alert
+                                    alert('Error adding question');
+                                    // eslint-disable-next-line no-console
+                                    console.error('Error adding question', err);
+                                });
+                            }}
+                        >
+                            Save
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+                {/* Send Survey Modal */}
                 <Modal
                     show={showModal}
                     onHide={handleCloseModal}
