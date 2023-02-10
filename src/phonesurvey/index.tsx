@@ -45,6 +45,7 @@ const AdminPhoneSurveyPage = () => {
     const [voiceRecordingTimeout, setVoiceRecordingTimeout] = useState(5);
     const [digitResponseMin, setDigitResponseMin] = useState(0);
     const [digitResponseMax, setDigitResponseMax] = useState(9);
+    const [numDigits, setNumDigits] = useState(1);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -141,6 +142,7 @@ const AdminPhoneSurveyPage = () => {
                                         setVoiceRecordingTimeout(question?.voiceRecordingTimeout || 5);
                                         setDigitResponseMin(question?.digitResponseMin || 0);
                                         setDigitResponseMax(question?.digitResponseMax || 9);
+                                        setNumDigits(question?.numDigits || 1);
                                     }}
                                 >
                                     Edit
@@ -201,6 +203,7 @@ const AdminPhoneSurveyPage = () => {
                         const defaultVoiceRecordingTimeout = 5;
                         const defaultDigitResponseMin = 0;
                         const defaultDigitResponseMax = 9;
+                        const defaultNumDigits = 1;
                         const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
                         const time = Math.round(new Date().getTime());
                         setDoc(questionRef, {
@@ -214,6 +217,7 @@ const AdminPhoneSurveyPage = () => {
                             voiceRecordingTimeout: defaultVoiceRecordingTimeout,
                             digitResponseMin: defaultDigitResponseMin,
                             digitResponseMax: defaultDigitResponseMax,
+                            numDigits: defaultNumDigits,
                         }, { merge: true }).then(() => {
                             fetchQuestions();
                         }).catch((err) => {
@@ -334,7 +338,21 @@ const AdminPhoneSurveyPage = () => {
                             { type === 'keypad'
                                 && (
                                     <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                                        <Form.Label>Minimum Digit Allowed</Form.Label>
+                                        <Form.Label>Number of Digits to Gather</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            placeholder="Number of Digits"
+                                            value={numDigits}
+                                            onChange={(event) => {
+                                                setNumDigits(parseInt(event?.target?.value || '1', 10));
+                                            }}
+                                        />
+                                    </Form.Group>
+                                )}
+                            { type === 'keypad'
+                                && (
+                                    <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                        <Form.Label>Minimum Number Allowed</Form.Label>
                                         <Form.Control
                                             type="number"
                                             placeholder="Minimum Digit Allowed"
@@ -348,7 +366,7 @@ const AdminPhoneSurveyPage = () => {
                             { type === 'keypad'
                                 && (
                                     <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                                        <Form.Label>Maximum Digit Allowed</Form.Label>
+                                        <Form.Label>Maximum Number Allowed</Form.Label>
                                         <Form.Control
                                             type="number"
                                             placeholder="Maximum Digit Allowed"
@@ -407,6 +425,7 @@ const AdminPhoneSurveyPage = () => {
                                     voiceRecordingTimeout,
                                     digitResponseMin,
                                     digitResponseMax,
+                                    numDigits,
                                 }, { merge: true }).then(() => {
                                     fetchQuestions().then(() => {
                                         handleCloseModal();
@@ -605,7 +624,6 @@ const AdminPhoneSurveyPage = () => {
                                         record: isRecordingEnabled === 1,
                                     }, { merge: true }).then(() => {
                                         // eslint-disable-next-line no-alert
-                                        alert(`${facilityPhoneNumber} will be sent a survey!`);
                                         setFacilityPhoneNumber('');
                                         setFacilityName('');
                                         setShowModal(false);
