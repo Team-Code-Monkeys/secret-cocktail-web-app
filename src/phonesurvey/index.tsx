@@ -342,6 +342,7 @@ const AdminPhoneSurveyPage = () => {
                                         <Form.Control
                                             type="number"
                                             placeholder="Number of Digits"
+                                            min={1}
                                             value={numDigits}
                                             onChange={(event) => {
                                                 setNumDigits(parseInt(event?.target?.value || '1', 10));
@@ -356,6 +357,7 @@ const AdminPhoneSurveyPage = () => {
                                         <Form.Control
                                             type="number"
                                             placeholder="Minimum Digit Allowed"
+                                            min={0}
                                             value={digitResponseMin}
                                             onChange={(event) => {
                                                 setDigitResponseMin(parseInt(event?.target?.value || '0', 10));
@@ -370,6 +372,7 @@ const AdminPhoneSurveyPage = () => {
                                         <Form.Control
                                             type="number"
                                             placeholder="Maximum Digit Allowed"
+                                            min={0}
                                             value={digitResponseMax}
                                             onChange={(event) => {
                                                 setDigitResponseMax(parseInt(event?.target?.value || '9', 10));
