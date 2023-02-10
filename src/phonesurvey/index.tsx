@@ -347,7 +347,9 @@ const AdminPhoneSurveyPage = () => {
                                     type,
                                     voiceRecordingTimeout,
                                 }, { merge: true }).then(() => {
-                                    fetchQuestions();
+                                    fetchQuestions().then(() => {
+                                        handleCloseModal();
+                                    });
                                 }).catch((err) => {
                                     // eslint-disable-next-line no-alert
                                     alert('Error adding question');
