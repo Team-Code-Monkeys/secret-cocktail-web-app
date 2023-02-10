@@ -43,6 +43,8 @@ const AdminPhoneSurveyPage = () => {
     const [transcribe, setTranscribe] = useState(false);
     const [type, setType] = useState('keypad');
     const [voiceRecordingTimeout, setVoiceRecordingTimeout] = useState(5);
+    const [digitResponseMin, setDigitResponseMin] = useState(0);
+    const [digitResponseMax, setDigitResponseMax] = useState(9);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -131,11 +133,14 @@ const AdminPhoneSurveyPage = () => {
                                     onClick={() => {
                                         setShowQuestionEditModal(true);
                                         setQuestionToEditID((question?.id || '').toString());
-                                        setQuestionText(question?.question);
-                                        setTitle(question?.title);
-                                        setTranscribe(question?.transcribe);
-                                        setType(question?.type);
-                                        setVoiceRecordingTimeout(question?.voiceRecordingTimeout);
+                                        setQuestionText(question?.question || 'question text');
+                                        setTitle(question?.title || 'question title');
+                                        setTranscribe(question?.transcribe || false);
+                                        setType(question?.type || 'keypad');
+                                        // eslint-disable-next-line max-len
+                                        setVoiceRecordingTimeout(question?.voiceRecordingTimeout || 5);
+                                        setDigitResponseMin(question?.digitResponseMin || 0);
+                                        setDigitResponseMax(question?.digitResponseMax || 9);
                                     }}
                                 >
                                     Edit
@@ -194,6 +199,8 @@ const AdminPhoneSurveyPage = () => {
                         const defaultTranscribe = false;
                         const defaultType = 'keypad';
                         const defaultVoiceRecordingTimeout = 5;
+                        const defaultDigitResponseMin = 0;
+                        const defaultDigitResponseMax = 9;
                         const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
                         const time = Math.round(new Date().getTime());
                         setDoc(questionRef, {
@@ -205,6 +212,8 @@ const AdminPhoneSurveyPage = () => {
                             transcribe: defaultTranscribe,
                             type: defaultType,
                             voiceRecordingTimeout: defaultVoiceRecordingTimeout,
+                            digitResponseMin: defaultDigitResponseMin,
+                            digitResponseMax: defaultDigitResponseMax,
                         }, { merge: true }).then(() => {
                             fetchQuestions();
                         }).catch((err) => {
@@ -295,41 +304,92 @@ const AdminPhoneSurveyPage = () => {
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                                <Form.Label>Transcribe Text to Speech</Form.Label>
-                                <Form.Check
-                                    type="switch"
-                                    id="custom-switch"
-                                    label={transcribe ? 'Enabled' : 'Disabled'}
-                                    value={transcribe ? 'on' : 'off'}
-                                    checked={transcribe}
-                                    onChange={(event) => {
-                                        // eslint-disable-next-line max-len
-                                        setTranscribe(event?.target?.checked);
-                                    }}
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                 <Form.Label>Survey Question Type</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Survey Question Type"
-                                    value={type}
-                                    onChange={(event) => {
-                                        setType(event?.target?.value || 'keypad');
-                                    }}
-                                />
+                                <DropdownButton
+                                    id="dropdown-button"
+                                    title={type === 'keypad' ? 'Keypad' : 'Voice'}
+                                    className={styles.coloredBtn}
+                                >
+                                    {
+                                        type === 'keypad'
+                                            ? (
+                                                <Dropdown.Item onClick={() => {
+                                                    setType('voice');
+                                                }}
+                                                >
+                                                    Voice
+                                                </Dropdown.Item>
+                                            )
+                                            : (
+                                                <Dropdown.Item onClick={() => {
+                                                    setType('keypad');
+                                                }}
+                                                >
+                                                    Keypad
+                                                </Dropdown.Item>
+                                            )
+                                    }
+                                </DropdownButton>
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                                <Form.Label>Voice Recording Timeout</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    placeholder="Voice Recording Timeout"
-                                    value={voiceRecordingTimeout}
-                                    onChange={(event) => {
-                                        setVoiceRecordingTimeout(parseInt(event?.target?.value || '5', 10));
-                                    }}
-                                />
-                            </Form.Group>
+                            { type === 'keypad'
+                                && (
+                                    <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                        <Form.Label>Minimum Digit Allowed</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            placeholder="Minimum Digit Allowed"
+                                            value={digitResponseMin}
+                                            onChange={(event) => {
+                                                setDigitResponseMin(parseInt(event?.target?.value || '0', 10));
+                                            }}
+                                        />
+                                    </Form.Group>
+                                )}
+                            { type === 'keypad'
+                                && (
+                                    <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                        <Form.Label>Maximum Digit Allowed</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            placeholder="Maximum Digit Allowed"
+                                            value={digitResponseMax}
+                                            onChange={(event) => {
+                                                setDigitResponseMax(parseInt(event?.target?.value || '9', 10));
+                                            }}
+                                        />
+                                    </Form.Group>
+                                )}
+                            { type === 'voice'
+                                && (
+                                    <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                        <Form.Label>Transcribe Text to Speech</Form.Label>
+                                        <Form.Check
+                                            type="switch"
+                                            id="custom-switch"
+                                            label={transcribe ? 'Enabled' : 'Disabled'}
+                                            value={transcribe ? 'on' : 'off'}
+                                            checked={transcribe}
+                                            onChange={(event) => {
+                                                // eslint-disable-next-line max-len
+                                                setTranscribe(event?.target?.checked);
+                                            }}
+                                        />
+                                    </Form.Group>
+                                )}
+                            { type === 'voice'
+                                && (
+                                    <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                        <Form.Label>Voice Recording Timeout</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            placeholder="Voice Recording Timeout"
+                                            value={voiceRecordingTimeout}
+                                            onChange={(event) => {
+                                                setVoiceRecordingTimeout(parseInt(event?.target?.value || '5', 10));
+                                            }}
+                                        />
+                                    </Form.Group>
+                                )}
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
@@ -340,12 +400,13 @@ const AdminPhoneSurveyPage = () => {
                                 const time = Math.round(new Date().getTime());
                                 setDoc(questionRef, {
                                     updatedAt: time,
-                                    order: questions.length - 1,
                                     question: questionText,
                                     title,
                                     transcribe,
                                     type,
                                     voiceRecordingTimeout,
+                                    digitResponseMin,
+                                    digitResponseMax,
                                 }, { merge: true }).then(() => {
                                     fetchQuestions().then(() => {
                                         handleCloseModal();
