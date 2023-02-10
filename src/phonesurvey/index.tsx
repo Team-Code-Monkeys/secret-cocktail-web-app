@@ -38,20 +38,37 @@ const AdminPhoneSurveyPage = () => {
 
     const [isRecordingEnabled, setIsRecordingEnabled] = useState(0);
 
-    useEffect(() => {
-        async function fetchQuestions() {
-            const q = query(collection(db, 'question'), where('order', '>=', 0));
-            const querySnapshot = await getDocs(q);
-            const questionsList: any = [];
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            querySnapshot.forEach((doc) => {
-                const question = doc.data();
-                question.id = doc.id;
-                questionsList.push(question);
-            });
-            setQuestions(questionsList);
-        }
+    async function fetchQuestions() {
+        const q = query(collection(db, 'question'), where('order', '>=', 0));
+        const querySnapshot = await getDocs(q);
+        const questionsList: any = [];
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        querySnapshot.forEach((doc) => {
+            const question = doc.data();
+            question.id = doc.id;
+            questionsList.push(question);
+        });
+        questionsList.sort((a: any, b: any) => a.order - b.order);
+        setQuestions(questionsList);
 
+        // fix any possible issues with question ordering (no gaps, in order, etc.)
+        let shouldQueryAgain = false;
+        // eslint-disable-next-line array-callback-return
+        questionsList.map(async (question: any, index: number) => {
+            if (parseInt((question.order).toString(), 10) !== index) {
+                const questionRef = doc(db, 'question', question.id || '');
+                await setDoc(questionRef, {
+                    order: index,
+                }, { merge: true });
+                shouldQueryAgain = true;
+            }
+        });
+        if (shouldQueryAgain) {
+            window.location.reload();
+        }
+    }
+
+    useEffect(() => {
         fetchQuestions();
     }, [db]);
 
@@ -76,7 +93,7 @@ const AdminPhoneSurveyPage = () => {
             <div className={styles.innerContainer3}>
                 {
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    questions.map((question: any, _: number) => (
+                    questions.map((question: any, index: number) => (
                         <div className={styles.listItemContainer} key={question.id}>
                             <div className={styles.listItemText}>{question.title || 'No title'}</div>
                             <div className={styles.listItemText2}>{question.question || 'No text'}</div>
@@ -112,6 +129,45 @@ const AdminPhoneSurveyPage = () => {
                                     }}
                                 >
                                     Edit
+                                </button>
+                                <button
+                                    disabled={index <= 0}
+                                    className={styles.primaryBtnListView}
+                                    onClick={async () => {
+                                        if (index > 0) {
+                                            const previousQuestion: any = questions[index - 1];
+                                            const previousQuestionRef = doc(db, 'question', previousQuestion.id || '');
+                                            await setDoc(previousQuestionRef, {
+                                                order: index,
+                                            }, { merge: true });
+                                            const currentQuestionRef = doc(db, 'question', question.id || '');
+                                            await setDoc(currentQuestionRef, {
+                                                order: index - 1,
+                                            }, { merge: true });
+                                            await fetchQuestions();
+                                        }
+                                    }}
+                                >
+                                    Up
+                                </button>
+                                <button
+                                    className={styles.primaryBtnListView}
+                                    onClick={async () => {
+                                        if (index + 1 < questions.length) {
+                                            const nextQuestion: any = questions[index + 1];
+                                            const nextQuestionRef = doc(db, 'question', nextQuestion.id || '');
+                                            await setDoc(nextQuestionRef, {
+                                                order: index,
+                                            }, { merge: true });
+                                            const currentQuestionRef = doc(db, 'question', question.id || '');
+                                            await setDoc(currentQuestionRef, {
+                                                order: index + 1,
+                                            }, { merge: true });
+                                            await fetchQuestions();
+                                        }
+                                    }}
+                                >
+                                    Down
                                 </button>
                             </div>
                         </div>
