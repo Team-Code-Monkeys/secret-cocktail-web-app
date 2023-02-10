@@ -256,153 +256,155 @@ const AdminPhoneSurveyPage = () => {
                                     </Dropdown.Item>
                                 )
                         }
-                    </DropdownButton>
-                    {
-                        sendToMultipleFacilities
-                            ? (
-                                <Form>
-                                    <CSVReader
-                                        onUploadAccepted={(results: any) => {
-                                            // convert CSV to JSON data
-                                            const data = results?.data || [];
-                                            const keys = data.shift();
-                                            // eslint-disable-next-line max-len
-                                            // eslint-disable-next-line @typescript-eslint/no-shadow,max-len
-                                            const jsonResult = data.map((data: any[]) => Object.assign({}, ...data.map((x: any, i: any) => ({ [keys[i]]: x }))));
-                                            for (let i = 0; i < jsonResult.length; i += 1) {
-                                                jsonResult[i].contacted = false;
-                                            }
-                                            setFacilitiesToSendSurveyTo(jsonResult);
-                                        }}
-                                    >
-                                        {({
-                                            getRootProps,
-                                            acceptedFile,
-                                            getRemoveFileProps,
-                                        }: any) => (
-                                            <>
-                                                <div style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                }}
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        {...getRootProps()}
-                                                        className={styles.browseBtn}
+                        {
+                            sendToMultipleFacilities
+                                ? (
+                                    <Form>
+                                        <CSVReader
+                                            onUploadAccepted={(results: any) => {
+                                                // convert CSV to JSON data
+                                                const data = results?.data || [];
+                                                const keys = data.shift();
+                                                // eslint-disable-next-line max-len
+                                                // eslint-disable-next-line @typescript-eslint/no-shadow,max-len
+                                                const jsonResult = data.map((data: any[]) => Object.assign({}, ...data.map((x: any, i: any) => ({ [keys[i]]: x }))));
+                                                for (let i = 0; i < jsonResult.length; i += 1) {
+                                                    jsonResult[i].contacted = false;
+                                                }
+                                                setFacilitiesToSendSurveyTo(jsonResult);
+                                            }}
+                                        >
+                                            {({
+                                                getRootProps,
+                                                acceptedFile,
+                                                getRemoveFileProps,
+                                            }: any) => (
+                                                <>
+                                                    <div style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'row',
+                                                        alignItems: 'center',
+                                                    }}
                                                     >
-                                                        Upload CSV File
-                                                    </button>
-                                                    <div>
-                                                        {acceptedFile && acceptedFile.name}
+                                                        <button
+                                                            type="button"
+                                                            {...getRootProps()}
+                                                            className={styles.browseBtn}
+                                                        >
+                                                            Upload CSV File
+                                                        </button>
+                                                        <div>
+                                                            {acceptedFile && acceptedFile.name}
+                                                        </div>
+                                                        {
+                                                            acceptedFile
+                                                            && (
+                                                                // eslint-disable-next-line max-len
+                                                                // eslint-disable-next-line max-len,react/jsx-props-no-spreading
+                                                                <button {...getRemoveFileProps()} className={styles.removeBtn}>
+                                                                    X
+                                                                </button>
+                                                            )
+                                                        }
                                                     </div>
-                                                    {
-                                                        acceptedFile
-                                                        && (
-                                                            // eslint-disable-next-line max-len
-                                                            // eslint-disable-next-line max-len,react/jsx-props-no-spreading
-                                                            <button {...getRemoveFileProps()} className={styles.removeBtn}>
-                                                                X
-                                                            </button>
-                                                        )
-                                                    }
-                                                </div>
-                                                <div>
-                                                    {/* eslint-disable-next-line max-len */}
-                                                    <span>Confused about the format? Refer to this </span>
-                                                    <a
-                                                        style={{ marginTop: '10px' }}
-                                                        href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT4o7EvXy3qVhg4LTBA6rbxGS0oHIR4vJCW0QKnu-I9gFmWEXxZDaWLOz7Zxv1tL_A_lqQoNTo-AwCY/pub?output=csv"
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                    >
-                                                        sample file
-                                                    </a>
-                                                </div>
-                                            </>
-                                        )}
-                                    </CSVReader>
-                                </Form>
-                            )
-                            : (
-                                <Form>
-                                    <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                                        <Form.Label>Name</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="Enter facility name"
-                                            value={facilityName}
-                                            onChange={(event) => {
-                                                setFacilityName(event?.target?.value || '');
-                                            }}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                                        <Form.Label>Phone</Form.Label>
-                                        <Form.Control
-                                            type="tel"
-                                            placeholder="Enter facility phone number"
-                                            value={facilityPhoneNumber}
-                                            onChange={(event) => {
-                                                setFacilityPhoneNumber(event?.target?.value || '');
-                                            }}
-                                        />
-                                    </Form.Group>
-                                </Form>
-                            )
-                    }
-                </Modal.Body>
-                <Modal.Footer>
-                    <button
-                        className={styles.sendBtn}
-                        onClick={() => {
-                            if (sendToMultipleFacilities) {
-                                const batch = writeBatch(db);
-                                facilitiesToSendSurveyTo.forEach((facilityInfo: any) => {
-                                    if (facilityInfo?.phone && facilityInfo?.name) {
-                                        const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityInfo?.phone).toString() + Math.round(new Date().getTime()).toString());
-                                        batch.set(phoneRef, facilityInfo);
-                                    }
-                                });
-                                batch.commit().then(() => {
-                                    // eslint-disable-next-line no-alert
-                                    alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
-                                    setShowModal(false);
+                                                    <div>
+                                                        {/* eslint-disable-next-line max-len */}
+                                                        <span>Confused about the format? Refer to this </span>
+                                                        <a
+                                                            style={{ marginTop: '10px' }}
+                                                            href="https://docs.google.com/spreadsheets/d/e/2PACX-1vT4o7EvXy3qVhg4LTBA6rbxGS0oHIR4vJCW0QKnu-I9gFmWEXxZDaWLOz7Zxv1tL_A_lqQoNTo-AwCY/pub?output=csv"
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                        >
+                                                            sample file
+                                                        </a>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </CSVReader>
+                                    </Form>
+                                )
+                                : (
+                                    <Form>
+                                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                            <Form.Label>Name</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter facility name"
+                                                value={facilityName}
+                                                onChange={(event) => {
+                                                    setFacilityName(event?.target?.value || '');
+                                                }}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                                            <Form.Label>Phone</Form.Label>
+                                            <Form.Control
+                                                type="tel"
+                                                placeholder="Enter facility phone number"
+                                                value={facilityPhoneNumber}
+                                                onChange={(event) => {
+                                                    setFacilityPhoneNumber(event?.target?.value || '');
+                                                }}
+                                            />
+                                        </Form.Group>
+                                    </Form>
+                                )
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button
+                            className={styles.sendBtn}
+                            onClick={() => {
+                                if (sendToMultipleFacilities) {
+                                    const batch = writeBatch(db);
+                                    facilitiesToSendSurveyTo.forEach((facilityInfo: any) => {
+                                        if (facilityInfo?.phone && facilityInfo?.name) {
+                                            const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityInfo?.phone).toString() + Math.round(new Date().getTime()).toString());
+                                            // eslint-disable-next-line no-param-reassign
+                                            facilityInfo.record = isRecordingEnabled;
+                                            batch.set(phoneRef, facilityInfo);
+                                        }
+                                    });
+                                    batch.commit().then(() => {
+                                        // eslint-disable-next-line no-alert
+                                        alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
+                                        setShowModal(false);
+                                        setFacilitiesToSendSurveyTo([]);
+                                    }).catch((err) => {
+                                        // eslint-disable-next-line no-alert
+                                        alert('Error sending phone surveys');
+                                        // eslint-disable-next-line no-console
+                                        console.error('Error sending phone surveys', err);
+                                    });
+                                } else {
                                     setFacilitiesToSendSurveyTo([]);
-                                }).catch((err) => {
-                                    // eslint-disable-next-line no-alert
-                                    alert('Error sending phone surveys');
-                                    // eslint-disable-next-line no-console
-                                    console.error('Error sending phone surveys', err);
-                                });
-                            } else {
-                                setFacilitiesToSendSurveyTo([]);
-                                const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
-                                setDoc(phoneRef, {
-                                    contacted: false,
-                                    name: facilityName,
-                                    phone: facilityPhoneNumber.toString(),
-                                }, { merge: true }).then(() => {
-                                    // eslint-disable-next-line no-alert
-                                    alert(`${facilityPhoneNumber} will be sent a survey!`);
-                                    setFacilityPhoneNumber('');
-                                    setFacilityName('');
-                                    setShowModal(false);
-                                }).catch((err) => {
-                                    // eslint-disable-next-line no-alert
-                                    alert('Error sending phone survey');
-                                    // eslint-disable-next-line no-console
-                                    console.error('Error sending phone survey', err);
-                                });
-                            }
-                        }}
-                    >
-                        Send
-                    </button>
-                </Modal.Footer>
-            </Modal>
-            <Waves />
+                                    const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
+                                    setDoc(phoneRef, {
+                                        contacted: false,
+                                        name: facilityName,
+                                        phone: facilityPhoneNumber.toString(),
+                                    }, { merge: true }).then(() => {
+                                        // eslint-disable-next-line no-alert
+                                        alert(`${facilityPhoneNumber} will be sent a survey!`);
+                                        setFacilityPhoneNumber('');
+                                        setFacilityName('');
+                                        setShowModal(false);
+                                    }).catch((err) => {
+                                        // eslint-disable-next-line no-alert
+                                        alert('Error sending phone survey');
+                                        // eslint-disable-next-line no-console
+                                        console.error('Error sending phone survey', err);
+                                    });
+                                }
+                            }}
+                        >
+                            Send
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+                <Waves />
+            </div>
         </div>
     );
 };
