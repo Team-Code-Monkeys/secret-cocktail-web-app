@@ -362,7 +362,7 @@ const AdminPhoneSurveyPage = () => {
                                         if (facilityInfo?.phone && facilityInfo?.name) {
                                             const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityInfo?.phone).toString() + Math.round(new Date().getTime()).toString());
                                             // eslint-disable-next-line no-param-reassign
-                                            facilityInfo.record = isRecordingEnabled;
+                                            facilityInfo.record = isRecordingEnabled === 1;
                                             batch.set(phoneRef, facilityInfo);
                                         }
                                     });
@@ -384,6 +384,7 @@ const AdminPhoneSurveyPage = () => {
                                         contacted: false,
                                         name: facilityName,
                                         phone: facilityPhoneNumber.toString(),
+                                        record: isRecordingEnabled === 1,
                                     }, { merge: true }).then(() => {
                                         // eslint-disable-next-line no-alert
                                         alert(`${facilityPhoneNumber} will be sent a survey!`);
