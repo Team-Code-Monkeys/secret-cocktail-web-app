@@ -102,7 +102,7 @@ const AdminPhoneSurveyPage = () => {
                                     className={styles.deleteBtnListView}
                                     onClick={() => {
                                         deleteDoc(doc(db, 'question', question.id || '')).then(() => {
-                                            window.location.reload();
+                                            fetchQuestions();
                                         }).catch((error: any) => {
                                             // eslint-disable-next-line no-alert
                                             alert('Error deleting question.');
@@ -123,7 +123,7 @@ const AdminPhoneSurveyPage = () => {
                                             setDoc(questionRef, {
                                                 question: newQuestionText,
                                             }, { merge: true }).then(() => {
-                                                window.location.reload();
+                                                fetchQuestions();
                                             });
                                         }
                                     }}
@@ -179,16 +179,25 @@ const AdminPhoneSurveyPage = () => {
                     style={{ width: 300 }}
                     className={styles.primaryBtn}
                     onClick={() => {
+                        const question = 'Sample question text.';
+                        const title = `Question ${questions.length + 1}`;
+                        const transcribe = false;
+                        const type = 'keypad';
+                        const voiceRecordingTimeout = 5;
+
                         const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
                         const time = Math.round(new Date().getTime());
                         setDoc(questionRef, {
                             createdAt: time,
                             updatedAt: time,
                             order: questions.length,
-                            question: 'Sample question text.',
-                            title: `Question ${questions.length + 1}`,
+                            question,
+                            title,
+                            transcribe,
+                            type,
+                            voiceRecordingTimeout,
                         }, { merge: true }).then(() => {
-                            window.location.reload();
+                            fetchQuestions();
                         }).catch((err) => {
                             // eslint-disable-next-line no-alert
                             alert('Error adding question');
