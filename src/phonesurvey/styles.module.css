@@ -109,7 +109,7 @@
     box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 15px 0px;
     border-radius: 15px;
     padding: 10px;
-    width: min(90%, 400px);
+    width: min(90%, 600px);
 }
 
 @media (max-width: 605px) {
@@ -192,12 +192,9 @@
 }
 
 .browseBtn {
-    margin-right: 8px;
-    color: white;
-    border: 1px solid #6C5CE7 !important;
-    background: #6C5CE7 !important;
-    padding: 8px;
-    border-radius: 8px;
+    composes: primaryBtn from '/src/globalStyles.css';
+    margin-left: 0;
+    margin-top: 0;
 }
 
 .removeBtn {
