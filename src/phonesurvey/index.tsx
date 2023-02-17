@@ -317,52 +317,65 @@ const AdminPhoneSurveyPage = () => {
                     }
                 </Modal.Body>
                 <Modal.Footer>
-                    <button
-                        className={styles.sendBtn}
-                        onClick={() => {
-                            if (sendToMultipleFacilities) {
-                                const batch = writeBatch(db);
-                                facilitiesToSendSurveyTo.forEach((facilityInfo: any) => {
-                                    if (facilityInfo?.phone && facilityInfo?.name) {
-                                        const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityInfo?.phone).toString() + Math.round(new Date().getTime()).toString());
-                                        batch.set(phoneRef, facilityInfo);
-                                    }
-                                });
-                                batch.commit().then(() => {
-                                    // eslint-disable-next-line no-alert
-                                    alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
-                                    setShowModal(false);
+                    <div className={styles.footerWrapper}>
+                        <form>
+                            <label htmlFor="checkbox-1">
+                                <input
+                                    type="checkbox"
+                                    id="checkbox-1"
+                                    className={styles.checkbox1}
+                                />
+                                <span>Send to multiple facilities</span>
+                            </label>
+                        </form>
+
+                        <button
+                            className={styles.sendBtn}
+                            onClick={() => {
+                                if (sendToMultipleFacilities) {
+                                    const batch = writeBatch(db);
+                                    facilitiesToSendSurveyTo.forEach((facilityInfo: any) => {
+                                        if (facilityInfo?.phone && facilityInfo?.name) {
+                                            const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityInfo?.phone).toString() + Math.round(new Date().getTime()).toString());
+                                            batch.set(phoneRef, facilityInfo);
+                                        }
+                                    });
+                                    batch.commit().then(() => {
+                                        // eslint-disable-next-line no-alert
+                                        alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
+                                        setShowModal(false);
+                                        setFacilitiesToSendSurveyTo([]);
+                                    }).catch((err) => {
+                                        // eslint-disable-next-line no-alert
+                                        alert('Error sending phone surveys');
+                                        // eslint-disable-next-line no-console
+                                        console.error('Error sending phone surveys', err);
+                                    });
+                                } else {
                                     setFacilitiesToSendSurveyTo([]);
-                                }).catch((err) => {
-                                    // eslint-disable-next-line no-alert
-                                    alert('Error sending phone surveys');
-                                    // eslint-disable-next-line no-console
-                                    console.error('Error sending phone surveys', err);
-                                });
-                            } else {
-                                setFacilitiesToSendSurveyTo([]);
-                                const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
-                                setDoc(phoneRef, {
-                                    contacted: false,
-                                    name: facilityName,
-                                    phone: facilityPhoneNumber.toString(),
-                                }, { merge: true }).then(() => {
-                                    // eslint-disable-next-line no-alert
-                                    alert(`${facilityPhoneNumber} will be sent a survey!`);
-                                    setFacilityPhoneNumber('');
-                                    setFacilityName('');
-                                    setShowModal(false);
-                                }).catch((err) => {
-                                    // eslint-disable-next-line no-alert
-                                    alert('Error sending phone survey');
-                                    // eslint-disable-next-line no-console
-                                    console.error('Error sending phone survey', err);
-                                });
-                            }
-                        }}
-                    >
-                        Send
-                    </button>
+                                    const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
+                                    setDoc(phoneRef, {
+                                        contacted: false,
+                                        name: facilityName,
+                                        phone: facilityPhoneNumber.toString(),
+                                    }, { merge: true }).then(() => {
+                                        // eslint-disable-next-line no-alert
+                                        alert(`${facilityPhoneNumber} will be sent a survey!`);
+                                        setFacilityPhoneNumber('');
+                                        setFacilityName('');
+                                        setShowModal(false);
+                                    }).catch((err) => {
+                                        // eslint-disable-next-line no-alert
+                                        alert('Error sending phone survey');
+                                        // eslint-disable-next-line no-console
+                                        console.error('Error sending phone survey', err);
+                                    });
+                                }
+                            }}
+                        >
+                            Send
+                        </button>
+                    </div>
                 </Modal.Footer>
             </Modal>
             <Waves />
