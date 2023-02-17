@@ -325,7 +325,7 @@ const AdminPhoneSurveyPage = () => {
                                     id="checkbox-1"
                                     className={styles.checkbox1}
                                 />
-                                <span>Send to multiple facilities</span>
+                                <span>Send Automatically</span>
                             </label>
                         </form>
 
