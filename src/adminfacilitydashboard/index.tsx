@@ -16,7 +16,9 @@ import {
     Form,
     Modal,
 } from 'react-bootstrap';
-import { Geopoint } from 'geofire-common';
+import { geohashForLocation, Geopoint } from 'geofire-common';
+import { useDebouncedCallback } from 'use-debounce';
+import Geocode from 'react-geocode';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
@@ -27,6 +29,7 @@ import {
 } from '../authredirect/auth-check';
 import { k_admin_portal_page_route, k_facility_page_route } from '../index';
 import wave from '../wave.png';
+import { GOOGLE_GEOCODING_API_KEY } from '../api';
 
 const CSV_FIELDS = ['name', 'email', 'phone', 'address', 'about', 'geohash', 'geopoint'];
 
@@ -47,6 +50,8 @@ const AdminFacilities = () => {
     const [geopoint, setGeopoint] = useState<Geopoint>([0, 0]);
     const [geohash, setGeohash] = useState('');
 
+    const [isUnknownLocation, setIsUnknownLocation] = useState(true);
+
     const [facilities, setFacilities] = useState<any>([]);
     const [facilityData, setFacilityData] = useState<Array<Array<string>>>([]);
 
@@ -58,17 +63,45 @@ const AdminFacilities = () => {
         setPhone('');
         setGeopoint([0, 0]);
         setGeohash('');
+        setIsUnknownLocation(true);
     };
+
+    // rate limit the frequency at which we query search input
+    const debouncedSearchInput = useDebouncedCallback(
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        (locationInput) => {
+            Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
+            Geocode.fromAddress(locationInput || '').then(
+                (response) => {
+                    const { lat, lng } = response.results[0].geometry.location;
+                    setGeopoint([lat, lng]);
+                    setGeohash(geohashForLocation([lat, lng]));
+                    setIsUnknownLocation(false);
+                },
+                (error) => {
+                    setGeopoint([0, 0]);
+                    setGeohash('');
+                    setIsUnknownLocation(true);
+                    if ((error?.message || '').includes('ZERO_RESULTS') || (error?.message || '').includes('Provided address is invalid')) {
+                        // eslint-disable-next-line no-console
+                        console.log('Unknown location');
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.error(error);
+                    }
+                },
+            );
+        },
+        1000,
+    );
 
     useEffect(() => {
         // TODO: use query parameters to auto-fill new facility info and show the modal
     }, []);
 
     useEffect(() => {
-        // eslint-disable-next-line no-console
-        console.log(address);
-        // TODO: update geopoint and geohash based off address input
-    }, [address]);
+        debouncedSearchInput(address);
+    }, [address, debouncedSearchInput]);
 
     function makeStringCSVCompliant(str: string | undefined) {
         if (!str) {
@@ -88,6 +121,7 @@ const AdminFacilities = () => {
 
     useEffect(() => {
         async function fetchFacilities() {
+            setFacilities([]);
             const q = query(collection(db, 'facility'), where('name', '>=', ''));
             const querySnapshot = await getDocs(q);
             const facilitiesList: any = [];
@@ -287,6 +321,8 @@ const AdminFacilities = () => {
                                 placeholder="Address"
                                 value={address}
                                 onChange={(event) => {
+                                    setGeohash('');
+                                    setGeopoint([0, 0]);
                                     setAddress(event?.target?.value || '');
                                 }}
                             />
@@ -302,33 +338,54 @@ const AdminFacilities = () => {
                                 }}
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                            <Form.Label>Latitude (auto-generated)</Form.Label>
-                            <Form.Control
-                                disabled
-                                type="text"
-                                placeholder="Latitude"
-                                value={geopoint[0].toString()}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                            <Form.Label>Longitude (auto-generated)</Form.Label>
-                            <Form.Control
-                                disabled
-                                type="text"
-                                placeholder="Longitude"
-                                value={geopoint[1].toString()}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
-                            <Form.Label>Geohash (auto-generated)</Form.Label>
-                            <Form.Control
-                                disabled
-                                type="text"
-                                placeholder="Geohash"
-                                value={geohash}
-                            />
-                        </Form.Group>
+                        {
+                            geohash
+                            && (
+                                <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                    <Form.Label>Latitude (auto-generated)</Form.Label>
+                                    <Form.Control
+                                        disabled
+                                        type="text"
+                                        placeholder="Latitude"
+                                        value={geopoint[0].toString()}
+                                    />
+                                </Form.Group>
+                            )
+                        }
+                        {
+                            geohash
+                            && (
+                                <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                    <Form.Label>Longitude (auto-generated)</Form.Label>
+                                    <Form.Control
+                                        disabled
+                                        type="text"
+                                        placeholder="Longitude"
+                                        value={geopoint[1].toString()}
+                                    />
+                                </Form.Group>
+                            )
+                        }
+                        {
+                            geohash
+                            && (
+                                <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                                    <Form.Label>Geohash (auto-generated)</Form.Label>
+                                    <Form.Control
+                                        disabled
+                                        type="text"
+                                        placeholder="Geohash"
+                                        value={geohash}
+                                    />
+                                </Form.Group>
+                            )
+                        }
+                        {
+                            (address && isUnknownLocation)
+                            && (
+                                <p style={{ color: 'red' }}>Unknown location</p>
+                            )
+                        }
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -352,6 +409,20 @@ const AdminFacilities = () => {
                                 })
                                     .then(() => {
                                         handleCloseModal();
+                                        async function fetchFacilities() {
+                                            setFacilities([]);
+                                            const q = query(collection(db, 'facility'), where('name', '>=', ''));
+                                            const querySnapshot = await getDocs(q);
+                                            const facilitiesList: any = [];
+                                            // eslint-disable-next-line @typescript-eslint/no-shadow
+                                            querySnapshot.forEach((doc) => {
+                                                const facility = doc.data();
+                                                facility.id = doc.id;
+                                                facilitiesList.push(facility);
+                                            });
+                                            setFacilities(facilitiesList);
+                                        }
+                                        fetchFacilities();
                                     }).catch((err) => {
                                         // eslint-disable-next-line no-console
                                         console.error('Error creating facility', err);
