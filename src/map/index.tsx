@@ -232,14 +232,21 @@ const MapPage = () => {
                                 ))
                             }
                             {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
-                            <Marker
-                                key="user"
-                                position={{
-                                    lat: center[0],
-                                    lng: center[1],
-                                }}
-                                label={{ color: 'black', text: 'You' }}
-                            />
+                            {
+                                !isAdmin
+                                && (
+                                    // eslint-disable-next-line max-len
+                                    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+                                    <Marker
+                                        key="user"
+                                        position={{
+                                            lat: center[0],
+                                            lng: center[1],
+                                        }}
+                                        label={{ color: 'black', text: 'You' }}
+                                    />
+                                )
+                            }
                             {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                             <Circle
                                 center={{
