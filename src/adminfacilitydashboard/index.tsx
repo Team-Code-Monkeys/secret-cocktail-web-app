@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
     collection,
     getDocs,
@@ -9,7 +9,7 @@ import {
     getFirestore,
     deleteDoc,
     doc, setDoc,
-    GeoPoint,
+    GeoPoint, getDoc,
 } from 'firebase/firestore';
 import { CSVLink } from 'react-csv';
 import {
@@ -41,6 +41,9 @@ const AdminFacilities = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const db = getFirestore();
+    const { search } = useLocation();
+
+    const [phoneSurveyResponseRefID, setPhoneSurveyResponseRefID] = useState(undefined);
 
     const [showModal, setShowModal] = useState(false);
     const [name, setName] = useState('');
@@ -96,7 +99,84 @@ const AdminFacilities = () => {
     );
 
     useEffect(() => {
-        // TODO: use query parameters to auto-fill new facility info and show the modal
+        const searchParams = new URLSearchParams(search);
+        const phoneSurveyResponseID: any = searchParams.get('phoneSurveyResponseID');
+        setPhoneSurveyResponseRefID(phoneSurveyResponseID || undefined);
+        if (phoneSurveyResponseID) {
+            setShowModal(true);
+            const docRef = doc(db, 'phone-survey-responses', phoneSurveyResponseID);
+            getDoc(docRef)
+                .then((phoneSurveyResponseDoc: any) => {
+                    const phoneSurveyResponse = phoneSurveyResponseDoc.data();
+                    phoneSurveyResponse.id = phoneSurveyResponseDoc.id;
+                    let nameQuestionID = '';
+                    let locationQuestionID = '';
+                    let phoneQuestionID = '';
+                    let emailQuestionID = '';
+                    getDocs(query(collection(db, 'question')))
+                        .then((questionsDocs) => {
+                            questionsDocs.forEach((questionDoc) => {
+                                const question = questionDoc.data();
+                                question.id = questionDoc.id;
+                                const questionText = question?.question || '';
+                                // eslint-disable-next-line max-len
+                                // TODO: in future allow admin to define which question maps to which field
+                                if (questionText.includes('facility name') || questionText.includes('name of your facility')) {
+                                    nameQuestionID = question.id;
+                                } else if (questionText.includes('location')) {
+                                    locationQuestionID = question.id;
+                                } else if (questionText.includes('phone')) {
+                                    phoneQuestionID = question.id;
+                                } else if (questionText.includes('email')) {
+                                    emailQuestionID = question.id;
+                                }
+                            });
+                            // console.log(nameQuestionID);
+                            // console.log(locationQuestionID);
+                            // console.log(phoneQuestionID);
+                            // console.log(emailQuestionID);
+                            // digit responses
+                            if (phoneSurveyResponse?.questions) {
+                                phoneSurveyResponse.questions.forEach((questionResponse: any) => {
+                                    const digit = questionResponse?.digit || 0;
+                                    const questionID = questionResponse?.questionDBOID || '_%&none';
+                                    if (questionID === phoneQuestionID) {
+                                        setPhone(digit);
+                                    }
+                                });
+                            }
+                            // transcription responses
+                            if (phoneSurveyResponse?.questionTranscriptions) {
+                                // eslint-disable-next-line max-len
+                                phoneSurveyResponse.questionTranscriptions.forEach((questionResponse: any) => {
+                                    const transcriptionText = questionResponse?.transcriptionText || '';
+                                    const questionID = questionResponse?.questionDBOID || '_%&none';
+                                    if (questionID === nameQuestionID) {
+                                        setName(transcriptionText);
+                                    }
+                                    if (questionID === locationQuestionID) {
+                                        setAddress(transcriptionText);
+                                    }
+                                    if (questionID === emailQuestionID) {
+                                        setEmail(transcriptionText);
+                                    }
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            // eslint-disable-next-line no-console
+                            console.error('Error getting questions', err);
+                            // eslint-disable-next-line no-alert
+                            alert('Error getting questions');
+                        });
+                })
+                .catch((err) => {
+                    // eslint-disable-next-line no-console
+                    console.error('Error getting phone survey information', err);
+                    // eslint-disable-next-line no-alert
+                    alert('Error getting phone survey information');
+                });
+        }
     }, []);
 
     useEffect(() => {
@@ -408,7 +488,6 @@ const AdminFacilities = () => {
                                     geohash,
                                 })
                                     .then(() => {
-                                        handleCloseModal();
                                         async function fetchFacilities() {
                                             setFacilities([]);
                                             const q = query(collection(db, 'facility'), where('name', '>=', ''));
@@ -422,7 +501,18 @@ const AdminFacilities = () => {
                                             });
                                             setFacilities(facilitiesList);
                                         }
-                                        fetchFacilities();
+
+                                        if (phoneSurveyResponseRefID) {
+                                            const docRef = doc(db, 'phone-survey-responses', phoneSurveyResponseRefID);
+                                            // eslint-disable-next-line max-len
+                                            setDoc(docRef, { added: true }, { merge: true }).then(() => {
+                                                handleCloseModal();
+                                                fetchFacilities();
+                                            });
+                                        } else {
+                                            handleCloseModal();
+                                            fetchFacilities();
+                                        }
                                     }).catch((err) => {
                                         // eslint-disable-next-line no-console
                                         console.error('Error creating facility', err);
@@ -432,7 +522,7 @@ const AdminFacilities = () => {
                             }
                         }}
                     >
-                        Send
+                        Submit
                     </button>
                 </Modal.Footer>
             </Modal>

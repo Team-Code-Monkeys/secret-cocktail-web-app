@@ -74,6 +74,7 @@ training hours.
   - Ability to record data
   - Ability to record phone call
 - Integrated Twiliio API to make calls
+- Ability to add a facility based off transcribed phone responses provided by Twilio
 
 ### Bug Fixes
 
