@@ -16,7 +16,11 @@ import wave from '../wave.png';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import { checkedIfAllowedOnPage, k_admin_role } from '../authredirect/auth-check';
-import { k_admin_phone_survey_responses_page_route, k_admin_portal_page_route } from '../index';
+import {
+    k_admin_phone_survey_queue_page_route,
+    k_admin_phone_survey_responses_page_route,
+    k_admin_portal_page_route,
+} from '../index';
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
@@ -255,6 +259,19 @@ const AdminPhoneSurveyPage = () => {
                     View Survey Responses
                 </button>
             </div>
+
+            <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
+                <button
+                    style={{ width: 300 }}
+                    className={styles.sendBtn}
+                    onClick={() => {
+                        navigate(k_admin_phone_survey_queue_page_route);
+                    }}
+                >
+                    View Survey Queue
+                </button>
+            </div>
+
             {/* <div className={styles.innerContainer4} style={{ marginTop: '20px' }}> */}
             {/* eslint-disable-next-line max-len */}
             {/*    <Button style={{ width: 300 }} className={styles.downloadBtn} variant="primary"> */}
