@@ -212,6 +212,13 @@
   border: 1px solid #6C5CE7;
 }
 
+.sendBtn {
+  composes: primaryBtn from '/src/globalStyles.css';
+  margin-top: 0;
+  border: 1px solid #6C5CE7 !important;
+  background: #6C5CE7 !important;
+}
+
 .downloadBtn:disabled, .downloadBtn[disabled] {
   border: 1px solid #a59de1;
   background: #a59de1;

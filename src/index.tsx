@@ -14,6 +14,7 @@ import ReportFacilityCorrectionPage from './facilityreport';
 import AdminPortalPage from './adminportal';
 import AdminPhoneSurveyPage from './phonesurvey';
 import AdminFacilities from './adminfacilitydashboard';
+import AdminPhoneSurveyResponsesPage from './adminphonesurveyresponses';
 
 // Define routes
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -29,6 +30,7 @@ export const k_facility_report_correction_page_route = '/facility-report-correct
 export const k_admin_portal_page_route = '/admin-portal';
 export const k_admin_phone_survey_page_route = '/admin-phone-survey';
 export const k_admin_facility_page_route = '/admin-facility-dashboard';
+export const k_admin_phone_survey_responses_page_route = '/admin-phone-survey-responses';
 
 const router = createBrowserRouter([
     {
@@ -82,6 +84,10 @@ const router = createBrowserRouter([
     {
         path: k_admin_facility_page_route,
         element: <AdminFacilities />,
+    },
+    {
+        path: k_admin_phone_survey_responses_page_route,
+        element: <AdminPhoneSurveyResponsesPage />,
     },
 ]);
 
