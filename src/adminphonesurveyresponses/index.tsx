@@ -26,8 +26,8 @@ const AdminPhoneSurveyResponsesPage = () => {
     const navigate = useNavigate();
     const db = getFirestore(firebaseApp);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [phoneSurveyResponses, setPhoneSurveyResponses] = useState([]);
-    const [questions, setQuestions] = useState(undefined);
+    const [phoneSurveyResponses, setPhoneSurveyResponses] = useState<any>([]);
+    const [questions, setQuestions] = useState<any>(undefined);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -44,7 +44,7 @@ const AdminPhoneSurveyResponsesPage = () => {
             questionsQuery.forEach((doc) => {
                 const question = doc.data();
                 question.id = doc.id;
-                questionsObj.id = question;
+                questionsObj[question.id] = question;
             });
             // @ts-ignore
             setQuestions(questionsObj);
@@ -85,6 +85,80 @@ const AdminPhoneSurveyResponsesPage = () => {
                                     {' '}
                                     {phoneSurveyResponse?.toPhoneNumber || 'None'}
                                 </div>
+                                {
+                                    phoneSurveyResponse?.recordingUrl && (
+                                        <div>
+                                            <div className={styles.listItemText2}>
+                                                Recording:
+                                            </div>
+                                            {/* eslint-disable-next-line max-len */}
+                                            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                                            <audio controls>
+                                                <source src={phoneSurveyResponse?.recordingUrl} type="audio/mpeg" />
+                                            </audio>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    Object.keys(questions).map((questionID: any) => {
+                                        let questionText = `${questions[questionID]?.question || ''}`;
+                                        let response: any = 'Failed to capture response';
+                                        let recordingURL: any;
+                                        // eslint-disable-next-line max-len
+                                        if (phoneSurveyResponse?.questions) {
+                                            // eslint-disable-next-line no-unsafe-optional-chaining
+                                            // eslint-disable-next-line max-len
+                                            const digitResponses: any = phoneSurveyResponse?.questions;
+                                            digitResponses.forEach((questionResponse: any) => {
+                                                // eslint-disable-next-line max-len
+                                                if (questionID === questionResponse?.questionDBOID) {
+                                                    response = questionResponse?.digit || 'Failed to capture key press';
+                                                    // eslint-disable-next-line max-len
+                                                    recordingURL = recordingURL || questionResponse?.recordingUrl;
+                                                }
+                                            });
+                                        }
+
+                                        if (phoneSurveyResponse?.questionTranscriptions) {
+                                            questionText = `${questions[questionID]?.question || ''}`;
+                                            // eslint-disable-next-line max-len
+                                            const transcriptionResponses: any = phoneSurveyResponse?.questionTranscriptions;
+                                            // eslint-disable-next-line max-len
+                                            transcriptionResponses.forEach((questionResponse: any) => {
+                                                // eslint-disable-next-line max-len
+                                                if (questionID === questionResponse?.questionDBOID) {
+                                                    response = questionResponse?.transcriptionText || 'Failed to transcribe audio';
+                                                    // eslint-disable-next-line max-len
+                                                    recordingURL = recordingURL || questionResponse?.recordingUrl;
+                                                }
+                                            });
+                                        }
+                                        if (questionText) {
+                                            return (
+                                                <div style={{ marginTop: '10px' }} key={questionID}>
+                                                    {/* eslint-disable-next-line max-len */}
+                                                    <div className={styles.listItemText2}>{questionText}</div>
+                                                    <div>
+                                                        {`${response}`}
+                                                    </div>
+                                                    {
+                                                        recordingURL
+                                                        // eslint-disable-next-line max-len
+                                                        // eslint-disable-next-line max-len,jsx-a11y/media-has-caption
+                                                        && (
+                                                            // eslint-disable-next-line max-len
+                                                            // eslint-disable-next-line jsx-a11y/media-has-caption
+                                                            <audio controls>
+                                                                <source src={recordingURL} type="audio/mpeg" />
+                                                            </audio>
+                                                        )
+                                                    }
+                                                </div>
+                                            );
+                                        }
+                                        return <div />;
+                                    })
+                                }
                                 <div className={styles.listItemButtonsContainer}>
                                     <button
                                         style={{ border: '#e13d3d', background: '#e13d3d' }}
