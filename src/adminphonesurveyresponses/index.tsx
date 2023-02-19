@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     collection, deleteDoc, doc, getDocs, getFirestore, query,
 } from 'firebase/firestore';
+import { CSVLink } from 'react-csv';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
@@ -28,11 +29,73 @@ const AdminPhoneSurveyResponsesPage = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [phoneSurveyResponses, setPhoneSurveyResponses] = useState<any>([]);
     const [questions, setQuestions] = useState<any>(undefined);
+    const [responsesData, setResponsesData] = useState<Array<Array<string>>>([]);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
+
+    useEffect(() => {
+        if (questions) {
+            // fetch phone responses data for CSV
+            getDocs(query(collection(db, 'phone-survey-responses')))
+                .then((phoneSurveyResponseDocs) => {
+                    const phoneSurveyResponsesList: any = [];
+                    phoneSurveyResponseDocs.forEach((phoneSurveyResponseDoc) => {
+                        const phoneSurveyResponse = phoneSurveyResponseDoc.data();
+                        phoneSurveyResponse.id = phoneSurveyResponseDoc.id;
+                        const phoneSurveyResponseCleanedUp: any = {};
+                        phoneSurveyResponseCleanedUp.phone = phoneSurveyResponse?.toPhoneNumber || 'none';
+                        phoneSurveyResponseCleanedUp.callSid = phoneSurveyResponse?.callSid || 'none';
+                        // eslint-disable-next-line array-callback-return
+                        Object.keys(questions).map((questionID: any) => {
+                            let questionText = `${questions[questionID]?.question || ''}`;
+                            let response: any = 'Failed to capture response';
+                            let recordingURL: any;
+                            // eslint-disable-next-line max-len
+                            if (phoneSurveyResponse?.questions) {
+                                // eslint-disable-next-line no-unsafe-optional-chaining
+                                // eslint-disable-next-line max-len
+                                const digitResponses: any = phoneSurveyResponse?.questions;
+                                digitResponses.forEach((questionResponse: any) => {
+                                    // eslint-disable-next-line max-len
+                                    if (questionID === questionResponse?.questionDBOID) {
+                                        response = questionResponse?.digit || 'Failed to capture key press';
+                                        // eslint-disable-next-line max-len
+                                        recordingURL = recordingURL || questionResponse?.recordingUrl;
+                                    }
+                                });
+                            }
+                            if (phoneSurveyResponse?.questionTranscriptions) {
+                                questionText = `${questions[questionID]?.question || ''}`;
+                                // eslint-disable-next-line max-len
+                                const transcriptionResponses: any = phoneSurveyResponse?.questionTranscriptions;
+                                // eslint-disable-next-line max-len
+                                transcriptionResponses.forEach((questionResponse: any) => {
+                                    // eslint-disable-next-line max-len
+                                    if (questionID === questionResponse?.questionDBOID) {
+                                        response = questionResponse?.transcriptionText || 'Failed to transcribe audio';
+                                        // eslint-disable-next-line max-len
+                                        recordingURL = recordingURL || questionResponse?.recordingUrl;
+                                    }
+                                });
+                            }
+                            phoneSurveyResponseCleanedUp[questionText] = response || 'No response';
+                            phoneSurveyResponseCleanedUp[`${questionText.toString()} (recording)`] = recordingURL || 'No Recording URL';
+                        });
+                        phoneSurveyResponsesList.push(phoneSurveyResponseCleanedUp);
+                    });
+                    setResponsesData(phoneSurveyResponsesList);
+                })
+                .catch((err) => {
+                    // eslint-disable-next-line no-console
+                    console.error('Error getting questions', err);
+                    // eslint-disable-next-line no-alert
+                    alert('Error getting questions');
+                });
+        }
+    }, [questions]);
 
     // @ts-ignore
     useEffect(() => {
@@ -70,6 +133,14 @@ const AdminPhoneSurveyResponsesPage = () => {
             <div className={styles.innerContainer}>
                 <div className={styles.title}>Phone Survey Responses</div>
             </div>
+            {
+                (responsesData && responsesData.length > 0)
+                && (
+                    <CSVLink data={responsesData} filename="responses.csv" className={styles.downloadBtn}>
+                        <span>Download CSV</span>
+                    </CSVLink>
+                )
+            }
             {
                 questions && (
                     <div className={styles.innerContainer3}>
