@@ -181,14 +181,14 @@ const AdminPhoneSurveyResponsesPage = () => {
                                     {/* eslint-disable-next-line max-len */}
                                     { (phoneSurveyResponse?.added === undefined || phoneSurveyResponse?.added === false)
                                         && (
-                                            <button
+                                            <a
                                                 className={styles.primaryBtnListView}
-                                                onClick={() => {
-                                                    navigate(`${k_admin_facility_page_route}?phoneSurveyResponseID=${phoneSurveyResponse.id}`);
-                                                }}
+                                                target="_blank"
+                                                href={`${k_admin_facility_page_route}?phoneSurveyResponseID=${phoneSurveyResponse.id}`}
+                                                rel="noreferrer"
                                             >
                                                 Create Facility
-                                            </button>
+                                            </a>
                                         )}
                                 </div>
                             </div>
