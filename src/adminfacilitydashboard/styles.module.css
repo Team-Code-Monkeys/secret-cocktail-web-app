@@ -201,7 +201,8 @@
 
 .downloadBtn {
   composes: primaryBtn from '/src/globalStyles.css';
-  width: clamp(20vw, 10em, 25vh);
+  /*width: clamp(20vw, 10em, 25vh);*/
+  width: 300px;
   margin: 10px auto 20px;
   -moz-box-sizing: border-box;
   display: flex;

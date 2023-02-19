@@ -12,7 +12,7 @@ import {
 import { distanceBetween, geohashQueryBounds, Geopoint } from 'geofire-common';
 import { useDebouncedCallback } from 'use-debounce';
 import Geocode from 'react-geocode';
-import { k_admin_portal_page_route, k_facility_page_route } from '../index';
+import { k_admin_facility_page_route, k_facility_page_route } from '../index';
 import { GOOGLE_GEOCODING_API_KEY, GOOGLE_MAPS_API_KEY } from '../api';
 import { checkedIfAllowedOnPage, k_admin_role, k_regular_user_role } from '../authredirect/auth-check';
 import firebaseApp from '../firebase';
@@ -277,7 +277,7 @@ const FacilityList = (props: any) => {
                     <div
                         className={styles.backBtnContainer}
                         onClick={() => {
-                            navigate(k_admin_portal_page_route);
+                            navigate(k_admin_facility_page_route);
                         }}
                     >
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -387,7 +387,7 @@ const FacilityList = (props: any) => {
                                                     <button
                                                         className={styles.primaryBtnListView}
                                                         onClick={() => {
-                                                            navigate(`${k_facility_page_route}/${facility.id}` || 'none', { state: { distance } });
+                                                            navigate(`${k_facility_page_route}/${facility.id}` || 'none', { state: { distance, fromPage: 'map' } });
                                                         }}
                                                     >
                                                         More Info

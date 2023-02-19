@@ -10,7 +10,7 @@ import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import wave from '../wave.png';
-import { k_admin_facility_page_route, k_facility_report_correction_page_route, k_map_page_route } from '../index';
+import { k_facility_report_correction_page_route } from '../index';
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
@@ -20,7 +20,7 @@ const FacilityPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const db = getFirestore(firebaseApp);
-    const [isAdmin, setIsAdmin] = useState<any>(undefined);
+    const [, setIsAdmin] = useState<any>(undefined);
     const [isFacility, setIsFacility] = useState<any>(undefined);
     const [facility, setFacility] = useState<any>(undefined);
     const [email, setEmail] = useState<any>(undefined);
@@ -98,7 +98,7 @@ const FacilityPage = () => {
                     <div
                         className={styles.backBtnContainer}
                         onClick={() => {
-                            navigate(isAdmin ? k_admin_facility_page_route : k_map_page_route);
+                            navigate(-1);
                         }}
                     >
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
