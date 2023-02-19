@@ -6,6 +6,7 @@ import {
     collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where, writeBatch,
 } from 'firebase/firestore';
 import {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Button, Form, Modal, ToggleButton, Dropdown, DropdownButton,
 } from 'react-bootstrap';
 import { useCSVReader } from 'react-papaparse';
@@ -106,6 +107,57 @@ const AdminPhoneSurveyPage = () => {
             <div className={styles.innerContainer2}>
                 <div className={styles.title}>Phone Survey Dashboard</div>
             </div>
+            <div className={styles.innerContainer4}>
+                <button
+                    style={{ width: 300 }}
+                    className={styles.primaryBtn}
+                    onClick={() => {
+                        const defaultQuestion = 'Sample question text.';
+                        const defaultTitle = `Question ${questions.length + 1}`;
+                        const defaultTranscribe = false;
+                        const defaultType = 'keypad';
+                        const defaultVoiceRecordingTimeout = 5;
+                        const defaultDigitResponseMin = 0;
+                        const defaultDigitResponseMax = 9;
+                        const defaultNumDigits = 1;
+                        const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
+                        const time = Math.round(new Date().getTime());
+                        setDoc(questionRef, {
+                            createdAt: time,
+                            updatedAt: time,
+                            order: questions.length,
+                            question: defaultQuestion,
+                            title: defaultTitle,
+                            transcribe: defaultTranscribe,
+                            type: defaultType,
+                            voiceRecordingTimeout: defaultVoiceRecordingTimeout,
+                            digitResponseMin: defaultDigitResponseMin,
+                            digitResponseMax: defaultDigitResponseMax,
+                            numDigits: defaultNumDigits,
+                        }, { merge: true }).then(() => {
+                            fetchQuestions();
+                        }).catch((err) => {
+                            // eslint-disable-next-line no-alert
+                            alert('Error adding question');
+                            // eslint-disable-next-line no-console
+                            console.error('Error adding question', err);
+                        });
+                    }}
+                >
+                    Add Question
+                </button>
+            </div>
+            <div className={styles.innerContainer4} style={{ marginTop: '20px', marginBottom: '20px' }}>
+                <button
+                    style={{ width: 300 }}
+                    className={styles.sendBtn}
+                    onClick={() => {
+                        setShowModal(true);
+                    }}
+                >
+                    Send Survey
+                </button>
+            </div>
             <div className={styles.innerContainer3}>
                 {
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -191,62 +243,12 @@ const AdminPhoneSurveyPage = () => {
                     ))
                 }
             </div>
-            <div className={styles.innerContainer4}>
-                <button
-                    style={{ width: 300 }}
-                    className={styles.primaryBtn}
-                    onClick={() => {
-                        const defaultQuestion = 'Sample question text.';
-                        const defaultTitle = `Question ${questions.length + 1}`;
-                        const defaultTranscribe = false;
-                        const defaultType = 'keypad';
-                        const defaultVoiceRecordingTimeout = 5;
-                        const defaultDigitResponseMin = 0;
-                        const defaultDigitResponseMax = 9;
-                        const defaultNumDigits = 1;
-                        const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
-                        const time = Math.round(new Date().getTime());
-                        setDoc(questionRef, {
-                            createdAt: time,
-                            updatedAt: time,
-                            order: questions.length,
-                            question: defaultQuestion,
-                            title: defaultTitle,
-                            transcribe: defaultTranscribe,
-                            type: defaultType,
-                            voiceRecordingTimeout: defaultVoiceRecordingTimeout,
-                            digitResponseMin: defaultDigitResponseMin,
-                            digitResponseMax: defaultDigitResponseMax,
-                            numDigits: defaultNumDigits,
-                        }, { merge: true }).then(() => {
-                            fetchQuestions();
-                        }).catch((err) => {
-                            // eslint-disable-next-line no-alert
-                            alert('Error adding question');
-                            // eslint-disable-next-line no-console
-                            console.error('Error adding question', err);
-                        });
-                    }}
-                >
-                    Add Question
-                </button>
-            </div>
-            <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
-                <button
-                    style={{ width: 300 }}
-                    className={styles.sendBtn}
-                    onClick={() => {
-                        setShowModal(true);
-                    }}
-                >
-                    Send Survey
-                </button>
-            </div>
-            <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
-                <Button style={{ width: 300 }} className={styles.downloadBtn} variant="primary">
-                    Download CSV
-                </Button>
-            </div>
+            {/* <div className={styles.innerContainer4} style={{ marginTop: '20px' }}> */}
+            {/* eslint-disable-next-line max-len */}
+            {/*    <Button style={{ width: 300 }} className={styles.downloadBtn} variant="primary"> */}
+            {/*        Download CSV */}
+            {/*    </Button> */}
+            {/* </div> */}
             <div className={styles.innerContainer}>
                 {/* eslint-disable-next-line max-len */}
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */}

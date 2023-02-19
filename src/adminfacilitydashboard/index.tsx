@@ -8,9 +8,15 @@ import {
     where,
     getFirestore,
     deleteDoc,
-    doc,
+    doc, setDoc,
+    GeoPoint,
 } from 'firebase/firestore';
 import { CSVLink } from 'react-csv';
+import {
+    Form,
+    Modal,
+} from 'react-bootstrap';
+import { Geopoint } from 'geofire-common';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
@@ -33,8 +39,36 @@ const AdminFacilities = () => {
     const navigate = useNavigate();
     const db = getFirestore();
 
+    const [showModal, setShowModal] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
+    const [geopoint, setGeopoint] = useState<Geopoint>([0, 0]);
+    const [geohash, setGeohash] = useState('');
+
     const [facilities, setFacilities] = useState<any>([]);
     const [facilityData, setFacilityData] = useState<Array<Array<string>>>([]);
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setName('');
+        setEmail('');
+        setAddress('');
+        setPhone('');
+        setGeopoint([0, 0]);
+        setGeohash('');
+    };
+
+    useEffect(() => {
+        // TODO: use query parameters to auto-fill new facility info and show the modal
+    }, []);
+
+    useEffect(() => {
+        // eslint-disable-next-line no-console
+        console.log(address);
+        // TODO: update geopoint and geohash based off address input
+    }, [address]);
 
     function makeStringCSVCompliant(str: string | undefined) {
         if (!str) {
@@ -115,6 +149,17 @@ const AdminFacilities = () => {
                         )
                         : <button className={styles.downloadBtn} disabled>Loading...</button>
                 }
+                <div className={styles.innerContainer4} style={{ marginBottom: '15px' }}>
+                    <button
+                        style={{ width: 300 }}
+                        className={styles.downloadBtn}
+                        onClick={() => {
+                            setShowModal(true);
+                        }}
+                    >
+                        Add Facility
+                    </button>
+                </div>
                 {facilities.map((facility: any) => (
                     <div className={styles.listItemContainer} key={facility.id}>
                         <div className={styles.listItemText2}>
@@ -203,6 +248,123 @@ const AdminFacilities = () => {
                     <div className={styles.backBtnText}>Back</div>
                 </div>
             </div>
+            <Modal
+                show={showModal}
+                onHide={handleCloseModal}
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Facility</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Name"
+                                value={name}
+                                onChange={(event) => {
+                                    setName(event?.target?.value || '');
+                                }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Email"
+                                value={email}
+                                onChange={(event) => {
+                                    setEmail(event?.target?.value || '');
+                                }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Address"
+                                value={address}
+                                onChange={(event) => {
+                                    setAddress(event?.target?.value || '');
+                                }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Phone</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Phone"
+                                value={phone}
+                                onChange={(event) => {
+                                    setPhone(event?.target?.value || '');
+                                }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Latitude (auto-generated)</Form.Label>
+                            <Form.Control
+                                disabled
+                                type="text"
+                                placeholder="Latitude"
+                                value={geopoint[0].toString()}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Longitude (auto-generated)</Form.Label>
+                            <Form.Control
+                                disabled
+                                type="text"
+                                placeholder="Longitude"
+                                value={geopoint[1].toString()}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Geohash (auto-generated)</Form.Label>
+                            <Form.Control
+                                disabled
+                                type="text"
+                                placeholder="Geohash"
+                                value={geohash}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button
+                        className={styles.sendBtn}
+                        onClick={() => {
+                            if (geohash === undefined || geohash.length === 0) {
+                                // eslint-disable-next-line no-alert
+                                alert('Location cannot be found');
+                            } else {
+                                // eslint-disable-next-line no-console
+                                console.log('test');
+                                const newFacilityRef = doc(collection(db, 'facility'));
+                                setDoc(newFacilityRef, {
+                                    name,
+                                    email,
+                                    address,
+                                    phone,
+                                    geopoint: new GeoPoint(geopoint[0], geopoint[1]),
+                                    geohash,
+                                })
+                                    .then(() => {
+                                        handleCloseModal();
+                                    }).catch((err) => {
+                                        // eslint-disable-next-line no-console
+                                        console.error('Error creating facility', err);
+                                        // eslint-disable-next-line no-alert
+                                        alert('Error adding facility to database');
+                                    });
+                            }
+                        }}
+                    >
+                        Send
+                    </button>
+                </Modal.Footer>
+            </Modal>
             <Waves />
         </div>
     );
