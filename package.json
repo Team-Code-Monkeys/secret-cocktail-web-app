@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@firebase/app": "^0.9.3",
+    "@firebase/firestore": "^3.8.3",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -36,7 +38,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "eslintConfig": {
     "extends": [
@@ -58,7 +61,21 @@
   },
   "devDependencies": {
     "@types/google.maps": "^3.50.5",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "autoprefixer": "^10.4.13",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "postcss": "^8.4.19"
-  }
+  },
+  "eslintIgnore": [
+    ".eslintrc.js",
+    "build/*",
+    "public/*"
+  ]
 }

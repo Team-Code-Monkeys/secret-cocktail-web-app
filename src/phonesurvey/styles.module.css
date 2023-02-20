@@ -109,7 +109,7 @@
     box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 15px 0px;
     border-radius: 15px;
     padding: 10px;
-    width: min(90%, 400px);
+    width: min(90%, 600px);
 }
 
 @media (max-width: 605px) {
@@ -159,6 +159,16 @@
     box-shadow: None;
 }
 
+.deleteBtnListView {
+    composes: primaryBtnListView;
+    border: #e13d3d;
+    background: #e13d3d;
+}
+
+.deleteBtnListView:hover {
+    box-shadow: rgba(138, 24, 24, 0.30) 0px 7px 29px 0px !important;
+}
+
 .primaryBtn {
     composes: primaryBtn from '/src/globalStyles.css';
     margin-top: 0;
@@ -177,20 +187,29 @@
 
 .coloredBtn > button {
     color: black !important;
-    border: 1px solid #000000 !important;
+    border: 1px solid #d0d4dc !important;
     background: #ffffff !important;
 }
 
 .browseBtn {
-    margin-right: 8px;
-    color: white;
-    border: 1px solid #6C5CE7 !important;
-    background: #6C5CE7 !important;
-    border-radius: 10px;
+    composes: primaryBtn from '/src/globalStyles.css';
+    margin-left: 0;
+    margin-top: 0;
 }
 
 .removeBtn {
     color: red;
     border: none;
     background: rgba(0, 0, 0, 0);
+}
+
+.checkbox1 {
+    margin-right: 10px;
+}
+
+.footerWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

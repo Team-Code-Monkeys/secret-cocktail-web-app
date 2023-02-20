@@ -24,12 +24,20 @@
     <li>
       <a href="#introduction">Introduction</a>
     </li>
-    <li>
-      <a href="#v010-release-notes">v0.1.0 Release Notes</a>
+      <li>
+      <a href="#v020-release-notes">v0.2.0 Release Notes</a>
       <ul>
         <li><a href="#features">Features</a></li>
         <li><a href="#bug-fixes">Bug Fixes</a></li>
         <li><a href="#known-issues">Known Issues</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#v010-release-notes">v0.1.0 Release Notes</a>
+      <ul>
+        <li><a href="#features-1">Features</a></li>
+        <li><a href="#bug-fixes-1">Bug Fixes</a></li>
+        <li><a href="#known-issues-1">Known Issues</a></li>
       </ul>
     </li>
     <li><a href="#how-to-run">How To Run</a></li>
@@ -57,6 +65,27 @@ training hours.
 <!-- Release Notes -->
 
 # Release Notes
+## v0.2.0 Release Notes
+
+### Features
+
+- Added ability to create phone survey
+  - Ability to change questions
+  - Ability to record data
+  - Ability to record phone call
+- Integrated Twiliio API to make calls
+- Ability to add a facility based off transcribed phone responses provided by Twilio
+
+### Bug Fixes
+
+- Fixed wave background showing wrong color
+
+### Known Issues
+
+- Button styling is inconsistent in modals
+
+Please report future issues using GitHub issues.
+
 
 ## v0.1.0 Release Notes
 

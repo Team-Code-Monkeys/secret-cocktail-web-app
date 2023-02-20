@@ -79,11 +79,20 @@
   composes: primaryBtn from "/src/globalStyles.css";
   margin-top: 0;
   margin-left: 10px;
-  /*width: 100px;*/
   height: 40px;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
+}
+
+.deleteBtnListView {
+  composes: primaryBtnListView;
+  border: #e13d3d;
+  background: #e13d3d;
+}
+
+.deleteBtnListView:hover {
+  box-shadow: rgba(138, 24, 24, 0.30) 0px 7px 29px 0px !important;
 }
 
 @media (max-width: 605px) {
@@ -192,7 +201,8 @@
 
 .downloadBtn {
   composes: primaryBtn from '/src/globalStyles.css';
-  width: clamp(20vw, 10em, 25vh);
+  /*width: clamp(20vw, 10em, 25vh);*/
+  width: 300px;
   margin: 10px auto 20px;
   -moz-box-sizing: border-box;
   display: flex;
@@ -201,6 +211,13 @@
   text-align: center;
   text-decoration: none;
   border: 1px solid #6C5CE7;
+}
+
+.sendBtn {
+  composes: primaryBtn from '/src/globalStyles.css';
+  margin-top: 0;
+  border: 1px solid #6C5CE7 !important;
+  background: #6C5CE7 !important;
 }
 
 .downloadBtn:disabled, .downloadBtn[disabled] {
