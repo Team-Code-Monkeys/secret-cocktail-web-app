@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import {
-    collection, deleteDoc, doc, getDocs, getFirestore, query,
+    collection, doc, getDocs, getFirestore, query, setDoc,
 } from 'firebase/firestore';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
@@ -10,7 +10,7 @@ import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import wave from '../wave.png';
 import { checkedIfAllowedOnPage, k_admin_role } from '../authredirect/auth-check';
-import { k_admin_facility_page_route, k_admin_phone_survey_page_route } from '../index';
+import { k_admin_phone_survey_page_route } from '../index';
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
@@ -20,8 +20,7 @@ const AdminPhoneSurveyQueuePage = () => {
     const navigate = useNavigate();
     const db = getFirestore(firebaseApp);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [phoneSurveyResponses, setPhoneSurveyResponses] = useState<any>([]);
-    const [questions, setQuestions] = useState<any>(undefined);
+    const [phoneSurveyQueue, setPhoneSurveyQueue] = useState<any>([]);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -30,166 +29,83 @@ const AdminPhoneSurveyQueuePage = () => {
 
     // @ts-ignore
     useEffect(() => {
-        async function fetchPhoneSurveyResponsesAndQuestions() {
-            // fetch questions
-            const questionsObj: any = {};
-            const questionsQuery = await getDocs(query(collection(db, 'question')));
+        async function fetchPhoneSurveyQueue() {
+            // fetch phone survey queue
+            const phoneSurveyQueueArr: any = [];
+            const phoneSurveyQueueQuery = await getDocs(query(collection(db, 'to-contact-for-survey')));
             // eslint-disable-next-line @typescript-eslint/no-shadow
-            questionsQuery.forEach((doc) => {
-                const question = doc.data();
-                question.id = doc.id;
-                questionsObj[question.id] = question;
+            phoneSurveyQueueQuery.forEach((doc) => {
+                const phoneSurveyQueueObj = doc.data();
+                phoneSurveyQueueObj.id = doc.id;
+                phoneSurveyQueueArr.push(phoneSurveyQueueObj);
             });
             // @ts-ignore
-            setQuestions(questionsObj);
-
-            // fetch phone survey responses
-            const phoneSurveyResponsesArr: any = [];
-            const phoneSurveyResponsesQuery = await getDocs(query(collection(db, 'phone-survey-responses')));
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            phoneSurveyResponsesQuery.forEach((doc) => {
-                const phoneSurveyResponse = doc.data();
-                phoneSurveyResponse.id = doc.id;
-                phoneSurveyResponsesArr.push(phoneSurveyResponse);
-            });
-            // @ts-ignore
-            setPhoneSurveyResponses(phoneSurveyResponsesArr);
+            setPhoneSurveyQueue(phoneSurveyQueueArr);
         }
-        fetchPhoneSurveyResponsesAndQuestions();
+        fetchPhoneSurveyQueue();
     }, [db]);
 
     return (
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
-                <div className={styles.title}>Phone Survey Responses</div>
+                <div className={styles.title}>Phone Survey Queue</div>
             </div>
-            {
-                questions && (
-                    <div className={styles.innerContainer3}>
-                        {phoneSurveyResponses.map((phoneSurveyResponse: any) => (
-                            <div className={styles.listItemContainer} key={phoneSurveyResponse.id}>
+            <div className={styles.innerContainer3}>
+                {phoneSurveyQueue.map((phoneSurveyQueueObj: any) => (
+                    <div className={styles.listItemContainer} key={phoneSurveyQueueObj.id}>
+                        <div className={styles.listItemText2}>
+                            Name:
+                            {' '}
+                            {phoneSurveyQueueObj?.name || 'None'}
+                        </div>
+                        <div className={styles.listItemText2}>
+                            Phone:
+                            {' '}
+                            {phoneSurveyQueueObj?.phone || 'None'}
+                        </div>
+                        <div className={styles.listItemText2}>
+                            Recording:
+                            {' '}
+                            {phoneSurveyQueueObj?.record ? 'Enabled' : 'Disabled'}
+                        </div>
+                        {
+                            phoneSurveyQueueObj?.callStatus && (
                                 <div className={styles.listItemText2}>
-                                    Twilio Call SID:
+                                    Call Status:
                                     {' '}
-                                    {phoneSurveyResponse?.callSid || 'None'}
+                                    {phoneSurveyQueueObj?.callStatus}
                                 </div>
-                                <div className={styles.listItemText2}>
-                                    Phone:
-                                    {' '}
-                                    {phoneSurveyResponse?.toPhoneNumber || 'None'}
-                                </div>
-                                {
-                                    phoneSurveyResponse?.recordingUrl && (
-                                        <div>
-                                            <div className={styles.listItemText2}>
-                                                Recording:
-                                            </div>
-                                            {/* eslint-disable-next-line max-len */}
-                                            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-                                            <audio controls>
-                                                <source src={phoneSurveyResponse?.recordingUrl} type="audio/mpeg" />
-                                            </audio>
-                                        </div>
-                                    )
-                                }
-                                {
-                                    Object.keys(questions).map((questionID: any) => {
-                                        let questionText = `${questions[questionID]?.question || ''}`;
-                                        let response: any = 'Failed to capture response';
-                                        let recordingURL: any;
-                                        // eslint-disable-next-line max-len
-                                        if (phoneSurveyResponse?.questions) {
-                                            // eslint-disable-next-line no-unsafe-optional-chaining
-                                            // eslint-disable-next-line max-len
-                                            const digitResponses: any = phoneSurveyResponse?.questions;
-                                            digitResponses.forEach((questionResponse: any) => {
-                                                // eslint-disable-next-line max-len
-                                                if (questionID === questionResponse?.questionDBOID) {
-                                                    response = questionResponse?.digit || 'Failed to capture key press';
-                                                    // eslint-disable-next-line max-len
-                                                    recordingURL = recordingURL || questionResponse?.recordingUrl;
-                                                }
-                                            });
-                                        }
-
-                                        if (phoneSurveyResponse?.questionTranscriptions) {
-                                            questionText = `${questions[questionID]?.question || ''}`;
-                                            // eslint-disable-next-line max-len
-                                            const transcriptionResponses: any = phoneSurveyResponse?.questionTranscriptions;
-                                            // eslint-disable-next-line max-len
-                                            transcriptionResponses.forEach((questionResponse: any) => {
-                                                // eslint-disable-next-line max-len
-                                                if (questionID === questionResponse?.questionDBOID) {
-                                                    response = questionResponse?.transcriptionText || 'Failed to transcribe audio';
-                                                    // eslint-disable-next-line max-len
-                                                    recordingURL = recordingURL || questionResponse?.recordingUrl;
-                                                }
-                                            });
-                                        }
-                                        if (questionText) {
-                                            return (
-                                                <div style={{ marginTop: '10px' }} key={questionID}>
-                                                    {/* eslint-disable-next-line max-len */}
-                                                    <div className={styles.listItemText2}>{questionText}</div>
-                                                    <div>
-                                                        {`${response}`}
-                                                    </div>
-                                                    {
-                                                        recordingURL
-                                                        // eslint-disable-next-line max-len
-                                                        // eslint-disable-next-line max-len,jsx-a11y/media-has-caption
-                                                        && (
-                                                            // eslint-disable-next-line max-len
-                                                            // eslint-disable-next-line jsx-a11y/media-has-caption
-                                                            <audio controls>
-                                                                <source src={recordingURL} type="audio/mpeg" />
-                                                            </audio>
-                                                        )
-                                                    }
-                                                </div>
-                                            );
-                                        }
-                                        return <div />;
-                                    })
-                                }
-                                <div className={styles.listItemButtonsContainer}>
+                            )
+                        }
+                        <div className={styles.listItemButtonsContainer}>
+                            {
+                                // eslint-disable-next-line max-len
+                                (phoneSurveyQueueObj?.contacted === undefined && phoneSurveyQueueObj.id) && (
                                     <button
-                                        style={{ border: '#e13d3d', background: '#e13d3d' }}
-                                        className={styles.deleteBtnListView}
+                                        className={styles.primaryBtnListView}
                                         onClick={() => {
-                                            deleteDoc(doc(db, 'phone-survey-responses', phoneSurveyResponse.id || ''))
+                                            setDoc(doc(db, 'to-contact-for-survey', phoneSurveyQueueObj.id), {
+                                                contacted: false,
+                                            }, { merge: true })
                                                 .then(() => {
                                                     window.location.reload();
-                                                })
-                                                .catch((error: any) => {
-                                                    // eslint-disable-next-line no-alert
-                                                    alert('Error deleting phone survey response.');
+                                                }).catch((err) => {
                                                     // eslint-disable-next-line no-console
-                                                    console.error('Error deleting phone survey response', error);
+                                                    console.error('Error updating database to send survey', err);
+                                                    // eslint-disable-next-line no-alert
+                                                    alert('Error sending survey');
                                                 });
                                         }}
                                     >
-                                        Delete
+                                        Send
                                     </button>
-                                    {/* eslint-disable-next-line max-len */}
-                                    { (phoneSurveyResponse?.added === undefined || phoneSurveyResponse?.added === false)
-                                        && (
-                                            <a
-                                                className={styles.primaryBtnListView}
-                                                target="_blank"
-                                                href={`${k_admin_facility_page_route}?phoneSurveyResponseID=${phoneSurveyResponse.id}`}
-                                                rel="noreferrer"
-                                            >
-                                                Create Facility
-                                            </a>
-                                        )}
-                                </div>
-                            </div>
-                        ))}
+                                )
+                            }
+                        </div>
                     </div>
-                )
-            }
+                ))}
+            </div>
             <div className={styles.innerContainer}>
                 {/* TODO: make this a button */}
                 {/* eslint-disable-next-line max-len */}
