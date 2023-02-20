@@ -16,7 +16,11 @@ import wave from '../wave.png';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import { checkedIfAllowedOnPage, k_admin_role } from '../authredirect/auth-check';
-import { k_admin_phone_survey_responses_page_route, k_admin_portal_page_route } from '../index';
+import {
+    k_admin_phone_survey_queue_page_route,
+    k_admin_phone_survey_responses_page_route,
+    k_admin_portal_page_route,
+} from '../index';
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
@@ -47,13 +51,13 @@ const AdminPhoneSurveyPage = () => {
     const [digitResponseMin, setDigitResponseMin] = useState(0);
     const [digitResponseMax, setDigitResponseMax] = useState(9);
     const [numDigits, setNumDigits] = useState(1);
+    const [isRecordingEnabled, setIsRecordingEnabled] = useState<any>(true);
+    const [isAutomaticSend, setIsAutomaticSend] = useState<any>(true);
 
     const handleCloseModal = () => {
         setShowModal(false);
         setShowQuestionEditModal(false);
     };
-
-    const [isRecordingEnabled, setIsRecordingEnabled] = useState(0);
 
     async function fetchQuestions() {
         const q = query(collection(db, 'question'), where('order', '>=', 0));
@@ -105,70 +109,7 @@ const AdminPhoneSurveyPage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer2}>
-                <div className={styles.title}>Phone Survey Dashboard</div>
-            </div>
-            <div className={styles.innerContainer4}>
-                <button
-                    style={{ width: 300 }}
-                    className={styles.primaryBtn}
-                    onClick={() => {
-                        const defaultQuestion = 'Sample question text.';
-                        const defaultTitle = `Question ${questions.length + 1}`;
-                        const defaultTranscribe = false;
-                        const defaultType = 'keypad';
-                        const defaultVoiceRecordingTimeout = 5;
-                        const defaultDigitResponseMin = 0;
-                        const defaultDigitResponseMax = 9;
-                        const defaultNumDigits = 1;
-                        const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
-                        const time = Math.round(new Date().getTime());
-                        setDoc(questionRef, {
-                            createdAt: time,
-                            updatedAt: time,
-                            order: questions.length,
-                            question: defaultQuestion,
-                            title: defaultTitle,
-                            transcribe: defaultTranscribe,
-                            type: defaultType,
-                            voiceRecordingTimeout: defaultVoiceRecordingTimeout,
-                            digitResponseMin: defaultDigitResponseMin,
-                            digitResponseMax: defaultDigitResponseMax,
-                            numDigits: defaultNumDigits,
-                        }, { merge: true }).then(() => {
-                            fetchQuestions();
-                        }).catch((err) => {
-                            // eslint-disable-next-line no-alert
-                            alert('Error adding question');
-                            // eslint-disable-next-line no-console
-                            console.error('Error adding question', err);
-                        });
-                    }}
-                >
-                    Add Question
-                </button>
-            </div>
-            <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
-                <button
-                    style={{ width: 300 }}
-                    className={styles.sendBtn}
-                    onClick={() => {
-                        setShowModal(true);
-                    }}
-                >
-                    Send Survey
-                </button>
-            </div>
-
-            <div className={styles.innerContainer4} style={{ marginTop: '20px', marginBottom: '20px' }}>
-                <button
-                    style={{ width: 300 }}
-                    className={styles.sendBtn}
-                    onClick={() => {
-                        navigate(k_admin_phone_survey_responses_page_route);
-                    }}
-                >
-                    View Survey Responses
-                </button>
+                <div className={styles.title}>Phone Survey Questions</div>
             </div>
             <div className={styles.innerContainer3}>
                 {
@@ -255,6 +196,82 @@ const AdminPhoneSurveyPage = () => {
                     ))
                 }
             </div>
+            <div className={styles.innerContainer4}>
+                <button
+                    style={{ width: 300 }}
+                    className={styles.primaryBtn}
+                    onClick={() => {
+                        const defaultQuestion = 'Sample question text.';
+                        const defaultTitle = `Question ${questions.length + 1}`;
+                        const defaultTranscribe = false;
+                        const defaultType = 'keypad';
+                        const defaultVoiceRecordingTimeout = 5;
+                        const defaultDigitResponseMin = 0;
+                        const defaultDigitResponseMax = 9;
+                        const defaultNumDigits = 1;
+                        const questionRef = doc(db, 'question', Math.round(new Date().getTime()).toString());
+                        const time = Math.round(new Date().getTime());
+                        setDoc(questionRef, {
+                            createdAt: time,
+                            updatedAt: time,
+                            order: questions.length,
+                            question: defaultQuestion,
+                            title: defaultTitle,
+                            transcribe: defaultTranscribe,
+                            type: defaultType,
+                            voiceRecordingTimeout: defaultVoiceRecordingTimeout,
+                            digitResponseMin: defaultDigitResponseMin,
+                            digitResponseMax: defaultDigitResponseMax,
+                            numDigits: defaultNumDigits,
+                        }, { merge: true }).then(() => {
+                            fetchQuestions();
+                        }).catch((err) => {
+                            // eslint-disable-next-line no-alert
+                            alert('Error adding question');
+                            // eslint-disable-next-line no-console
+                            console.error('Error adding question', err);
+                        });
+                    }}
+                >
+                    Add Question
+                </button>
+            </div>
+            <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
+                <button
+                    style={{ width: 300 }}
+                    className={styles.sendBtn}
+                    onClick={() => {
+                        setShowModal(true);
+                    }}
+                >
+                    Send Survey
+                </button>
+            </div>
+
+            <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
+                <button
+                    style={{ width: 300 }}
+                    className={styles.sendBtn}
+                    onClick={() => {
+                        navigate(k_admin_phone_survey_responses_page_route);
+                    }}
+                >
+                    View Survey Responses
+                </button>
+            </div>
+
+            <div className={styles.innerContainer4} style={{ marginTop: '20px' }}>
+                <button
+                    style={{ width: 300 }}
+                    className={styles.sendBtn}
+                    onClick={() => {
+                        navigate(k_admin_phone_survey_queue_page_route);
+                    }}
+                >
+                    View Survey Queue
+                </button>
+            </div>
+
             {/* <div className={styles.innerContainer4} style={{ marginTop: '20px' }}> */}
             {/* eslint-disable-next-line max-len */}
             {/*    <Button style={{ width: 300 }} className={styles.downloadBtn} variant="primary"> */}
@@ -494,22 +511,36 @@ const AdminPhoneSurveyPage = () => {
                                     )
                             }
                         </DropdownButton>
-                        <ToggleButton
-                            id="toggle-check"
-                            className="mb-3"
-                            value={0}
-                            type="checkbox"
-                            variant="outline-primary"
-                            checked={isRecordingEnabled === 1}
-                            onChange={() => {
-                                // eslint-disable-next-line max-len
-                                setIsRecordingEnabled(isRecordingEnabled === 1 ? 0 : 1);
-                            }}
-                        >
-                            Recording
-                            {' '}
-                            {isRecordingEnabled === 1 ? 'Enabled' : 'Disabled'}
-                        </ToggleButton>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Record Call</Form.Label>
+                            <Form.Check
+                                type="switch"
+                                id="custom-switch"
+                                label={isRecordingEnabled ? 'Enabled' : 'Disabled'}
+                                value={isRecordingEnabled ? 'on' : 'off'}
+                                checked={isRecordingEnabled}
+                                onChange={(event) => {
+                                    // eslint-disable-next-line max-len
+                                    // @ts-ignore
+                                    setIsRecordingEnabled(event?.target?.checked);
+                                }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicFacilityName">
+                            <Form.Label>Automatically Send</Form.Label>
+                            <Form.Check
+                                type="switch"
+                                id="custom-switch"
+                                label={isAutomaticSend ? 'Enabled' : 'Disabled'}
+                                value={isAutomaticSend ? 'on' : 'off'}
+                                checked={isAutomaticSend}
+                                onChange={(event) => {
+                                    // eslint-disable-next-line max-len
+                                    // @ts-ignore
+                                    setIsAutomaticSend(event?.target?.checked);
+                                }}
+                            />
+                        </Form.Group>
                         {
                             sendToMultipleFacilities
                                 ? (
@@ -522,9 +553,9 @@ const AdminPhoneSurveyPage = () => {
                                                 // eslint-disable-next-line max-len
                                                 // eslint-disable-next-line @typescript-eslint/no-shadow,max-len
                                                 const jsonResult = data.map((data: any[]) => Object.assign({}, ...data.map((x: any, i: any) => ({ [keys[i]]: x }))));
-                                                for (let i = 0; i < jsonResult.length; i += 1) {
-                                                    jsonResult[i].contacted = false;
-                                                }
+                                                // for (let i = 0; i < jsonResult.length; i += 1) {
+                                                //     jsonResult[i].contacted = false;
+                                                // }
                                                 setFacilitiesToSendSurveyTo(jsonResult);
                                             }}
                                         >
@@ -545,7 +576,7 @@ const AdminPhoneSurveyPage = () => {
                                                             {...getRootProps()}
                                                             className={styles.browseBtn}
                                                         >
-                                                            Upload CSV File
+                                                            Upload CSV
                                                         </button>
                                                         <div>
                                                             {acceptedFile && acceptedFile.name}
@@ -561,7 +592,7 @@ const AdminPhoneSurveyPage = () => {
                                                             )
                                                         }
                                                     </div>
-                                                    <div>
+                                                    <div style={{ marginTop: '5px' }}>
                                                         {/* eslint-disable-next-line max-len */}
                                                         <span>Confused about the format? Refer to this </span>
                                                         <a
@@ -616,13 +647,17 @@ const AdminPhoneSurveyPage = () => {
                                         if (facilityInfo?.phone && facilityInfo?.name) {
                                             const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityInfo?.phone).toString() + Math.round(new Date().getTime()).toString());
                                             // eslint-disable-next-line no-param-reassign
-                                            facilityInfo.record = isRecordingEnabled === 1;
+                                            facilityInfo.record = isRecordingEnabled;
+                                            if (isAutomaticSend) {
+                                                // eslint-disable-next-line no-param-reassign
+                                                facilityInfo.contacted = false;
+                                            }
                                             batch.set(phoneRef, facilityInfo);
                                         }
                                     });
                                     batch.commit().then(() => {
-                                        // eslint-disable-next-line no-alert
-                                        alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
+                                        // eslint-disable-next-line no-alert,max-len
+                                        // alert(`Sending phone surveys to ${facilitiesToSendSurveyTo.length} facilities!`);
                                         setShowModal(false);
                                         setFacilitiesToSendSurveyTo([]);
                                     }).catch((err) => {
@@ -634,12 +669,15 @@ const AdminPhoneSurveyPage = () => {
                                 } else {
                                     setFacilitiesToSendSurveyTo([]);
                                     const phoneRef = doc(db, 'to-contact-for-survey', hashCode(facilityPhoneNumber).toString() + Math.round(new Date().getTime()).toString());
-                                    setDoc(phoneRef, {
-                                        contacted: false,
+                                    const docData: any = {
                                         name: facilityName,
                                         phone: facilityPhoneNumber.toString(),
-                                        record: isRecordingEnabled === 1,
-                                    }, { merge: true }).then(() => {
+                                        record: isRecordingEnabled,
+                                    };
+                                    if (isAutomaticSend) {
+                                        docData.contacted = false;
+                                    }
+                                    setDoc(phoneRef, docData, { merge: true }).then(() => {
                                         // eslint-disable-next-line no-alert
                                         setFacilityPhoneNumber('');
                                         setFacilityName('');

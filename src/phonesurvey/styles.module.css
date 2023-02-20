@@ -187,7 +187,7 @@
 
 .coloredBtn > button {
     color: black !important;
-    border: 2px solid #000000 !important;
+    border: 1px solid #d0d4dc !important;
     background: #ffffff !important;
 }
 

@@ -27,7 +27,7 @@ import {
     checkedIfAllowedOnPage,
     k_admin_role,
 } from '../authredirect/auth-check';
-import { k_admin_portal_page_route, k_facility_page_route } from '../index';
+import { k_admin_portal_page_route, k_facility_page_route, k_map_page_route } from '../index';
 import wave from '../wave.png';
 import { GOOGLE_GEOCODING_API_KEY } from '../api';
 
@@ -292,6 +292,19 @@ const AdminFacilities = () => {
                             {facility.phone || 'No text'}
                         </div>
                         <div className={styles.listItemButtonsContainer}>
+                            <button
+                                className={styles.primaryBtnListView}
+                                onClick={() => {
+                                    navigate(`${k_map_page_route}?lat=${facility?.geopoint?.latitude || 0}&lon=${facility?.geopoint?.longitude || 0}` || 'none', {
+                                        state: {
+                                            distance: undefined,
+                                            goBackToAdminPage: true,
+                                        },
+                                    });
+                                }}
+                            >
+                                View Location
+                            </button>
                             <button
                                 className={styles.primaryBtnListView}
                                 onClick={() => {
