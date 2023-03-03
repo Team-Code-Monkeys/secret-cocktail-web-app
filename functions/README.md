@@ -12,16 +12,6 @@ Server that manages the sending of phone surveys to facilities
 Create `.env` file with following content (derived from Firebase Admin SDK JSON):
 
 ```shell
-F_FIREBASE_TYPE="..."
-F_FIREBASE_PROJECT_ID="..."
-F_FIREBASE_PRIVATE_KEY_ID="..."
-F_FIREBASE_PRIVATE_KEY="..."
-F_FIREBASE_CLIENT_EMAIL="..."
-F_FIREBASE_CLIENT_ID="..."
-F_FIREBASE_AUTH_URI="..."
-F_FIREBASE_TOKEN_URI="..."
-F_FIREBASE_AUTH_PROVIDER_X509_CERT_URL="..."
-F_FIREBASE_CLIENT_X509_CERT_URL="..."
 TWILIO_ACCOUNT_SID="..."
 TWILIO_AUTH_TOKEN="..."
 TWILIO_PHONE_NUMBER="..."
