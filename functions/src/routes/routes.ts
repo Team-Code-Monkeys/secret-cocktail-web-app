@@ -13,6 +13,7 @@ import {
     phoneSurveyQuestionResponseEvent,
     phoneSurveyRecordingEvent, phoneSurveyTranscriptionEvent
 } from "../controller/controller";
+import {createAdmin} from "../controller/admin";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function addRoutes(app: core.Express) {
@@ -40,4 +41,9 @@ export default function addRoutes(app: core.Express) {
      * Endpoint to handle transcription events
      */
     app.post(`/${transcriptionEndpoint}`, [], phoneSurveyTranscriptionEvent);
+
+    /**
+     * Endpoint to create admin account if it does not already exist
+     */
+    app.post(`/create-admin`, [], createAdmin);
 };
