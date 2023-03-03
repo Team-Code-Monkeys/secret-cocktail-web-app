@@ -9,26 +9,24 @@ Server that manages the sending of phone surveys to facilities
 - [NodeJS Version 16.x](https://nodejs.org/en/download/)
 
 ## Environment Variables
-Create `.env.dev` file with following content (derived from Firebase Admin SDK JSON):
+Create `.env` file with following content (derived from Firebase Admin SDK JSON):
 
 ```shell
-firebase_type="..."
-firebase_project_id="..."
-firebase_private_key_id="..."
-firebase_private_key="..."
-firebase_client_email="..."
-firebase_client_id="..."
-firebase_auth_uri="..."
-firebase_token_uri="..."
-firebase_auth_provider_x509_cert_url="..."
-firebase_client_x509_cert_url="..."
+F_FIREBASE_TYPE="..."
+F_FIREBASE_PROJECT_ID="..."
+F_FIREBASE_PRIVATE_KEY_ID="..."
+F_FIREBASE_PRIVATE_KEY="..."
+F_FIREBASE_CLIENT_EMAIL="..."
+F_FIREBASE_CLIENT_ID="..."
+F_FIREBASE_AUTH_URI="..."
+F_FIREBASE_TOKEN_URI="..."
+F_FIREBASE_AUTH_PROVIDER_X509_CERT_URL="..."
+F_FIREBASE_CLIENT_X509_CERT_URL="..."
 TWILIO_ACCOUNT_SID="..."
 TWILIO_AUTH_TOKEN="..."
 TWILIO_PHONE_NUMBER="..."
 TWILIO_STATUS_CALLBACK_URL="https://something.com"
 ```
-
-Note: for production call this file `.env.prod`
 
 ## Get Started (server)
 

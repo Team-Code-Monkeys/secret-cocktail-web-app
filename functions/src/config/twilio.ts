@@ -1,8 +1,4 @@
 // import twilio from "twilio";
-// import dotenv from "dotenv";
-//
-// // load additional environment variables from .env file
-// dotenv.config();
 //
 // const accountSid = (process.env.TWILIO_ACCOUNT_SID || '').toString();
 // const authToken = (process.env.TWILIO_AUTH_TOKEN || '').toString();

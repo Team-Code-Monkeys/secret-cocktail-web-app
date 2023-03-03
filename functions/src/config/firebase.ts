@@ -1,24 +1,20 @@
-// import dotenv from "dotenv";
 // import * as firebase from "firebase-admin";
-//
-// // load additional environment variables from .env file
-// dotenv.config();
 //
 // // connect to firebase
 // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 // const firebaseCredentials: any = {
-//     type: process.env.firebase_type,
-//     project_id: process.env.firebase_project_id,
-//     private_key_id: process.env.firebase_private_key_id,
-//     private_key: process.env.firebase_private_key
-//         ? process.env.firebase_private_key.replace(/\\n/gm, "\n")
+//     type: process.env.F_FIREBASE_TYPE,
+//     project_id: process.env.F_FIREBASE_PROJECT_ID,
+//     private_key_id: process.env.F_FIREBASE_PRIVATE_KEY_ID,
+//     private_key: process.env.F_FIREBASE_PRIVATE_KEY
+//         ? process.env.F_FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
 //         : undefined,
-//     client_email: process.env.firebase_client_email,
-//     client_id: process.env.firebase_client_id,
-//     auth_uri: process.env.firebase_auth_uri,
-//     token_uri: process.env.firebase_token_uri,
-//     auth_provider_x509_cert_url: process.env.firebase_auth_provider_x509_cert_url,
-//     client_x509_cert_url: process.env.firebase_client_x509_cert_url,
+//     client_email: process.env.F_FIREBASE_CLIENT_EMAIL,
+//     client_id: process.env.F_FIREBASE_CLIENT_ID,
+//     auth_uri: process.env.F_FIREBASE_AUTH_URI,
+//     token_uri: process.env.F_FIREBASE_TOKEN_URI,
+//     auth_provider_x509_cert_url: process.env.F_FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+//     client_x509_cert_url: process.env.F_FIREBASE_CLIENT_X509_CERT_URL,
 // }
 //
 // for (const [key, value] of Object.entries(firebaseCredentials)) {

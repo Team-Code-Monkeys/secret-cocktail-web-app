@@ -9,6 +9,8 @@ import * as bodyParser from "body-parser";
 
 // setup express server for case where REST API is needed
 const app = express();
+// @ts-ignore
+app.get("/", (req, res) => {res.send(process.env.TWILIO_STATUS_CALLBACK_URL)});
 app.use(bodyParser.urlencoded({ extended: false }));
 // addRoutes(app);
 exports.app = functions.https.onRequest(app);

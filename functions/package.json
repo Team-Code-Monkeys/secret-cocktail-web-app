@@ -3,11 +3,11 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "serve": "npm run build && firebase emulators:start --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "serve": "firebase use prod && npm run build && firebase emulators:start --only functions",
+    "shell": "firebase use prod && npm run build && firebase functions:shell",
+    "start": "firebase use prod && npm run shell",
+    "deploy": "firebase use prod && firebase deploy --only functions",
+    "logs": "firebase use prod && firebase functions:log"
   },
   "engines": {
     "node": "16"
