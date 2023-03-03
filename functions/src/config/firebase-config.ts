@@ -1,5 +1,6 @@
 import * as firebase from "firebase-admin";
 
+// uncomment below code if you do not want to use Firebase functions and want to use a custom server
 // // connect to firebase
 // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 // const firebaseCredentials: any = {
