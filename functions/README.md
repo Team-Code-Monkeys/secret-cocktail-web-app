@@ -26,6 +26,8 @@ TWILIO_ACCOUNT_SID="..."
 TWILIO_AUTH_TOKEN="..."
 TWILIO_PHONE_NUMBER="..."
 TWILIO_STATUS_CALLBACK_URL="https://something.com"
+EMAIL_EMAIL="someone@gmail.com"
+EMAIL_PASSWORD="..."
 ```
 
 ## Get Started (server)

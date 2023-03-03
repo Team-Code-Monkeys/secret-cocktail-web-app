@@ -1,0 +1,104 @@
+[debug] [2023-03-03T08:10:23.653Z] ----------------------------------------------------------------------
+[debug] [2023-03-03T08:10:23.654Z] Command:       /Users/deepakramalingam/.nvm/versions/node/v16.19.1/bin/node /opt/homebrew/bin/firebase emulators:start
+[debug] [2023-03-03T08:10:23.654Z] CLI Version:   11.16.1
+[debug] [2023-03-03T08:10:23.654Z] Platform:      darwin
+[debug] [2023-03-03T08:10:23.654Z] Node Version:  v16.19.1
+[debug] [2023-03-03T08:10:23.655Z] Time:          Fri Mar 03 2023 03:10:23 GMT-0500 (Eastern Standard Time)
+[debug] [2023-03-03T08:10:23.655Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-03-03T08:10:23.695Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-03-03T08:10:23.695Z] > authorizing via signed-in user (rdeepak2002@gmail.com)
+[info] i  emulators: Starting emulators: functions, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, hosting"}}
+[debug] [2023-03-03T08:10:24.113Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[warn] ⚠  hosting: Hosting Emulator unable to start on port 5000, starting on 5002 instead. {"metadata":{"emulator":{"name":"hosting"},"message":"Hosting Emulator unable to start on port 5000, starting on 5002 instead."}}
+[debug] [2023-03-03T08:10:24.113Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-03-03T08:10:24.113Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5002}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2023-03-03T08:10:24.118Z] [hub] writing locator at /var/folders/4m/qh6nkkr503sdk7l93qnm7hl40000gn/T/hub-secret-cocktail.json
+[debug] [2023-03-03T08:10:24.311Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-03-03T08:10:24.311Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-03-03T08:10:24.312Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5002}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, pubsub, storage\u001b[22m"}}
+[info] ✔  functions: Using node@16 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Using node@16 from host."}}
+[debug] [2023-03-03T08:10:24.317Z] defaultcredentials: writing to file /Users/deepakramalingam/.config/firebase/rdeepak2002_gmail_com_application_default_credentials.json
+[debug] [2023-03-03T08:10:24.319Z] Setting GAC to /Users/deepakramalingam/.config/firebase/rdeepak2002_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/deepakramalingam/.config/firebase/rdeepak2002_gmail_com_application_default_credentials.json"}}
+[debug] [2023-03-03T08:10:24.320Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail/adminSdkConfig [none]
+[debug] [2023-03-03T08:10:24.484Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail/adminSdkConfig 200
+[debug] [2023-03-03T08:10:24.484Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail/adminSdkConfig {"projectId":"secret-cocktail","storageBucket":"secret-cocktail.appspot.com","locationId":"us-central"}
+[debug] [2023-03-03T08:10:24.501Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/secret-cocktail/sites 
+[debug] [2023-03-03T08:10:24.799Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/secret-cocktail/sites 200
+[debug] [2023-03-03T08:10:24.799Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/secret-cocktail/sites {"sites":[{"name":"projects/secret-cocktail/sites/secret-cocktail","defaultUrl":"https://secret-cocktail.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2023-03-03T08:10:24.799Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail/webApps/-/config [none]
+[debug] [2023-03-03T08:10:25.019Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail/webApps/-/config 200
+[debug] [2023-03-03T08:10:25.019Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail/webApps/-/config {"projectId":"secret-cocktail","storageBucket":"secret-cocktail.appspot.com","locationId":"us-central","apiKey":"AIzaSyCpHG9-94DvB3FDFYLX8weS0QgyxNDESiQ","authDomain":"secret-cocktail.firebaseapp.com","messagingSenderId":"389621210114"}
+[debug] [2023-03-03T08:10:25.025Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail [none]
+[debug] [2023-03-03T08:10:25.186Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail 200
+[debug] [2023-03-03T08:10:25.186Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/secret-cocktail {"projectId":"secret-cocktail","projectNumber":"389621210114","displayName":"secret-cocktail","name":"projects/secret-cocktail","resources":{"hostingSite":"secret-cocktail","storageBucket":"secret-cocktail.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_c9516332-bc89-4a9b-b2c5-12a17d0ab0d5"}
+[info] i  hosting[secret-cocktail]: Serving hosting files from: build {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mbuild\u001b[22m"}}
+[info] ✔  hosting[secret-cocktail]: Local server: http://127.0.0.1:5002 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5002\u001b[22m\u001b[24m"}}
+[debug] [2023-03-03T08:10:25.256Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-03-03T08:10:25.256Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2023-03-03T08:10:25.256Z] Starting Emulator UI with command {"binary":"node","args":["/Users/deepakramalingam/.cache/firebase/emulators/ui-v1.11.1/server/server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/deepakramalingam/.cache/firebase/emulators/ui-v1.11.1/server/server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2023-03-03T08:10:25.328Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2023-03-03T08:10:25.328Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] i  functions: Watching "/Users/deepakramalingam/Documents/Projects/secret-cocktail-web-app/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/deepakramalingam/Documents/Projects/secret-cocktail-web-app/functions\" for Cloud Functions..."}}
+[debug] [2023-03-03T08:10:25.518Z] Validating nodejs source
+[debug] [2023-03-03T08:10:26.329Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "firebase use prod && npm run build && firebase emulators:start",
+    "shell": "firebase use prod && npm run build && firebase functions:shell",
+    "start": "firebase use prod && npm run shell",
+    "deploy": "firebase use prod && firebase deploy --only functions",
+    "logs": "firebase use prod && firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@types/nodemailer": "^6.4.7",
+    "body-parser": "^1.20.2",
+    "express": "^4.17.1",
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.2.1",
+    "nodemailer": "^6.9.1",
+    "twilio": "^3.83.3"
+  },
+  "private": true
+}
+[debug] [2023-03-03T08:10:26.330Z] Building nodejs source
+[debug] [2023-03-03T08:10:26.330Z] Analyzing nodejs backend spec
+[debug] [2023-03-03T08:10:26.331Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-03-03T08:10:26.437Z] Serving at port 9006
+
+[debug] [2023-03-03T08:10:26.584Z] undefined undefined
+
+[debug] [2023-03-03T08:10:26.587Z] Got response from /__/functions.yaml {"endpoints":{"app":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"httpsTrigger":{},"entryPoint":"app"},"scheduleCallFunction":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.create","eventFilters":{"resource":"projects/secret-cocktail/databases/(default)/documents/facility/{docId}"},"retry":false},"labels":{},"entryPoint":"scheduleCallFunction"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2023-03-03T08:10:26.593Z] shutdown requested via /__/quitquitquit
+
+[info] ✔  functions: Loaded functions definitions from source: app, scheduleCallFunction. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: app, scheduleCallFunction."}}
+[info] ✔  functions[us-central1-app]: http function initialized (http://127.0.0.1:5001/secret-cocktail/us-central1/app). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/secret-cocktail/us-central1/app)."}}
+[info] i  functions[us-central1-scheduleCallFunction]: function ignored because the firestore emulator does not exist or is not running. {"metadata":{"emulator":{"name":"functions"},"message":"function ignored because the firestore emulator does not exist or is not running."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Hosting   │ 127.0.0.1:5002 │ n/a                             │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
