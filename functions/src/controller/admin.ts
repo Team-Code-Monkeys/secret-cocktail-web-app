@@ -12,7 +12,7 @@ export const createAdmin = async (req: any, res: any) => {
                 }
             });
             if (adminAccountUID) {
-                res.send(`Error: admin already exists. If you want to create a new admin account, delete the existing admin with UID ${adminAccountUID}`);
+                res.send(`Error: admin already exists. If you want to create a new admin account, delete the existing admin with UID ${adminAccountUID}. This can be done by visiting the Firebase console at https://console.firebase.google.com/u/0/project/secret-cocktail/authentication/users`);
                 return;
             }
             if (listUsersResult?.pageToken) {
@@ -39,8 +39,8 @@ export const createAdmin = async (req: any, res: any) => {
                 admin.auth().setCustomUserClaims(userRecord.uid, {admin: true})
                     .then(() => {
                         // See the UserRecord reference doc for the contents of userRecord.
-                        console.log('Successfully created new admin:', userRecord.uid);
-                        res.send('Successfully created new admin: ' + userRecord.uid);
+                        console.log('Successfully created new admin with UID: ', userRecord.uid);
+                        res.send('Successfully created new admin with UID: ' + userRecord.uid);
                         return;
                     }).catch((error) => {
                     console.error(`Error updating ${userRecord.uid} to admin`, error);
