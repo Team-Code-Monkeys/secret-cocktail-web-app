@@ -78,6 +78,10 @@
     filter: brightness(80%);
 }
 
+#reportBtn {
+    width: auto !important;
+}
+
 .primaryBtn {
     margin-right: 50px;
     margin-top: 50px;
