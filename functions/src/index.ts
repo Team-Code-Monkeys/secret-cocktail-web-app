@@ -3,7 +3,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import addRoutes from "./routes/routes";
 import {sendPhoneSurvey} from "./queue/queue";
-import {sendEmail} from "./email/email";
+import {createAccountAndSendEmail} from "./facility-account/facility-account";
 
 // setup express server for case where REST API is needed
 const app = express();
@@ -11,8 +11,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 addRoutes(app);
 exports.app = functions.https.onRequest(app);
-
-sendEmail('rdeepak2002@gmail.com', 'Deepak', '123');
 
 exports.scheduleCallFunction = functions.firestore
     .document('to-contact-for-survey/{docId}')
@@ -33,6 +31,6 @@ exports.scheduleCallFunction = functions.firestore
         const name: string = doc?.data()?.name || 'Facility';
         const email: string = doc?.data()?.email;
         const id = doc?.id || "id";
-        sendEmail(email, name, id);
+        createAccountAndSendEmail(email, name, id);
     });
 
