@@ -15,9 +15,14 @@ export const createAccountAndSendEmail = (email: string, name: string, id: strin
             disabled: false,
         })
         .then((userRecord) => {
-            // See the UserRecord reference doc for the contents of userRecord.
-            console.log('Successfully created new facility:', userRecord.uid);
-            sendEmail(email, name, password);
+            admin.auth().setCustomUserClaims(userRecord.uid, {facility: true})
+                .then(() => {
+                    // See the UserRecord reference doc for the contents of userRecord.
+                    console.log('Successfully created new facility:', userRecord.uid);
+                    sendEmail(email, name, password);
+                }).catch((error) => {
+                    console.error(`Error updating ${userRecord.uid} to facility`, error);
+                });
         })
         .catch((error) => {
             console.error('Error creating new facility:', error);
