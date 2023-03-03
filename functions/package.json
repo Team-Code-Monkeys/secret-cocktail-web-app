@@ -17,7 +17,8 @@
     "body-parser": "^1.20.2",
     "express": "^4.17.1",
     "firebase-admin": "^11.5.0",
-    "firebase-functions": "^4.2.1"
+    "firebase-functions": "^4.2.1",
+    "twilio": "^3.83.3"
   },
   "private": true
 }
