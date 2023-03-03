@@ -1,8 +1,3 @@
-// @ts-nocheck
-import * as twilio from "twilio";
-
-const accountSid = (process.env.TWILIO_ACCOUNT_SID || '').toString();
-const authToken = (process.env.TWILIO_AUTH_TOKEN || '').toString();
 export const twilioPhoneNumber: string = (process.env.TWILIO_PHONE_NUMBER || '').toString();
 // export const twilioClient: twilio.Twilio = twilio(accountSid, authToken);
 // url to handle questions
