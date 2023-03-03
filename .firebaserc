@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "secret-cocktail"
-  }
+    "default": "secret-cocktail",
+    "prod": "secret-cocktail",
+    "dev": "secret-cocktail"
+  },
+  "targets": {},
+  "etags": {}
 }

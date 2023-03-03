@@ -153,7 +153,8 @@ const FacilityPage = () => {
                 && (
                     <div className={styles.btnOuterContainer}>
                         <div className={styles.btnContainer}>
-                            <button className="primaryBtn" onClick={() => { navigate(k_facility_report_correction_page_route, { state: { facilityId: facility.id } }); }}>Report a Correction</button>
+                            {/* eslint-disable-next-line max-len */}
+                            <button id="reportBtn" className={styles.primaryBtn} onClick={() => { navigate(k_facility_report_correction_page_route, { state: { facilityId: facility.id } }); }}>Report a Correction</button>
                         </div>
                     </div>
                 )
