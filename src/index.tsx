@@ -16,6 +16,7 @@ import AdminPhoneSurveyPage from './phonesurvey';
 import AdminFacilities from './adminfacilitydashboard';
 import AdminPhoneSurveyResponsesPage from './adminphonesurveyresponses';
 import AdminPhoneSurveyQueuePage from './adminphonesurveyqueue';
+import CreateAdminPage from './createadmin';
 
 // Define routes
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -33,6 +34,7 @@ export const k_admin_phone_survey_page_route = '/admin-phone-survey';
 export const k_admin_facility_page_route = '/admin-facility-dashboard';
 export const k_admin_phone_survey_responses_page_route = '/admin-phone-survey-responses';
 export const k_admin_phone_survey_queue_page_route = '/admin-phone-survey-queue';
+export const k_create_admin_page_route = '/create-admin';
 
 const router = createBrowserRouter([
     {
@@ -94,6 +96,10 @@ const router = createBrowserRouter([
     {
         path: k_admin_phone_survey_queue_page_route,
         element: <AdminPhoneSurveyQueuePage />,
+    },
+    {
+        path: k_create_admin_page_route,
+        element: <CreateAdminPage />,
     },
 ]);
 
