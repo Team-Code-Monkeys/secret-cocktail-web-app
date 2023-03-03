@@ -1,6 +1,6 @@
-import {db} from "../config/firebase";
+import {db} from "../config/firebase-config";
 import * as VoiceResponse from "twilio/lib/twiml/VoiceResponse";
-import {transcriptionURL, voiceURL} from "../config/twilio";
+import {transcriptionURL, voiceURL} from "../config/twilio-config";
 import {firestore} from "firebase-admin";
 import FieldValue = firestore.FieldValue;
 

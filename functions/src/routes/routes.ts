@@ -1,10 +1,11 @@
+// @ts-nocheck
 import {
     eventEndpoint,
     failureEndpoint,
     recordingEndpoint,
     transcriptionEndpoint,
     voiceEndpoint
-} from "../config/twilio";
+} from "../config/twilio-config";
 import * as core from "express-serve-static-core";
 import {
     phoneSurveyEvent,
@@ -23,23 +24,23 @@ export default function addRoutes(app: core.Express) {
     /**
      * Endpoint to update status of phone survey call in event of failure
      */
-    app.post(`/${failureEndpoint}`, [], phoneSurveyFailureEvent);
+    // app.post(`/${failureEndpoint}`, [], phoneSurveyFailureEvent);
 
     /**
      * Endpoint to handle input from phone survey questions
      */
     // eslint-disable-next-line @typescript-eslint/no-misused-promises,@typescript-eslint/require-await
-    app.post(`/${voiceEndpoint}`, [], phoneSurveyQuestionResponseEvent);
+    // app.post(`/${voiceEndpoint}`, [], phoneSurveyQuestionResponseEvent);
 
     /**
      * Endpoint to handle recording events
      */
     // eslint-disable-next-line @typescript-eslint/no-misused-promises,@typescript-eslint/require-await
-    app.post(`/${recordingEndpoint}`, [], phoneSurveyRecordingEvent);
+    // app.post(`/${recordingEndpoint}`, [], phoneSurveyRecordingEvent);
 
     /**
      * Endpoint to handle transcription events
      */
     // eslint-disable-next-line @typescript-eslint/no-misused-promises,@typescript-eslint/require-await
-    app.post(`/${transcriptionEndpoint}`, [], phoneSurveyTranscriptionEvent);
+    // app.post(`/${transcriptionEndpoint}`, [], phoneSurveyTranscriptionEvent);
 };
