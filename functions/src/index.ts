@@ -25,7 +25,7 @@ exports.scheduleCallFunction = functions.firestore
         }
     });
 
-exports.scheduleCallFunction = functions.firestore
+exports.createFacilityAccount = functions.firestore
     .document('facility/{docId}')
     .onCreate((doc, context) => {
         const name: string = doc?.data()?.name || 'Facility';
