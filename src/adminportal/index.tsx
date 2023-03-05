@@ -50,7 +50,7 @@ const AdminPortalPage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
-                <div className={styles.title}>Admin Portal</div>
+                <div className="title">Admin Portal</div>
             </div>
             <div className={styles.pageOuterContainer}>
                 <div className={styles.pageContainer}>

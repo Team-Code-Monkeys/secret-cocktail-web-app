@@ -49,7 +49,7 @@ const AdminPhoneSurveyQueuePage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
-                <div className={styles.title}>Phone Survey Queue</div>
+                <div className="title">Phone Survey Queue</div>
             </div>
             <div className={styles.innerContainer3}>
                 {phoneSurveyQueue.map((phoneSurveyQueueObj: any) => (
