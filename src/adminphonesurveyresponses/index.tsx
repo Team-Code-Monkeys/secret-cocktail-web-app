@@ -131,7 +131,7 @@ const AdminPhoneSurveyResponsesPage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
-                <div className={styles.title}>Phone Survey Responses</div>
+                <div className="title">Phone Survey Responses</div>
             </div>
             {
                 (responsesData && responsesData.length > 0)
