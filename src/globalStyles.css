@@ -37,6 +37,20 @@
     background-color: #f3f3f3;
 }
 
+.title {
+    margin-top: 20px;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 50px;
+    line-height: 77px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -1px;
+    color: #2d3436;
+}
+
 @media (max-width: 605px) {
     .wave {
         visibility: hidden !important;
