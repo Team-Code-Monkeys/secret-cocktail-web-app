@@ -251,7 +251,7 @@ const AdminFacilities = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
-                <div className={styles.title}>Facility Dashboard</div>
+                <div className="title">Facility Dashboard</div>
             </div>
             <div className={styles.innerContainer3}>
                 {

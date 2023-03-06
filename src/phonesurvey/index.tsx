@@ -6,8 +6,7 @@ import {
     collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, where, writeBatch,
 } from 'firebase/firestore';
 import {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Button, Form, Modal, ToggleButton, Dropdown, DropdownButton,
+    Form, Modal, Dropdown, DropdownButton,
 } from 'react-bootstrap';
 import { useCSVReader } from 'react-papaparse';
 import Navbar from '../navbar';
@@ -109,7 +108,7 @@ const AdminPhoneSurveyPage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer2}>
-                <div className={styles.title}>Phone Survey Questions</div>
+                <div className="title">Phone Survey Questions</div>
             </div>
             <div className={styles.innerContainer3}>
                 {
@@ -366,7 +365,7 @@ const AdminPhoneSurveyPage = () => {
                                     }
                                 </DropdownButton>
                             </Form.Group>
-                            { type === 'keypad'
+                            {type === 'keypad'
                                 && (
                                     <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                         <Form.Label>Number of Digits to Gather</Form.Label>
@@ -381,7 +380,7 @@ const AdminPhoneSurveyPage = () => {
                                         />
                                     </Form.Group>
                                 )}
-                            { type === 'keypad'
+                            {type === 'keypad'
                                 && (
                                     <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                         <Form.Label>Minimum Number Allowed</Form.Label>
@@ -396,7 +395,7 @@ const AdminPhoneSurveyPage = () => {
                                         />
                                     </Form.Group>
                                 )}
-                            { type === 'keypad'
+                            {type === 'keypad'
                                 && (
                                     <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                         <Form.Label>Maximum Number Allowed</Form.Label>
@@ -411,7 +410,7 @@ const AdminPhoneSurveyPage = () => {
                                         />
                                     </Form.Group>
                                 )}
-                            { type === 'voice'
+                            {type === 'voice'
                                 && (
                                     <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                         <Form.Label>Transcribe Text to Speech</Form.Label>
@@ -428,7 +427,7 @@ const AdminPhoneSurveyPage = () => {
                                         />
                                     </Form.Group>
                                 )}
-                            { type === 'voice'
+                            {type === 'voice'
                                 && (
                                     <Form.Group className="mb-3" controlId="formBasicFacilityName">
                                         <Form.Label>Voice Recording Timeout</Form.Label>
