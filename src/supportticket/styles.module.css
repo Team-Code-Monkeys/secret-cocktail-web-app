@@ -1,0 +1,126 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.backBtnContainer:hover {
+    cursor: pointer;
+}
+
+.backBtnContainer {
+    margin-left: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+}
+
+.backBtnText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 12px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -0.5px;
+    color: #6C5CE7;
+}
+
+.textArea {
+    background: rgba(194, 194, 194, 0.24);
+    border: 2px solid #6C5CE7;
+    border-radius: 16px;
+    color: rgba(0, 0, 0, 1.0) !important;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 32px;
+    letter-spacing: 0.2px;
+    resize: none;
+    width: min(800px, 100%);
+    height: min(600px, 30vh);
+}
+
+.textArea::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.innerContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /*justify-content: center;*/
+    margin-top: 40px;
+    align-items: center;
+    align-content: center;
+}
+
+.helpText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 36px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.25px;
+    color: rgba(45, 52, 54, 0.79);
+    margin-bottom: 20px;
+}
+
+.innerContainerHeader {
+    width: min(800px, 100%);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.btnOuterContainer {
+    width: min(800px, 100%);
+}
+
+.btnContainer {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.primaryBtn:hover {
+    cursor: pointer;
+}
+
+.primaryBtn:active {
+    filter: brightness(80%);
+}
+
+.primaryBtn {
+    margin-top: 50px;
+    width: 200px;
+    height: 45px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 36px;
+    letter-spacing: 0.25px;
+    color: white;
+    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
+    box-sizing: border-box;
+    border: 1px solid #6C5CE7;
+    border-radius: 16px;
+    background: #6C5CE7;
+}
+
+@media (max-width: 605px) {
+    .primaryBtn {
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+}
