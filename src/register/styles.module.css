@@ -125,3 +125,31 @@
     letter-spacing: -0.5px;
     color: #6C5CE7;
 }
+
+.titleCNA {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 64px;
+    line-height: 77px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -1px;
+    color: #E75C5C;
+    margin-right: '20px';
+}
+
+.titleFacilities {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 64px;
+    line-height: 77px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -1px;
+    color:  #2D3436;
+}
