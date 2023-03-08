@@ -13,6 +13,11 @@ import {
 } from '../index';
 import firebaseApp from '../firebase';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
+import wave from '../wave.png';
+
+const Waves = () => (
+    <img src={wave} className="wave" alt="Wave for styling webpage." />
+);
 
 const LoginPage = () => {
     const auth = getAuth(firebaseApp);
@@ -145,6 +150,7 @@ const LoginPage = () => {
                     <div className={styles.backBtnText}>Back</div>
                 </div>
             </div>
+            <Waves />
         </div>
     );
 };
