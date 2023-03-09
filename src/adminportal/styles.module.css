@@ -46,6 +46,12 @@
     min-width: 300px;
 }
 
+@media only screen and (max-width: 600px) {
+    .pageContainer {
+        max-width: 300px !important;
+    }
+}
+
 .pageContainerText1 {
     font-family: 'Inter', sans-serif;
     font-style: normal;
