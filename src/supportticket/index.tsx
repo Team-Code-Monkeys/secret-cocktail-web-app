@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
-import { checkedIfAllowedOnPage, k_facility_role } from '../authredirect/auth-check';
-import { k_facility_page_route } from '../index';
+import {
+    checkedIfAllowedOnPage, k_admin_role, k_facility_role, k_regular_user_role,
+} from '../authredirect/auth-check';
 
-const ReportFacilityCorrectionPage = () => {
+const SupportTicketPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
-    const location = useLocation();
     const db = getFirestore();
     const [reportSent, setReportSent] = useState<boolean>(false);
     const [report, setReport] = useState<string>('');
     const [currentUser, setCurrentUser] = useState<any>();
 
     useEffect(() => {
-        checkedIfAllowedOnPage(auth, navigate, [k_facility_role]);
+        // eslint-disable-next-line max-len
+        checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_facility_role, k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
 
@@ -49,14 +50,14 @@ const ReportFacilityCorrectionPage = () => {
                     <div className={styles.innerContainer}>
                         <div className={styles.innerContainerHeader}>
                             {/* eslint-disable-next-line max-len */}
-                            <div className={styles.helpText}>Report a correction about your facility to the Admin team!</div>
+                            <div className={styles.helpText}>Submit a support ticket to the Admin team!</div>
                         </div>
                         <textarea value={report} onChange={(event) => { setReport(event.target.value); }} className={styles.textArea} placeholder="Leave your message" />
                         <div className={styles.btnOuterContainer}>
                             <div className={styles.btnContainer}>
                                 <button
                                     className={styles.primaryBtn}
-                                    onClick={() => { navigate(k_facility_page_route); }}
+                                    onClick={() => { navigate(-1); }}
                                     style={{
                                         width: '150px', marginRight: '10px', background: '#D2042D', borderColor: '#D2042D',
                                     }}
@@ -66,7 +67,6 @@ const ReportFacilityCorrectionPage = () => {
                                 <button
                                     className={styles.primaryBtn}
                                     onClick={() => {
-                                        const facilityId = location?.state?.facilityId;
                                         const currentTimestamp = Math.round(new Date().getTime());
 
                                         if (!report || report.length <= 0) {
@@ -75,21 +75,14 @@ const ReportFacilityCorrectionPage = () => {
                                             return;
                                         }
 
-                                        if (facilityId) {
-                                            const cityRef = doc(db, 'facility-report', (`${currentTimestamp.toString()}.${facilityId.toString()}`));
-                                            setDoc(cityRef, {
-                                                report,
-                                                facilityId,
-                                                timeReported: currentTimestamp,
-                                                user: currentUser,
-                                            }, { merge: true }).then(() => {
-                                                setReportSent(true);
-                                            });
-                                        } else {
-                                            // eslint-disable-next-line no-alert
-                                            alert('Error sending report. Please try again.');
-                                            navigate(k_facility_page_route);
-                                        }
+                                        const cityRef = doc(db, 'support-ticket', (`${currentTimestamp.toString()}.${Math.floor(Math.random() * 10)}`));
+                                        setDoc(cityRef, {
+                                            report,
+                                            timeReported: currentTimestamp,
+                                            user: currentUser,
+                                        }, { merge: true }).then(() => {
+                                            setReportSent(true);
+                                        });
                                     }}
                                     style={{ background: '#50C878', borderColor: '#50C878' }}
                                 >
@@ -105,13 +98,13 @@ const ReportFacilityCorrectionPage = () => {
                 && (
                     <div className={styles.innerContainer}>
                         {/* eslint-disable-next-line max-len */}
-                        <div className={styles.helpText}>Thank you for contacting the Admin team! We will be processing your request soon and will be in touch!</div>
+                        <div className={styles.helpText}>Thank you for contacting the Admin team! We will review your support ticket!</div>
                         {/* eslint-disable-next-line max-len */}
                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                         <div
                             className={styles.backBtnContainer}
                             onClick={() => {
-                                navigate(k_facility_page_route);
+                                navigate(-1);
                             }}
                         >
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,4 +132,4 @@ const ReportFacilityCorrectionPage = () => {
     );
 };
 
-export default ReportFacilityCorrectionPage;
+export default SupportTicketPage;
