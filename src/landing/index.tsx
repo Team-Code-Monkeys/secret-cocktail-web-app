@@ -6,6 +6,36 @@ import styles from './styles.module.css';
 import wave from '../wave.png';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
+import {
+    k_login_page_trainee_route,
+    k_login_page_admin_route,
+    k_login_page_facility_route,
+    k_register_page_trainee_route,
+} from '../index';
+
+const Circle = () => (
+    <svg width="27" height="27" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_b_65_2560)">
+            <rect x="0.540527" width="32" height="32" rx="16" fill="#FDCB6E" />
+        </g>
+        <defs>
+            <filter
+                id="filter0_b_65_2560"
+                x="-47.4595"
+                y="-48"
+                width="128"
+                height="128"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB"
+            >
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                <feGaussianBlur in="BackgroundImageFix" stdDeviation="24" />
+                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_65_2560" />
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_65_2560" result="shape" />
+            </filter>
+        </defs>
+    </svg>
+);
 
 const LandingPage = () => {
     const auth = getAuth(firebaseApp);
@@ -26,6 +56,102 @@ const LandingPage = () => {
             <Rectangle />
             {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Dots />
+            <div className={styles.pageOuterContainer}>
+                <div className={styles.pageContainer}>
+                    <div className={styles.pageContainerText1}>The Secret Cocktail </div>
+                    <div className={styles.pageContainerText2}>Admin</div>
+                    <div className={styles.bulletPointContainer}>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            <div className={styles.pageContainerText3}>Customize phone survey</div>
+                        </div>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            <div className={styles.pageContainerText3}>View Facility List</div>
+                        </div>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            <div className={styles.pageContainerText3}>Moderate Facilities</div>
+                        </div>
+                    </div>
+                    <button
+                        className={styles.primaryBtn}
+                        onClick={() => {
+                            navigate(k_login_page_admin_route);
+                        }}
+                    >
+                        Admin Login
+                    </button>
+                </div>
+                <div className={styles.pageContainer}>
+                    <div className={styles.pageContainerText1}>👤 Individual </div>
+                    <div className={styles.pageContainerText2}>CNA Trainer</div>
+                    <div className={styles.bulletPointContainer}>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            <div className={styles.pageContainerText3}>
+                                Search nearby facilities
+                            </div>
+                        </div>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            <div className={styles.pageContainerText3}>
+                                View facility information
+                            </div>
+                        </div>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            <div className={styles.pageContainerText3}>
+                                Map View by Location
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        className={styles.secondaryBtn}
+                        onClick={() => {
+                            navigate(k_login_page_trainee_route);
+                        }}
+                    >
+                        Login
+                    </button>
+                    <button
+                        className={styles.primaryTrainerBtn}
+                        onClick={() => {
+                            navigate(k_register_page_trainee_route);
+                        }}
+                    >
+                        Sign Up
+                    </button>
+                </div>
+                <div className={styles.pageContainer}>
+                    <div className={styles.pageContainerText1}>👤👤 Nursing Facilities</div>
+                    <div className={styles.pageContainerText2}>Facility</div>
+                    <div className={styles.bulletPointContainer}>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            {/* eslint-disable-next-line max-len */}
+                            <div className={styles.pageContainerText3}>View facility information</div>
+                        </div>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            {/* eslint-disable-next-line max-len */}
+                            <div className={styles.pageContainerText3}>Amend contact information</div>
+                        </div>
+                        <div className={styles.bulletPoint}>
+                            <Circle />
+                            <div className={styles.pageContainerText3}>Contact administrator</div>
+                        </div>
+                    </div>
+                    <button
+                        className={styles.primaryBtn}
+                        onClick={() => {
+                            navigate(k_login_page_facility_route);
+                        }}
+                    >
+                        Facility Login
+                    </button>
+                </div>
+            </div>
             {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
             <Waves />
         </div>
