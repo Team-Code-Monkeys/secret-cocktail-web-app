@@ -7,7 +7,11 @@ import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import { checkedIfAllowedOnPage, k_admin_role } from '../authredirect/auth-check';
 import wave from '../wave.png';
-import { k_admin_phone_survey_page_route, k_admin_facility_page_route } from '../index';
+import {
+    k_admin_phone_survey_page_route,
+    k_admin_facility_page_route,
+    k_admin_view_tickets_route,
+} from '../index';
 
 const Circle = () => (
     <svg width="27" height="27" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,60 +56,89 @@ const AdminPortalPage = () => {
             <div className={styles.innerContainer}>
                 <div className="title">Admin Portal</div>
             </div>
-            <div className={styles.pageOuterContainer}>
-                <div className={styles.pageContainer}>
-                    <div className={styles.pageContainerText1}>👤 Phone Survey</div>
-                    <div className={styles.pageContainerText2}>Phone Survey</div>
-                    <div className={styles.bulletPointContainer}>
-                        <div className={styles.bulletPoint}>
-                            <Circle />
-                            <div className={styles.pageContainerText3}>View phone survey</div>
+            <div style={{
+                width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '60px',
+            }}
+            >
+                <div style={{ flexWrap: 'wrap', maxWidth: '1000px' }} className={styles.pageOuterContainer}>
+                    <div className={styles.pageContainer}>
+                        <div className={styles.pageContainerText1}>👤 Phone Survey</div>
+                        <div className={styles.pageContainerText2}>Phone Survey</div>
+                        <div className={styles.bulletPointContainer}>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                <div className={styles.pageContainerText3}>View phone survey</div>
+                            </div>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                <div className={styles.pageContainerText3}>Edit questions</div>
+                            </div>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                <div className={styles.pageContainerText3}>Delete questions</div>
+                            </div>
                         </div>
-                        <div className={styles.bulletPoint}>
-                            <Circle />
-                            <div className={styles.pageContainerText3}>Edit questions</div>
-                        </div>
-                        <div className={styles.bulletPoint}>
-                            <Circle />
-                            <div className={styles.pageContainerText3}>Delete questions</div>
-                        </div>
+                        <button
+                            className={styles.primaryBtn}
+                            onClick={() => {
+                                navigate(k_admin_phone_survey_page_route);
+                            }}
+                        >
+                            Customize Survey
+                        </button>
                     </div>
-                    <button
-                        className={styles.primaryBtn}
-                        onClick={() => {
-                            navigate(k_admin_phone_survey_page_route);
-                        }}
-                    >
-                        Customize Survey
-                    </button>
-                </div>
-                <div className={styles.pageContainer}>
-                    <div className={styles.pageContainerText1}>👤 Manage Facilities</div>
-                    <div className={styles.pageContainerText2}>Facility Dashboard</div>
-                    <div className={styles.bulletPointContainer}>
-                        <div className={styles.bulletPoint}>
-                            <Circle />
-                            {/* eslint-disable-next-line max-len */}
-                            <div className={styles.pageContainerText3}>View facility information</div>
+                    <div className={styles.pageContainer}>
+                        <div className={styles.pageContainerText1}>👤 Manage Facilities</div>
+                        <div className={styles.pageContainerText2}>Facility Dashboard</div>
+                        <div className={styles.bulletPointContainer}>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                {/* eslint-disable-next-line max-len */}
+                                <div className={styles.pageContainerText3}>View facility information</div>
+                            </div>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                {/* eslint-disable-next-line max-len */}
+                                <div className={styles.pageContainerText3}>Verify facility information</div>
+                            </div>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                <div className={styles.pageContainerText3}>Delete facilities</div>
+                            </div>
                         </div>
-                        <div className={styles.bulletPoint}>
-                            <Circle />
-                            {/* eslint-disable-next-line max-len */}
-                            <div className={styles.pageContainerText3}>Verify facility information</div>
-                        </div>
-                        <div className={styles.bulletPoint}>
-                            <Circle />
-                            <div className={styles.pageContainerText3}>Delete facilities</div>
-                        </div>
+                        <button
+                            className={styles.primaryBtn}
+                            onClick={() => {
+                                navigate(k_admin_facility_page_route);
+                            }}
+                        >
+                            Open Dashboard
+                        </button>
                     </div>
-                    <button
-                        className={styles.primaryBtn}
-                        onClick={() => {
-                            navigate(k_admin_facility_page_route);
-                        }}
-                    >
-                        Open Dashboard
-                    </button>
+                    <div className={styles.pageContainer}>
+                        <div className={styles.pageContainerText1}>👤 Resolve Support Tickets</div>
+                        <div className={styles.pageContainerText2}>Support Ticket Dashboard</div>
+                        <div className={styles.bulletPointContainer}>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                {/* eslint-disable-next-line max-len */}
+                                <div className={styles.pageContainerText3}>View support tickets created by users</div>
+                            </div>
+                            <div className={styles.bulletPoint}>
+                                <Circle />
+                                {/* eslint-disable-next-line max-len */}
+                                <div className={styles.pageContainerText3}>Resolve support tickets</div>
+                            </div>
+                        </div>
+                        <button
+                            className={styles.primaryBtn}
+                            onClick={() => {
+                                navigate(k_admin_view_tickets_route);
+                            }}
+                        >
+                            View Support Tickets
+                        </button>
+                    </div>
                 </div>
             </div>
             <Waves />

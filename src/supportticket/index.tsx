@@ -16,12 +16,30 @@ const SupportTicketPage = () => {
     const db = getFirestore();
     const [reportSent, setReportSent] = useState<boolean>(false);
     const [report, setReport] = useState<string>('');
+    const [currentUser, setCurrentUser] = useState<any>();
 
     useEffect(() => {
         // eslint-disable-next-line max-len
         checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_facility_role, k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
+
+    useEffect(() => {
+        auth.onAuthStateChanged((user: any) => {
+            const userCpy = JSON.parse(JSON.stringify(user));
+            if (userCpy) {
+                userCpy.accessToken = undefined;
+                delete userCpy.accessToken;
+                userCpy.stsTokenManager = undefined;
+                delete userCpy.stsTokenManager;
+                userCpy.providerData = undefined;
+                delete userCpy.providerData;
+                userCpy.apiKey = undefined;
+                delete userCpy.apiKey;
+                setCurrentUser(userCpy);
+            }
+        });
+    }, [auth]);
 
     return (
         <div className={styles.container}>
@@ -61,6 +79,7 @@ const SupportTicketPage = () => {
                                         setDoc(cityRef, {
                                             report,
                                             timeReported: currentTimestamp,
+                                            user: currentUser,
                                         }, { merge: true }).then(() => {
                                             setReportSent(true);
                                         });
