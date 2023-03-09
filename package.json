@@ -76,6 +76,7 @@
   "eslintIgnore": [
     ".eslintrc.js",
     "build/*",
-    "public/*"
+    "public/*",
+    "functions/*"
   ]
 }

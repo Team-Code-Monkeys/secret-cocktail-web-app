@@ -1,0 +1,116 @@
+import React, { useEffect, useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import Navbar from '../navbar';
+import styles from './styles.module.css';
+import { setupAuthListener } from '../authredirect/setup-auth-listener';
+import firebaseApp from '../firebase';
+import {
+    checkedIfAllowedOnPage, k_admin_role, k_facility_role, k_regular_user_role,
+} from '../authredirect/auth-check';
+
+const SupportTicketPage = () => {
+    const auth = getAuth(firebaseApp);
+    const navigate = useNavigate();
+    const db = getFirestore();
+    const [reportSent, setReportSent] = useState<boolean>(false);
+    const [report, setReport] = useState<string>('');
+
+    useEffect(() => {
+        // eslint-disable-next-line max-len
+        checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_facility_role, k_admin_role]);
+        setupAuthListener(auth, navigate, true, false);
+    }, [auth, navigate]);
+
+    return (
+        <div className={styles.container}>
+            <Navbar />
+            {
+                !reportSent
+                && (
+                    <div className={styles.innerContainer}>
+                        <div className={styles.innerContainerHeader}>
+                            {/* eslint-disable-next-line max-len */}
+                            <div className={styles.helpText}>Submit a support ticket to the Admin team!</div>
+                        </div>
+                        <textarea value={report} onChange={(event) => { setReport(event.target.value); }} className={styles.textArea} placeholder="Leave your message" />
+                        <div className={styles.btnOuterContainer}>
+                            <div className={styles.btnContainer}>
+                                <button
+                                    className={styles.primaryBtn}
+                                    onClick={() => { navigate(-1); }}
+                                    style={{
+                                        width: '150px', marginRight: '10px', background: '#D2042D', borderColor: '#D2042D',
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className={styles.primaryBtn}
+                                    onClick={() => {
+                                        const currentTimestamp = Math.round(new Date().getTime());
+
+                                        if (!report || report.length <= 0) {
+                                            // eslint-disable-next-line no-alert
+                                            alert('Report cannot be empty');
+                                            return;
+                                        }
+
+                                        const cityRef = doc(db, 'support-ticket', (`${currentTimestamp.toString()}.${Math.floor(Math.random() * 10)}`));
+                                        setDoc(cityRef, {
+                                            report,
+                                            timeReported: currentTimestamp,
+                                        }, { merge: true }).then(() => {
+                                            setReportSent(true);
+                                        });
+                                    }}
+                                    style={{ background: '#50C878', borderColor: '#50C878' }}
+                                >
+                                    Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                reportSent
+                && (
+                    <div className={styles.innerContainer}>
+                        {/* eslint-disable-next-line max-len */}
+                        <div className={styles.helpText}>Thank you for contacting the Admin team! We will review your support ticket!</div>
+                        {/* eslint-disable-next-line max-len */}
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            className={styles.backBtnContainer}
+                            onClick={() => {
+                                navigate(-1);
+                            }}
+                        >
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M27 20H13"
+                                    stroke="#5C5C5C"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                                <path
+                                    d="M20 27L13 20L20 13"
+                                    stroke="#5C5C5C"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                            <div className={styles.backBtnText}>Back</div>
+                        </div>
+                    </div>
+                )
+            }
+        </div>
+    );
+};
+
+export default SupportTicketPage;
