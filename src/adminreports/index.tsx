@@ -169,9 +169,14 @@ const ReportsPage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
-                <div className="title">Reports</div>
+                <div className="title">User Support Tickets</div>
             </div>
             <div className={styles.innerContainer3}>
+                {
+                    facilities.length === 0 && (
+                        <h3 style={{ marginTop: '10px' }}>All support tickets have been resolved!</h3>
+                    )
+                }
                 {facilities.map((facility: any) => (
                     <div className={styles.listItemContainer} key={facility.id}>
                         <div className={styles.listItemText2}>
@@ -201,7 +206,7 @@ const ReportsPage = () => {
                                         });
                                 }}
                             >
-                                Delete
+                                Resolve
                             </button>
                         </div>
                     </div>
