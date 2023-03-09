@@ -13,6 +13,7 @@
     padding: 10px 20px;
 }
 
+/* used to style secret cocktail logo on the navbar */
 .navbarLogo {
     max-height: 100%;
     height: 70px;
@@ -26,11 +27,9 @@
     }
 }
 
+/* styles the title text - e.g. The Secret Cocktail */
 .navbarTitleText {
     font-size: 36px;
-}
-
-.navbarTitleText {
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 700;
@@ -48,10 +47,12 @@
     align-items: center;
 }
 
+/* converts mouse to pointer on hover */
 .btnSecondary:hover {
     cursor: pointer;
 }
 
+/* shows that button is being clicked */
 .btnSecondary:active {
     filter: brightness(80%);
 }
@@ -61,7 +62,7 @@
         width: 100px !important;
     }
 }
-
+/* creates an ellipse-shaped button with white backgroudm and purple font - e.g. used for login button  */
 .btnSecondary {
     width: 150px;
     height: 45px;
@@ -85,14 +86,16 @@
     }
 }
 
+/* converts mouse to pointer on hover */
 .btnPrimary:hover {
     cursor: pointer;
 }
 
+/* shows that button is being clicked */
 .btnPrimary:active {
     filter: brightness(80%);
 }
-
+/* creates an ellipse-shaped button with purple background and white font - e.g. used for logout and sign up  */
 .btnPrimary {
     margin-left: 10px;
     width: 150px;
