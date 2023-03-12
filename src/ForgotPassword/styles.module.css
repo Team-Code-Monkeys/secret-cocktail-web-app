@@ -1,0 +1,128 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+@media (max-height: 740px) {
+    .titleContainer {
+        margin-top: 10px !important;
+    }
+}
+
+.titleContainer {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formContainer {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 64px;
+    line-height: 77px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -1px;
+    color: #2D3436;
+}
+
+.subtitle {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 48px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -0.5px;
+    color: #6C5CE7;
+}
+
+.inputContainer {
+    margin-top: 20px;
+    max-height: 42px;
+    overflow: hidden;
+}
+
+.inputIcon {
+    position: relative;
+    left: 165px;
+    top: -40px;
+}
+
+@media (max-width: 740px) {
+    .inputIcon {
+        visibility: hidden;
+        width: 1px;
+    }
+}
+
+@supports (-webkit-touch-callout: none) {
+    .inputIcon {
+        visibility: hidden !important;
+        width: 1px;
+    }
+}
+
+
+.input {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    background: rgba(194, 194, 194, 0.24);
+    /*opacity: 0.24;*/
+    border-radius: 16px;
+    /*font-weight: 400;*/
+    /*font-size: 18px;*/
+    /*line-height: 32px;*/
+    outline: 0;
+    border: none;
+    padding: 5px 10px;
+}
+
+.input::placeholder {
+    color: rgba(45, 52, 54, 0.68);
+}
+
+.backBtnContainer:hover {
+    cursor: pointer;
+}
+
+.backBtnContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    margin-top: 50px;
+}
+
+.backBtnText {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 12px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -0.5px;
+    color: #6C5CE7;
+}
