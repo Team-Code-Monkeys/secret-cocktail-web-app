@@ -1,16 +1,10 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import styles from './styles.module.css';
 import Navbar from '../navbar';
-import {
-    k_landing_page_route,
-    k_login_page_trainee_route,
-    k_login_page_admin_route,
-    k_login_page_facility_route, k_root_page_route, k_forgot_password_route,
-} from '../index';
 import firebaseApp from '../firebase';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import wave from '../wave.png';
@@ -19,49 +13,32 @@ const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
 );
 
-const LoginPage = () => {
+const ForgotPasswordPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
-    const location = useLocation();
-    const pathname = location?.pathname;
-    const isTrainee = (pathname === k_login_page_trainee_route);
-    const isFacility = (pathname === k_login_page_facility_route);
-    const isAdmin = (pathname === k_login_page_admin_route);
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     useEffect(() => {
         setupAuthListener(auth, navigate, false, true);
     }, [auth, navigate]);
 
-    function signIn() {
-        if (!email || !password) {
-            alert('Username and password cannot be blank');
+    function resetPassword() {
+        if (!email) {
+            alert('Email cannot be blank');
             return;
         }
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential?.user;
-                if (user) {
-                    navigate(k_root_page_route);
-                }
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                setEmail('');
+                alert('Reset Password Email Sent!');
+            // Password reset email sent!
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 // eslint-disable-next-line no-console
-                console.error('error creating account');
-                // eslint-disable-next-line no-console
                 console.error(errorCode, errorMessage);
-                if (errorCode === 'auth/wrong-password') {
-                    alert('Unable to login. Incorrect password provided.');
-                } else if (errorCode === 'auth/user-not-found') {
-                    alert('Unable to login. User does not exist with this email.');
-                } else if (errorCode === 'auth/invalid-email') {
-                    alert('Unable to login. Invalid email provided.');
-                } else {
-                    alert(`Unable to login. ${errorMessage || 'Unknown server error.'}`);
-                }
+                alert('unable to send reset password email');
             });
     }
 
@@ -69,19 +46,7 @@ const LoginPage = () => {
         <div className={styles.container}>
             <Navbar />
             <div className={styles.titleContainer}>
-                <div className={styles.title}>CNA Facilities</div>
-                {
-                    isTrainee
-                    && <div className={styles.subtitle}>CNA Trainer Login</div>
-                }
-                {
-                    isFacility
-                    && <div className={styles.subtitle}>CNA Facility Login</div>
-                }
-                {
-                    isAdmin
-                    && <div className={styles.subtitle}>Admin Login</div>
-                }
+                <div className={styles.title}>Reset Password</div>
             </div>
             <div className={styles.formContainer}>
                 <div className={styles.inputContainer}>
@@ -93,43 +58,28 @@ const LoginPage = () => {
                         onChange={(event) => setEmail(event.target.value)}
                         onKeyDown={(event) => {
                             if (event.key === 'Enter') {
-                                signIn();
+                                resetPassword();
                             }
                         }}
                     />
                     {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                     <UserIcon field={email} />
                 </div>
-                <div className={styles.inputContainer}>
-                    <input
-                        placeholder="Password"
-                        type="password"
-                        className={styles.input}
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                signIn();
-                            }
-                        }}
-                    />
-                </div>
                 <button
                     className="primaryBtn"
                     onClick={() => {
-                        signIn();
+                        resetPassword();
                     }}
                 >
-                    Sign In
+                    Reset
                 </button>
-                <a style={{ marginTop: '10px' }} href={k_forgot_password_route}>Forgot password?</a>
                 {/* TODO: make this a button */}
                 {/* eslint-disable-next-line max-len */}
                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
                     className={styles.backBtnContainer}
                     onClick={() => {
-                        navigate(k_landing_page_route);
+                        navigate(-1);
                     }}
                 >
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -183,4 +133,4 @@ const UserIcon = (props: any) => (
     </>
 );
 
-export default LoginPage;
+export default ForgotPasswordPage;
