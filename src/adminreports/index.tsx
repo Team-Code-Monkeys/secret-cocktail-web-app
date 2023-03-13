@@ -5,20 +5,16 @@ import {
     collection,
     getDocs,
     query,
-    where,
     getFirestore,
     deleteDoc,
     doc, setDoc,
     GeoPoint, getDoc,
 } from 'firebase/firestore';
-import { CSVLink } from 'react-csv';
 import {
     Form,
     Modal,
 } from 'react-bootstrap';
-import { geohashForLocation, Geopoint } from 'geofire-common';
-import { useDebouncedCallback } from 'use-debounce';
-import Geocode from 'react-geocode';
+import { Geopoint } from 'geofire-common';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
@@ -27,17 +23,14 @@ import {
     checkedIfAllowedOnPage,
     k_admin_role,
 } from '../authredirect/auth-check';
-import { k_admin_portal_page_route, k_facility_page_route, k_map_page_route } from '../index';
+import { k_admin_portal_page_route } from '../index';
 import wave from '../wave.png';
-import { GOOGLE_GEOCODING_API_KEY } from '../api';
-
-const CSV_FIELDS = ['name', 'email', 'phone', 'address', 'about', 'geohash', 'geopoint'];
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
 );
 
-const AdminFacilities = () => {
+const ReportsPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
     const db = getFirestore();
@@ -56,7 +49,6 @@ const AdminFacilities = () => {
     const [isUnknownLocation, setIsUnknownLocation] = useState(true);
 
     const [facilities, setFacilities] = useState<any>([]);
-    const [facilityData, setFacilityData] = useState<Array<Array<string>>>([]);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -68,35 +60,6 @@ const AdminFacilities = () => {
         setGeohash('');
         setIsUnknownLocation(true);
     };
-
-    // rate limit the frequency at which we query search input
-    const debouncedSearchInput = useDebouncedCallback(
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        (locationInput) => {
-            Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
-            Geocode.fromAddress(locationInput || '').then(
-                (response) => {
-                    const { lat, lng } = response.results[0].geometry.location;
-                    setGeopoint([lat, lng]);
-                    setGeohash(geohashForLocation([lat, lng]));
-                    setIsUnknownLocation(false);
-                },
-                (error) => {
-                    setGeopoint([0, 0]);
-                    setGeohash('');
-                    setIsUnknownLocation(true);
-                    if ((error?.message || '').includes('ZERO_RESULTS') || (error?.message || '').includes('Provided address is invalid')) {
-                        // eslint-disable-next-line no-console
-                        console.log('Unknown location');
-                    } else {
-                        // eslint-disable-next-line no-console
-                        console.error(error);
-                    }
-                },
-            );
-        },
-        1000,
-    );
 
     useEffect(() => {
         const searchParams = new URLSearchParams(search);
@@ -131,10 +94,6 @@ const AdminFacilities = () => {
                                     emailQuestionID = question.id;
                                 }
                             });
-                            // console.log(nameQuestionID);
-                            // console.log(locationQuestionID);
-                            // console.log(phoneQuestionID);
-                            // console.log(emailQuestionID);
                             // digit responses
                             if (phoneSurveyResponse?.questions) {
                                 phoneSurveyResponse.questions.forEach((questionResponse: any) => {
@@ -179,20 +138,9 @@ const AdminFacilities = () => {
         }
     }, []);
 
-    useEffect(() => {
-        debouncedSearchInput(address);
-    }, [address, debouncedSearchInput]);
-
-    function makeStringCSVCompliant(str: string | undefined) {
-        if (!str) {
-            return '';
-        }
-        let result = str;
-        result = result.replace(/"/g, '""');
-        result = result.replace(/,/g, ',');
-        result = result.replace(/'/g, '\'');
-        return result;
-    }
+    // useEffect(() => {
+    //     debouncedSearchInput(address);
+    // }, [address, debouncedSearchInput]);
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -202,7 +150,7 @@ const AdminFacilities = () => {
     useEffect(() => {
         async function fetchFacilities() {
             setFacilities([]);
-            const q = query(collection(db, 'facility'), where('name', '>=', ''));
+            const q = query(collection(db, 'support-ticket'));
             const querySnapshot = await getDocs(q);
             const facilitiesList: any = [];
             // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -217,112 +165,36 @@ const AdminFacilities = () => {
         fetchFacilities();
     }, [db]);
 
-    useEffect(() => {
-        async function fetchFacilityData() {
-            try {
-                const newFacilityData: Array<Array<string>> = [CSV_FIELDS];
-                const querySnapshot = await getDocs(query(collection(db, 'facility')));
-                // eslint-disable-next-line @typescript-eslint/no-shadow
-                querySnapshot.forEach((doc) => {
-                    const facility = doc.data();
-                    const facilityDataArr: Array<string> = [];
-
-                    CSV_FIELDS.forEach(((field) => {
-                        facilityDataArr.push(facility[field] ? `${makeStringCSVCompliant(JSON.stringify(facility[field]))}` : '');
-                    }));
-
-                    newFacilityData.push(facilityDataArr);
-                });
-                return newFacilityData;
-            } catch (e: any) {
-                throw Error(e?.message || 'unable to query database');
-            }
-        }
-
-        fetchFacilityData().then((res) => {
-            setFacilityData(res);
-        }).catch((err) => {
-            // eslint-disable-next-line no-alert
-            alert(`Unable to generate CSV file for facilities ${err?.message}` || '');
-        });
-    }, [db]);
-
     return (
         <div className={styles.container}>
             <Navbar />
             <div className={styles.innerContainer}>
-                <div className="title">Facility Dashboard</div>
+                <div className="title">User Support Tickets</div>
             </div>
             <div className={styles.innerContainer3}>
                 {
-                    (facilityData && facilityData.length > 0)
-                        ? (
-                            <CSVLink data={facilityData} filename="facilities.csv" className={styles.downloadBtn}>
-                                <span>Download CSV</span>
-                            </CSVLink>
-                        )
-                        : <button className={styles.downloadBtn} disabled>Loading...</button>
+                    facilities.length === 0 && (
+                        <h3 style={{ marginTop: '10px' }}>All support tickets have been resolved!</h3>
+                    )
                 }
-                <div className={styles.innerContainer4} style={{ marginBottom: '15px' }}>
-                    <button
-                        style={{ width: 300 }}
-                        className={styles.downloadBtn}
-                        onClick={() => {
-                            setShowModal(true);
-                        }}
-                    >
-                        Add Facility
-                    </button>
-                </div>
                 {facilities.map((facility: any) => (
                     <div className={styles.listItemContainer} key={facility.id}>
                         <div className={styles.listItemText2}>
-                            NAME:
+                            REPORT:
                             {' '}
-                            {facility.name || 'No text'}
+                            {facility.report || 'No text'}
                         </div>
                         <div className={styles.listItemText2}>
-                            ADDRESS:
+                            USER EMAIL:
                             {' '}
-                            {facility.address || 'No text'}
-                        </div>
-                        <div className={styles.listItemText2}>
-                            PHONE:
-                            {' '}
-                            {facility.phone || 'No text'}
+                            {facility?.user?.email || 'No Email for User'}
                         </div>
                         <div className={styles.listItemButtonsContainer}>
-                            <button
-                                className={styles.primaryBtnListView}
-                                onClick={() => {
-                                    navigate(`${k_map_page_route}?lat=${facility?.geopoint?.latitude || 0}&lon=${facility?.geopoint?.longitude || 0}` || 'none', {
-                                        state: {
-                                            distance: undefined,
-                                            goBackToAdminPage: true,
-                                        },
-                                    });
-                                }}
-                            >
-                                View Location
-                            </button>
-                            <button
-                                className={styles.primaryBtnListView}
-                                onClick={() => {
-                                    navigate(`${k_facility_page_route}/${facility.id}` || 'none', {
-                                        state: {
-                                            distance: undefined,
-                                            goBackToAdminPage: true,
-                                        },
-                                    });
-                                }}
-                            >
-                                More Info
-                            </button>
                             <button
                                 style={{ border: '#e13d3d', background: '#e13d3d' }}
                                 className={styles.deleteBtnListView}
                                 onClick={() => {
-                                    deleteDoc(doc(db, 'facility', facility.id || ''))
+                                    deleteDoc(doc(db, 'support-ticket', facility.id || ''))
                                         .then(() => {
                                             window.location.reload();
                                         })
@@ -334,7 +206,7 @@ const AdminFacilities = () => {
                                         });
                                 }}
                             >
-                                Delete
+                                Resolve
                             </button>
                         </div>
                     </div>
@@ -503,7 +375,7 @@ const AdminFacilities = () => {
                                     .then(() => {
                                         async function fetchFacilities() {
                                             setFacilities([]);
-                                            const q = query(collection(db, 'facility'), where('name', '>=', ''));
+                                            const q = query(collection(db, 'support-ticket'));
                                             const querySnapshot = await getDocs(q);
                                             const facilitiesList: any = [];
                                             // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -527,7 +399,7 @@ const AdminFacilities = () => {
                                             fetchFacilities();
                                         }
                                     }).catch((err) => {
-                                        // eslint-disable-next-line no-console
+                                    // eslint-disable-next-line no-console
                                         console.error('Error creating facility', err);
                                         // eslint-disable-next-line no-alert
                                         alert('Error adding facility to database');
@@ -544,4 +416,4 @@ const AdminFacilities = () => {
     );
 };
 
-export default AdminFacilities;
+export default ReportsPage;
