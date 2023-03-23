@@ -155,6 +155,8 @@ const FacilityPage = () => {
                         <div className={styles.btnContainer}>
                             {/* eslint-disable-next-line max-len */}
                             <button id="reportBtn" className={styles.primaryBtn} onClick={() => { navigate(k_facility_report_correction_page_route, { state: { facilityId: facility.id } }); }}>Report a Correction</button>
+                            {/* eslint-disable-next-line no-alert */}
+                            <button id="killMeBtn" className={styles.killMeBtn} onClick={() => { alert('Please nuke my facility'); }}>Delete Facility</button>
                         </div>
                     </div>
                 )
