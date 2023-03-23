@@ -24,7 +24,15 @@
     <li>
       <a href="#introduction">Introduction</a>
     </li>
-      <li>
+    <li>
+      <a href="#v030-release-notes">v0.3.0 Release Notes</a>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#bug-fixes">Bug Fixes</a></li>
+        <li><a href="#known-issues">Known Issues</a></li>
+      </ul>
+    </li>
+    <li>
       <a href="#v020-release-notes">v0.2.0 Release Notes</a>
       <ul>
         <li><a href="#features">Features</a></li>
@@ -65,6 +73,26 @@ training hours.
 <!-- Release Notes -->
 
 # Release Notes
+
+## v0.3.0 Release Notes
+
+### Features
+
+- Style landing page to have explicit login buttons for admin, facilities, and nursing trainees
+- Page to allow users to reset their password
+- Automatic creation of a facility account when a facility is added to our database
+- Automatic sending of an email with facility account credentials when a facility account is created
+- Page for nursing trainees to submit support tickets that admins can view
+- Page for admins to view support tickets created by nursing trainees
+
+### Bug Fixes
+
+- Fixed size of report correction button for facilities page
+
+### Known Issues
+
+No known issues as of now, please report using GitHub issues.
+
 ## v0.2.0 Release Notes
 
 ### Features
