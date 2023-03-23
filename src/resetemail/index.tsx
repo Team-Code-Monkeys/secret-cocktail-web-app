@@ -8,6 +8,7 @@ import Navbar from '../navbar';
 import firebaseApp from '../firebase';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import wave from '../wave.png';
+import { checkedIfAllowedOnPage, k_admin_role, k_regular_user_role } from '../authredirect/auth-check';
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
@@ -19,6 +20,7 @@ const ResetEmailPage = () => {
     const [email, setEmail] = useState('');
 
     useEffect(() => {
+        checkedIfAllowedOnPage(auth, navigate, [k_regular_user_role, k_admin_role]);
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
 
