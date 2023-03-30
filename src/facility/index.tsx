@@ -23,6 +23,7 @@ async function deleteFacility(auth: any, db: any, facility: any, navigate: any) 
             deleteUser(user)
                 .then(() => {
                 }).catch((error: any) => {
+                    // eslint-disable-next-line no-console
                     console.error('Error deleting facility user.', error);
                 });
             if (auth) {
