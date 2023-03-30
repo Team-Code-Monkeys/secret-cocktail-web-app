@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth } from 'firebase/auth';
+import { getAuth, deleteUser } from 'firebase/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-    collection, doc, getDoc, getDocs, getFirestore, query, where,
+    collection, doc, getDoc, getDocs, getFirestore, query, where, deleteDoc,
 } from 'firebase/firestore';
 import ReactMarkdown from 'react-markdown';
 import Navbar from '../navbar';
@@ -10,11 +10,43 @@ import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import wave from '../wave.png';
-import { k_facility_report_correction_page_route } from '../index';
+import { k_facility_report_correction_page_route, k_landing_page_route } from '../index';
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
 );
+async function deleteFacility(auth: any, db: any, facility: any, navigate: any) {
+    // delete facility object
+    await deleteDoc(doc(db, 'facility', facility.id || ''))
+        .then(() => {
+            const user = auth.currentUser;
+            deleteUser(user)
+                .then(() => {
+                }).catch((error: any) => {
+                    console.error('Error deleting facility user.', error);
+                });
+            if (auth) {
+                auth.signOut()
+                    .then((response: any) => {
+                        navigate(k_landing_page_route);
+                        // eslint-disable-next-line no-console
+                        console.log('Sign out response', response);
+                    })
+                    .catch((error: any) => {
+                        // eslint-disable-next-line no-alert
+                        alert('Unable to sign out.');
+                        // eslint-disable-next-line no-console
+                        console.error('Unable to sign out.', error);
+                    });
+            }
+        })
+        .catch((error: any) => {
+            // eslint-disable-next-line no-alert
+            alert('Error deleting facility.');
+            // eslint-disable-next-line no-console
+            console.error('Error deleting facility object', error);
+        });
+}
 const FacilityPage = () => {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
@@ -156,7 +188,15 @@ const FacilityPage = () => {
                             {/* eslint-disable-next-line max-len */}
                             <button id="reportBtn" className={styles.primaryBtn} onClick={() => { navigate(k_facility_report_correction_page_route, { state: { facilityId: facility.id } }); }}>Report a Correction</button>
                             {/* eslint-disable-next-line no-alert */}
-                            <button id="killMeBtn" className={styles.killMeBtn} onClick={() => { alert('Please nuke my facility'); }}>Delete Facility</button>
+                            <button
+                                id="killMeBtn"
+                                className={styles.killMeBtn}
+                                onClick={() => {
+                                    deleteFacility(auth, db, facility, navigate);
+                                }}
+                            >
+                                Delete Facility
+                            </button>
                         </div>
                     </div>
                 )
