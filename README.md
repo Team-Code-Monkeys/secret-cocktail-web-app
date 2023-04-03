@@ -25,6 +25,14 @@
       <a href="#introduction">Introduction</a>
     </li>
     <li>
+      <a href="#v040-release-notes">v0.4.0 Release Notes</a>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#bug-fixes">Bug Fixes</a></li>
+        <li><a href="#known-issues">Known Issues</a></li>
+      </ul>
+    </li>
+    <li>
       <a href="#v030-release-notes">v0.3.0 Release Notes</a>
       <ul>
         <li><a href="#features">Features</a></li>
@@ -73,6 +81,21 @@ training hours.
 <!-- Release Notes -->
 
 # Release Notes
+
+## v0.4.0 Release Notes
+
+### Features
+
+- Added ability to change user email
+- Added ability for facilities to delete account
+
+### Bug Fixes
+
+- Fixed styling error on facility home page where button would appear on bottom right of screen instead of the center
+
+### Known Issues
+
+No known issues as of now, please report using GitHub issues.
 
 ## v0.3.0 Release Notes
 

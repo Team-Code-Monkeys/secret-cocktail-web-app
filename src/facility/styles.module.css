@@ -83,36 +83,29 @@
 }
 
 .primaryBtn {
-    margin-right: 50px;
-    margin-top: 50px;
-    width: 250px;
-    height: 45px;
-    font-family: 'Inter', sans-serif;
+    composes: primaryBtn from "/src/globalStyles.css";
+    margin-top: 0;
+    margin-left: 10px;
+    height: 40px;
     font-style: normal;
     font-weight: 700;
-    font-size: 18px;
-    line-height: 36px;
-    letter-spacing: 0.25px;
-    color: white;
-    text-shadow: 0 4px 8px rgba(38, 50, 56, 0.08);
-    box-sizing: border-box;
-    border: 1px solid #6C5CE7;
-    border-radius: 16px;
-    background: #6C5CE7;
+    font-size: 16px;
+    width: auto;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-@media (max-width: 605px) {
-    .primaryBtn {
-        margin-right: 0 !important;
-        width: 100% !important;
-    }
+.killMeBtn {
+    composes: primaryBtn;
+    border: #e13d3d;
+    background: #e13d3d;
 }
 
 .btnContainer {
     padding: 10px;
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .btnOuterContainer {

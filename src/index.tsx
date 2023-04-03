@@ -20,6 +20,7 @@ import CreateAdminPage from './createadmin';
 import SupportTicketPage from './supportticket';
 import ReportsPage from './adminreports';
 import ForgotPasswordPage from './ForgotPassword';
+import ResetEmailPage from './resetemail';
 
 // Define routes
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -41,6 +42,7 @@ export const k_create_admin_page_route = '/create-admin';
 export const k_support_ticket_route = '/support-ticket';
 export const k_admin_view_tickets_route = '/reports';
 export const k_forgot_password_route = '/forgot-password';
+export const k_reset_email_route = '/reset-email';
 
 const router = createBrowserRouter([
     {
@@ -118,6 +120,10 @@ const router = createBrowserRouter([
     {
         path: k_forgot_password_route,
         element: <ForgotPasswordPage />,
+    },
+    {
+        path: k_reset_email_route,
+        element: <ResetEmailPage />,
     },
 ]);
 
