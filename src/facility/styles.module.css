@@ -78,6 +78,10 @@
     filter: brightness(80%);
 }
 
+#reportBtn {
+    width: auto !important;
+}
+
 .primaryBtn {
     composes: primaryBtn from "/src/globalStyles.css";
     margin-top: 0;
