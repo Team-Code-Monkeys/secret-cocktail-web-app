@@ -4,7 +4,7 @@ import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import addRoutes from "./routes/routes";
 import {sendPhoneSurvey} from "./queue/queue";
-import {createAccountAndSendEmail} from "./facility-account/facility-account";
+import {createAccountAndSendEmail, deleteAccount} from "./facility-account/facility-account";
 
 // setup express server for case where REST API is needed
 const app = express();
@@ -48,3 +48,9 @@ exports.createFacilityAccount = functions.firestore
         createAccountAndSendEmail(email, name, id);
     });
 
+exports.deleteFacilityAccount = functions.firestore
+    .document('facility/{docId}')
+    .onDelete((doc, context) => {
+        const facilityEmail: string = doc?.data()?.email;
+        deleteAccount(facilityEmail);
+    });
