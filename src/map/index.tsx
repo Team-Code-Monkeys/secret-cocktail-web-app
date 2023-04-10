@@ -13,7 +13,7 @@ import { distanceBetween, geohashQueryBounds, Geopoint } from 'geofire-common';
 import { useDebouncedCallback } from 'use-debounce';
 import Geocode from 'react-geocode';
 import {
-    k_admin_facility_page_route, k_facility_page_route, k_support_ticket_route, k_reset_email_route,
+    k_facility_page_route, k_support_ticket_route, k_reset_email_route,
 } from '../index';
 import { GOOGLE_GEOCODING_API_KEY, GOOGLE_MAPS_API_KEY } from '../api';
 import { checkedIfAllowedOnPage, k_admin_role, k_regular_user_role } from '../authredirect/auth-check';
