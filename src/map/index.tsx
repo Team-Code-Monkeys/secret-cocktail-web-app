@@ -286,7 +286,7 @@ const FacilityList = (props: any) => {
                     <div
                         className={styles.backBtnContainer}
                         onClick={() => {
-                            navigate(k_admin_facility_page_route);
+                            navigate(-1);
                         }}
                     >
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
