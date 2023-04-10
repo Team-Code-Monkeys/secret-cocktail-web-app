@@ -6,7 +6,9 @@ import Navbar from '../navbar';
 import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
-import { checkedIfAllowedOnPage, k_facility_role, k_facility_page_route } from '../authredirect/auth-check';
+import { checkedIfAllowedOnPage, k_facility_role } from '../authredirect/auth-check';
+
+import { k_facility_page_route } from '../index';
 
 const ReportFacilityCorrectionPage = () => {
     const auth = getAuth(firebaseApp);
