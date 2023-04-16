@@ -10,7 +10,7 @@ import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
 import firebaseApp from '../firebase';
 import wave from '../wave.png';
-import { k_facility_report_correction_page_route, k_landing_page_route } from '../index';
+import { k_facility_report_correction_page_route, k_landing_page_route, k_support_ticket_route } from '../index';
 
 const Waves = () => (
     <img src={wave} className="wave" alt="Wave for styling webpage." />
@@ -53,7 +53,7 @@ const FacilityPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const db = getFirestore(firebaseApp);
-    const [, setIsAdmin] = useState<any>(undefined);
+    const [isAdmin, setIsAdmin] = useState<any>(undefined);
     const [isFacility, setIsFacility] = useState<any>(undefined);
     const [facility, setFacility] = useState<any>(undefined);
     const [email, setEmail] = useState<any>(undefined);
@@ -182,22 +182,38 @@ const FacilityPage = () => {
                 )
             }
             {
-                isFacility && facility
+                facility
                 && (
                     <div className={styles.btnOuterContainer}>
                         <div className={styles.btnContainer}>
                             {/* eslint-disable-next-line max-len */}
-                            <button id="reportBtn" className={styles.primaryBtn} onClick={() => { navigate(k_facility_report_correction_page_route, { state: { facilityId: facility.id } }); }}>Report a Correction</button>
+                            {
+                                isFacility
+                                && (
+                                    <button id="reportBtn" className={styles.primaryBtn} onClick={() => { navigate(k_facility_report_correction_page_route, { state: { facilityId: facility.id } }); }}>Report a Correction</button>
+                                )
+                            }
+                            {
+                                !isFacility && !isAdmin
+                                && (
+                                    <button id="reportBtn" className={styles.primaryBtn} onClick={() => { navigate(k_support_ticket_route); }}>Report a Correction</button>
+                                )
+                            }
                             {/* eslint-disable-next-line no-alert */}
-                            <button
-                                id="killMeBtn"
-                                className={styles.killMeBtn}
-                                onClick={() => {
-                                    deleteFacility(auth, db, facility, navigate);
-                                }}
-                            >
-                                Delete Facility
-                            </button>
+                            {
+                                isFacility
+                                && (
+                                    <button
+                                        id="killMeBtn"
+                                        className={styles.killMeBtn}
+                                        onClick={() => {
+                                            deleteFacility(auth, db, facility, navigate);
+                                        }}
+                                    >
+                                        Delete Facility
+                                    </button>
+                                )
+                            }
                         </div>
                     </div>
                 )

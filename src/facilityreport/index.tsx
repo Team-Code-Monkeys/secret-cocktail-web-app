@@ -77,7 +77,7 @@ const ReportFacilityCorrectionPage = () => {
                                         }
 
                                         if (facilityId) {
-                                            const cityRef = doc(db, 'facility-report', (`${currentTimestamp.toString()}.${facilityId.toString()}`));
+                                            const cityRef = doc(db, 'support-ticket', (`${currentTimestamp.toString()}.${facilityId.toString()}`));
                                             setDoc(cityRef, {
                                                 report,
                                                 facilityId,
