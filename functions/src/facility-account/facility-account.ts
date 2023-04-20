@@ -32,6 +32,27 @@ export const createAccountAndSendEmail = (email: string, name: string, id: strin
     }
 }
 
+export const deleteAccount = (email: string) => {
+    if (email) {
+        admin.auth().getUserByEmail(email)
+            .then((userRecord) => {
+                admin.auth().deleteUser(userRecord.uid)
+                    .then(() => {
+                        console.log(`Successfully deleted user ${userRecord.uid}`);
+                    })
+                    .catch((error) => {
+                        console.error(`Error deleting user ${userRecord.uid}`, error);
+                    });
+            })
+            .catch((error) => {
+                console.error(`Error getting user by email ${email}`, error);
+            });
+    } else {
+        console.error("Blank email provided for facility account to be deleted");
+    }
+}
+
+
 export const sendEmail = (email: string, name: string, password: string) => {
     if (email) {
         const ourEmail = process.env.EMAIL_EMAIL;

@@ -12,8 +12,9 @@ import {
 import { distanceBetween, geohashQueryBounds, Geopoint } from 'geofire-common';
 import { useDebouncedCallback } from 'use-debounce';
 import Geocode from 'react-geocode';
+import { Form } from 'react-bootstrap';
 import {
-    k_admin_facility_page_route, k_facility_page_route, k_support_ticket_route, k_reset_email_route,
+    k_facility_page_route, k_support_ticket_route, k_reset_email_route,
 } from '../index';
 import { GOOGLE_GEOCODING_API_KEY, GOOGLE_MAPS_API_KEY } from '../api';
 import { checkedIfAllowedOnPage, k_admin_role, k_regular_user_role } from '../authredirect/auth-check';
@@ -30,14 +31,16 @@ const MapPage = () => {
     const navigate = useNavigate();
     const { search } = useLocation();
     const [hasParsedQueryParams, setHasParsedQueryParams] = useState<boolean>(false);
-    const [center, setCenter] = useState<any>([33.78010647946605, -84.38955018824828]);
+    const [center, setCenter] = useState<any>([0, 0]);
     const [zoom, setZoom] = useState<number>(16.0);
     const [radius, setRadius] = useState<number>(444);
     const [facilities, setFacilities] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
-    const [locationInput, setLocationInput] = useState<string>('930 Spring St NW, Atlanta, GA 30309');
+    const [locationInput, setLocationInput] = useState<string>('');
     const [isUnknownLocation, setIsUnknownLocation] = useState<boolean>(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isAutomaticLocationTracking, setAutomaticLocationTracking] = useState(localStorage?.getItem('automaticLocationTracking') === 'enabled');
 
     // use query parameter to set the center location of the map (if they are defined)
     const setLocationFromQueryParams = () => {
@@ -126,7 +129,9 @@ const MapPage = () => {
     const debounced = useDebouncedCallback(
         () => {
             setLoading(true);
+            console.log('started query for facilities');
             queryLocations().then(() => {
+                console.log('stop query for facilities');
                 setLoading(false);
             });
         },
@@ -139,12 +144,18 @@ const MapPage = () => {
         setupAuthListener(auth, navigate, true, false);
     }, [auth, navigate]);
 
+    const [allowChange, setAllowChange] = useState(false);
+
     // request for new list of facilities nearby location
     useEffect(() => {
-        // search facilities when center or radius is updated
-        setLoading(true);
-        debounced();
-    }, [center, radius, debounced]);
+        if (allowChange) {
+            console.log('flag debounce invoked');
+            // search facilities when center or radius is updated
+            debounced();
+        } else {
+            console.log('allow change', allowChange);
+        }
+    }, [center, radius]);
 
     // check if admin (to allow them to delete facilities)
     useEffect(() => {
@@ -188,8 +199,68 @@ const MapPage = () => {
     );
 
     useEffect(() => {
-        debouncedSearchInput(locationInput);
+        if (!isAutomaticLocationTracking) {
+            debouncedSearchInput(locationInput);
+        }
     }, [locationInput, debouncedSearchInput]);
+
+    useEffect(() => {
+        if (isAutomaticLocationTracking) {
+            localStorage.setItem('automaticLocationTracking', 'enabled');
+            setLoading(true);
+
+            navigator.geolocation.getCurrentPosition((position) => {
+                const lat = position?.coords?.latitude;
+                const lon = position?.coords?.longitude;
+                if (!lat || !lon) {
+                    setLoading(false);
+                    setAutomaticLocationTracking(false);
+                    return;
+                }
+
+                console.log('flag 2 invoked');
+                setLoading(true);
+
+                // eslint-disable-next-line max-len
+                // set search text of place (query Google Geo Decoding API to get the address of a place from latitude and longitude values)
+                Geocode.setApiKey(GOOGLE_GEOCODING_API_KEY);
+                Geocode.fromLatLng(lat.toString(), lon.toString()).then(
+                    (response) => {
+                        // eslint-disable-next-line max-len
+                        if (response.results && response.results.length > 0 && response.results[0].formatted_address) {
+                            setAllowChange(true);
+                            setLocationInput(`${response.results[0].formatted_address}`);
+                            setCenter([lat, lon]);
+                        } else {
+                            setAllowChange(true);
+                            setLocationInput(`(${lat}, ${lon})`);
+                            setCenter([lat, lon]);
+                        }
+                    },
+                    (error) => {
+                        setAllowChange(true);
+                        setLoading(false);
+                        if ((error?.message || '').includes('ZERO_RESULTS') || (error?.message || '').includes('Provided address is invalid')) {
+                            setIsUnknownLocation(true);
+                        } else {
+                            console.error(error);
+                        }
+                    },
+                );
+            }, () => {
+                localStorage.setItem('automaticLocationTracking', 'disabled');
+                alert('Unable to enable automatic location tracking. Please check website permissions for this browser.');
+                setAutomaticLocationTracking(false);
+            });
+            // setLocationInput('Timbuktu');
+            // setCenter([0, 0]);
+        } else {
+            setLoading(true);
+            setLocationInput('Georgia Tech');
+            setAllowChange(true);
+            localStorage.setItem('automaticLocationTracking', 'disabled');
+        }
+    }, [isAutomaticLocationTracking, radius]);
 
     return (
         <div className={styles.container}>
@@ -197,6 +268,7 @@ const MapPage = () => {
             <div className={styles.innerContainer}>
                 {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}
                 <FacilityList
+                    allowChange={allowChange}
                     facilities={facilities}
                     center={center}
                     radius={radius}
@@ -206,6 +278,8 @@ const MapPage = () => {
                     locationInput={locationInput}
                     setLocationInput={setLocationInput}
                     isUnknownLocation={isUnknownLocation}
+                    isAutomaticLocationTracking={isAutomaticLocationTracking}
+                    setAutomaticLocationTracking={setAutomaticLocationTracking}
                 />
                 <div className={styles.mapView}>
                     <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
@@ -286,7 +360,7 @@ const FacilityList = (props: any) => {
                     <div
                         className={styles.backBtnContainer}
                         onClick={() => {
-                            navigate(k_admin_facility_page_route);
+                            navigate(-1);
                         }}
                     >
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -323,16 +397,27 @@ const FacilityList = (props: any) => {
                     </span>
                 </div>
 
-                <div className={styles.filterHeader}>Location</div>
+                <div className={styles.filterHeader}>Your Location</div>
                 <div className={styles.searchContainer}>
                     <input
                         className={styles.searchLocation}
                         value={props.locationInput}
+                        disabled={props.isAutomaticLocationTracking}
                         onChange={(event) => {
                             props.setLocationInput(event.target.value);
                         }}
                     />
                 </div>
+                <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label={props.isAutomaticLocationTracking ? 'Automatic location tracking enabled' : 'Automatic location tracking disabled'}
+                    value={props.isAutomaticLocationTracking ? 'on' : 'off'}
+                    checked={props.isAutomaticLocationTracking}
+                    onChange={(event: any) => {
+                        props?.setAutomaticLocationTracking(event?.target?.checked);
+                    }}
+                />
                 <div className={styles.filterHeader}>Max Distance</div>
                 <div className={styles.distanceSliderContainer}>
                     <div>
@@ -354,8 +439,11 @@ const FacilityList = (props: any) => {
             </div>
             {
                 props.isUnknownLocation
-                && <div className={styles.invalidLocationText}>Unlabeled location</div>
+                && <div className={styles.invalidLocationText}>Unknown location</div>
             }
+            {/* eslint-disable-next-line max-len */}
+            { (!props.isUnknownLocation && !props?.loading && props?.facilities.length === 0)
+                && <div>No facilities nearby. Please increase the max distance.</div>}
             {
                 !props.isUnknownLocation
                 && (
