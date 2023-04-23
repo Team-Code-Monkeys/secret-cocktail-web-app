@@ -238,7 +238,7 @@ EMAIL_PASSWORD="..."
 
 ``TWILIO_ACCOUNT_SID`` and ``TWILIO_AUTH_TOKEN`` can be found in the Twilio dashboard.
 
-``TWILIO_PHONE_NUMBER`` is the registered phone number associated with the Twilio account that will make phone calls to facilities. 
+``TWILIO_PHONE_NUMBER`` is the registered phone number associated with the Twilio account that will make phone calls to facilities. This may be set to ``"+12055288686"``.
 
 ### Deploy the Software
 
