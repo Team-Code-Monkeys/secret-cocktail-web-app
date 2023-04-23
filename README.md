@@ -189,7 +189,7 @@ To run the web app available at [http://localhost:3000](http://localhost:3000), 
 yarn start
 ```
 
-To run the server (Firebase functions), run the following command in the functions folder:
+To run the server (Firebase functions), run the following command in the ``functions`` folder:
 
 ```shell
 yarn start
@@ -226,7 +226,7 @@ To deploy the web app run the following command in the root of the project:
 yarn deploy
 ```
 
-To deploy the server (Firebase functions) run the following command in the functions folder:
+To deploy the server (Firebase functions) run the following command in the ``functions`` folder:
 
 ```shell
 yarn deploy
