@@ -25,6 +25,14 @@
       <a href="#introduction">Introduction</a>
     </li>
     <li>
+      <a href="#v050-release-notes">v0.5.0 Release Notes</a>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#bug-fixes">Bug Fixes</a></li>
+        <li><a href="#known-issues">Known Issues</a></li>
+      </ul>
+    </li>
+    <li>
       <a href="#v040-release-notes">v0.4.0 Release Notes</a>
       <ul>
         <li><a href="#features">Features</a></li>
