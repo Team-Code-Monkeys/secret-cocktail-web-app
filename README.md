@@ -82,6 +82,22 @@ training hours.
 
 # Release Notes
 
+## v0.5.0 Release Notes
+
+### Features
+
+- Ability for nurse trainess to automatically have their location detected when searching for facilities
+- Ability for nurse trainees to report facilities
+- Ability for nurse trainees to view a sorted list of facilities near them
+
+### Bug Fixes
+
+- Fixed deletion of facilities from admin dashboard where the associated facility account was not being deleted
+
+### Known Issues
+
+No known issues as of now, please report using GitHub issues.
+
 ## v0.4.0 Release Notes
 
 ### Features
