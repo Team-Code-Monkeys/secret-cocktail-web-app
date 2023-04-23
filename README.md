@@ -221,7 +221,7 @@ yarn start
 
 **Required Environment Variables for the Server**
 
-These are environment variables that must be defined for the server to run properly. Create a ``.env`` file with the following content in the functions folder:
+These are environment variables that must be defined for the server to run properly. Create a ``.env`` file with the following content in the ``functions`` folder:
 
 ```shell
 TWILIO_ACCOUNT_SID="..."
@@ -232,11 +232,11 @@ EMAIL_EMAIL="someone@gmail.com"
 EMAIL_PASSWORD="..."
 ```
 
-``EMAIL_EMAIL`` and ``EMAIL_PASSWORD`` are the email and password for the account that will send authentication information emails to new facilities. 
+``EMAIL_EMAIL`` and ``EMAIL_PASSWORD`` are the email and password for the account that will send authentication information emails to new facilities. If you are using a Gmail account, an [App Password](https://support.google.com/mail/answer/185833?hl=en) must be used instead of the actual Gmail account password. 
 
-``TWILIO_STATUS_CALLBACK_URL`` is the URL Twilio will make requests to in order to progress the phone survey. This can be sent to the production URL ``"https://us-central1-secret-cocktail.cloudfunctions.net/app"``.
+``TWILIO_STATUS_CALLBACK_URL`` is the URL Twilio will make requests to in order to progress the phone survey. This can be set to the production URL ``"https://us-central1-secret-cocktail.cloudfunctions.net/app"``.
 
-``TWILIO_ACCOUNT_SID`` and ``TWILIO_AUTH_TOKEN`` can be received from the Twilio dashboard.
+``TWILIO_ACCOUNT_SID`` and ``TWILIO_AUTH_TOKEN`` can be found in the Twilio dashboard.
 
 ``TWILIO_PHONE_NUMBER`` is the registered phone number associated with the Twilio account that will make phone calls to facilities. 
 
