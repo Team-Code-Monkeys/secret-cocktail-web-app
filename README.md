@@ -56,7 +56,7 @@
         <li><a href="#known-issues-1">Known Issues</a></li>
       </ul>
     </li>
-    <li><a href="#installation-guide">How To Run</a></li>
+    <li><a href="#installation-guide">Installation Guide</a></li>
     <li><a href="#screenshots">Screenshots</a></li>
   </ol>
 </details>
@@ -186,7 +186,7 @@ yarn start
 
 **Optional Environment Variables for the Web App**
 
-Create a ``.env`` file with the following content:
+Create a ``.env`` file in the root of the project with the following content:
 
 ```shell
 API_URL="..."
@@ -212,6 +212,14 @@ TWILIO_STATUS_CALLBACK_URL="https://something.com"
 EMAIL_EMAIL="someone@gmail.com"
 EMAIL_PASSWORD="..."
 ```
+
+``EMAIL_EMAIL`` and ``EMAIL_PASSWORD`` are the email and password for the account that will send authentication information emails to new facilities. 
+
+``TWILIO_STATUS_CALLBACK_URL`` is the URL Twilio will make requests to in order to progress the phone survey. This can be sent to the production URL ``"https://us-central1-secret-cocktail.cloudfunctions.net/app"``.
+
+``TWILIO_ACCOUNT_SID`` and ``TWILIO_AUTH_TOKEN`` can be received from the Twilio dashboard.
+
+``TWILIO_PHONE_NUMBER`` is the registered phone number associated with the Twilio account that will make phone calls to facilities. 
 
 ### Deploy the Software
 
