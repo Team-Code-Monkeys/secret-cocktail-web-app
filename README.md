@@ -258,6 +258,8 @@ yarn deploy
 
 Please ensure that the ``.env`` file with the required server environment variables are defined. 
 
+If needed, this is the URL of the Firebase Project: [https://console.firebase.google.com/u/0/project/secret-cocktail/overview](https://console.firebase.google.com/u/0/project/secret-cocktail/overview)
+
 ## Screenshots
 
 ![screenshot](screenshot/0.png)
