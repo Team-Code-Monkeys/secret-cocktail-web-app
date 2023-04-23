@@ -56,7 +56,7 @@
         <li><a href="#known-issues-1">Known Issues</a></li>
       </ul>
     </li>
-    <li><a href="#how-to-run">How To Run</a></li>
+    <li><a href="#installation-guide">How To Run</a></li>
     <li><a href="#screenshots">Screenshots</a></li>
   </ol>
 </details>
@@ -156,26 +156,77 @@ Please report future issues using GitHub issues.
 
 No known issues as of now, please report using GitHub issues.
 
-<!-- How To Run -->
+<!-- Installation Guide -->
 
-## How To Run
+## Installation Guide
 
-In the project directory, you can run:
+### Required Software
 
-### `yarn start`
+- [NodeJs 16.x](https://nodejs.org/en/blog/release/v16.16.0)
+- [yarn](https://classic.yarnpkg.com/lang/en/docs/install)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Run in Development Mode
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+First, dependencies must be installed:
 
-**Optional Environment Variables**
+```shell
+# install dependencies for web app
+yarn
+
+# install dependencies for Firebase functions (ensure NodeJS 16 is installed)
+cd functions
+yarn
+```
+
+To run the web app available at [http://localhost:3000](http://localhost:3000), run the following command in the root of the project:
+
+```shell
+yarn start
+```
+
+**Optional Environment Variables for the Web App**
+
+Create a ``.env`` file with the following content:
 
 ```shell
 API_URL="..."
 REACT_APP_GOOGLE_MAPS_API_KEY="..."
 REACT_APP_GOOGLE_GEOCODING_API_KEY="..."
+```
+
+To run the server (Firebase functions), run the following command in the functions folder:
+
+```shell
+yarn start
+```
+
+**Required Environment Variables for the Server**
+
+Create a ``.env`` file with the following content in the functions folder:
+
+```shell
+TWILIO_ACCOUNT_SID="..."
+TWILIO_AUTH_TOKEN="..."
+TWILIO_PHONE_NUMBER="..."
+TWILIO_STATUS_CALLBACK_URL="https://something.com"
+EMAIL_EMAIL="someone@gmail.com"
+EMAIL_PASSWORD="..."
+```
+
+### Deploy the Software
+
+After ensuring the software can run on your machine, you may deploy it now.
+
+To deploy the web app run the following command in the root of the project:
+
+```shell
+yarn deploy
+```
+
+To deploy the server (Firebase functions) run the following command in the functions folder:
+
+```shell
+yarn deploy
 ```
 
 ## Screenshots
