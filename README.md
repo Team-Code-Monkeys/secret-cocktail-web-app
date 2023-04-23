@@ -167,14 +167,19 @@ No known issues as of now, please report using GitHub issues.
 
 ### Run in Development Mode
 
-First, dependencies must be installed:
+First, dependencies must be installed.
+
+To install dependencies for the web app run the following command in the root of the project:
 
 ```shell
 # install dependencies for web app
 yarn
+```
 
+To install dependencies for the server (Firebase functions) run the following command in the functions folder:
+
+```shell
 # install dependencies for Firebase functions (ensure NodeJS 16 is installed)
-cd functions
 yarn
 ```
 
