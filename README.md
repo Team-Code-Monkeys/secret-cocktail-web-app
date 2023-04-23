@@ -189,16 +189,6 @@ To run the web app available at [http://localhost:3000](http://localhost:3000), 
 yarn start
 ```
 
-**Optional Environment Variables for the Web App**
-
-Create a ``.env`` file in the root of the project with the following content:
-
-```shell
-API_URL="..."
-REACT_APP_GOOGLE_MAPS_API_KEY="..."
-REACT_APP_GOOGLE_GEOCODING_API_KEY="..."
-```
-
 To run the server (Firebase functions), run the following command in the functions folder:
 
 ```shell
@@ -207,7 +197,7 @@ yarn start
 
 **Required Environment Variables for the Server**
 
-Create a ``.env`` file with the following content in the functions folder:
+These are environment variables that must be defined for the server to run properly. Create a ``.env`` file with the following content in the functions folder:
 
 ```shell
 TWILIO_ACCOUNT_SID="..."
@@ -241,6 +231,8 @@ To deploy the server (Firebase functions) run the following command in the funct
 ```shell
 yarn deploy
 ```
+
+Please ensure that the ``.env`` file with the required server environment variables are defined. 
 
 ## Screenshots
 
