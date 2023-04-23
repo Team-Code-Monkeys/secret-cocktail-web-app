@@ -200,7 +200,7 @@ To install dependencies for the web app run the following command in the root of
 yarn
 ```
 
-To install dependencies for the server (Firebase functions) run the following command in the functions folder:
+To install dependencies for the server (Firebase functions) run the following command in the ``functions`` folder:
 
 ```shell
 # install dependencies for Firebase functions (ensure NodeJS 16 is installed)
