@@ -2486,10 +2486,10 @@
   dependencies:
     google-maps-react "*"
 
-"@types/google.maps@^3.52.3":
-  version "3.52.3"
-  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.52.3.tgz#8a99101b4ce046a58bb2cb7452376f7b15c97cbe"
-  integrity sha512-2bIhomvQF3+R/ahhhIsL95mPXEpvOY53wojcXAZSrFylYQuAT6owtmJRDGpSz3SL1PQAVDJ6MYLbH59cLDx7VQ==
+"@types/google.maps@^3.53.0":
+  version "3.53.0"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.53.0.tgz#45b50fd2b0b2868f96ba0346f906ca9127ba797c"
+  integrity sha512-ME6n+u0qHJ+zx7Tc+HK4YgHB2N5CBCP0BMsY3e5/FXoVG9SndE4JJpD7oP0YrNBBU6i9jMAKqPRDeAZPHhViBQ==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.6"
