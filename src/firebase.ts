@@ -7,13 +7,13 @@ import { initializeApp } from 'firebase/app';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-    apiKey: 'AIzaSyCpHG9-94DvB3FDFYLX8weS0QgyxNDESiQ',
-    authDomain: 'secret-cocktail.firebaseapp.com',
-    projectId: 'secret-cocktail',
-    storageBucket: 'secret-cocktail.appspot.com',
-    messagingSenderId: '389621210114',
-    appId: '1:389621210114:web:0b9e06bc35d57a3430db1b',
-    measurementId: 'G-TSBWQ81G3G',
+    apiKey: 'AIzaSyAxAi1EsechS9MWXOHhY53u2JthptfPN1g',
+    authDomain: 'tsc-phone-survey.firebaseapp.com',
+    projectId: 'tsc-phone-survey',
+    storageBucket: 'tsc-phone-survey.appspot.com',
+    messagingSenderId: '583655314154',
+    appId: '1:583655314154:web:b96b1c40990f8ff8a5bd93',
+    measurementId: 'G-4NMJ5BVPCJ',
 };
 
 // Initialize Firebase

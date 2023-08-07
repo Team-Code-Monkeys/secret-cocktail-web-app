@@ -1,8 +1,8 @@
 {
   "projects": {
-    "default": "secret-cocktail",
-    "prod": "secret-cocktail",
-    "dev": "secret-cocktail"
+    "default": "tsc-phone-survey",
+    "prod": "tsc-phone-survey",
+    "dev": "tsc-phone-survey"
   },
   "targets": {},
   "etags": {}
