@@ -3,14 +3,20 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "serve": "firebase use prod && npm run build && firebase emulators:start",
-    "shell": "firebase use prod && npm run build && firebase functions:shell",
-    "start": "firebase use prod && npm run shell",
-    "deploy": "firebase use prod && firebase deploy --only functions",
+    "prepreserve": "firebase use prod",
+    "preserve": "npm run build",
+    "serve": "firebase emulators:start",
+    "prepreshell": "firebase use prod",
+    "preshell": "npm run build",
+    "shell": "firebase functions:shell",
+    "prestart": "firebase use prod",
+    "start": "npm run shell",
+    "predeploy": "firebase use prod",
+    "deploy": "firebase deploy --only functions",
     "logs": "firebase use prod && firebase functions:log"
   },
   "engines": {
-    "node": "18"
+    "node": "16"
   },
   "main": "lib/index.js",
   "dependencies": {
