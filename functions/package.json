@@ -10,7 +10,7 @@
     "logs": "firebase use prod && firebase functions:log"
   },
   "engines": {
-    "node": "18"
+    "node": "16"
   },
   "main": "lib/index.js",
   "dependencies": {
