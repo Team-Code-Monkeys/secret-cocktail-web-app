@@ -7,7 +7,7 @@ import { initializeApp } from 'firebase/app';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-    apiKey: 'AIzaSyAxAi1EsechS9MWXOHhY53u2JthptfPN1g',
+    apiKey: 'AIzaSyATOLjzu4dudN72tlNG5-5NgNSqjWWNuxA',
     authDomain: 'tsc-phone-survey.firebaseapp.com',
     projectId: 'tsc-phone-survey',
     storageBucket: 'tsc-phone-survey.appspot.com',
