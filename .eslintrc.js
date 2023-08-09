@@ -8,7 +8,7 @@ module.exports = {
         'react/function-component-definition': [2, { "namedComponents": "arrow-function" }],
         'import/no-cycle': 'off',
         'react/button-has-type': 'off',
-        'linebreak-style':["error","windows"],
+        'linebreak-style': 'off'
 },
     parserOptions: {
         project: './tsconfig.json',
