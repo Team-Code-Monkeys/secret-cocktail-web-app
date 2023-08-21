@@ -2,6 +2,13 @@
 lib/**/*.js
 lib/**/*.js.map
 
+coverage
+coverage/
+coverage/*
+
+ui-debug.log
+*.log
+
 # TypeScript v1 declaration files
 typings/
 

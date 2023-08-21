@@ -3,6 +3,7 @@ import * as VoiceResponse from "twilio/lib/twiml/VoiceResponse";
 import {transcriptionURL, voiceURL} from "../config/twilio-config";
 import {firestore} from "firebase-admin";
 import FieldValue = firestore.FieldValue;
+import { debug } from "firebase-functions/logger";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const phoneSurveyEvent = async (req: any, res: any) => {
@@ -125,6 +126,8 @@ export const phoneSurveyQuestionResponseEvent = async (req: any, res: any) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
     const transcribe: boolean = questionDBO?.transcribe || false;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+    const transcribeAsEmail: boolean = questionDBO?.transcribeAsEmail || false;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
     const numDigitsToGather: number = parseInt(questionDBO?.numDigits || '1');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
     const digitsTimeout: number = parseInt(questionDBO?.digitsTimeout || '8');
@@ -137,7 +140,7 @@ export const phoneSurveyQuestionResponseEvent = async (req: any, res: any) => {
             twiml.record({
                 timeout: voiceRecordingTimeout,
                 transcribe: transcribe,
-                transcribeCallback: `${transcriptionURL}?questionNumber=${questionNumber}`,
+                transcribeCallback: `${transcriptionURL}?questionNumber=${questionNumber}&transcribeAsEmail=${transcribeAsEmail}`,
                 playBeep: true,
             });
         } else {
@@ -258,10 +261,17 @@ export const phoneSurveyTranscriptionEvent = async (req: any, res: any) => {
     // let questionDBO: any = undefined;
     // console.log("Got event from phone survey call for call with SID ", callSID);
     const snapshot = await questionRef.where('order', '==', questionNumber).get();
+    let transcribeAsEmail = req?.query?.transcribeAsEmail.toString() === 'true';
+
+    console.log("(transcription step) transcribeAsEmail", transcribeAsEmail);
+    debug(`(transcription step) Transcribe as email is ${transcribeAsEmail} for question number ${questionNumber}`);
+
     if (!snapshot.empty) {
         snapshot.forEach(doc => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             questionDBOID = doc?.id || '';
+            // transcribeAsEmail = doc?.data()?.transcribeAsEmail || false;
+            // debug(`Transcribe as email is ${transcribeAsEmail} for question ${questionDBOID}`);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
             // questionDBO = doc?.data();
         });
@@ -270,7 +280,7 @@ export const phoneSurveyTranscriptionEvent = async (req: any, res: any) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
     const callSid: string = (req?.body?.CallSid || '').toString();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
-    const transcriptionText: string = (req?.body?.TranscriptionText || '').toString();
+    let transcriptionText: string = (req?.body?.TranscriptionText || '').toString();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
     const transcriptionStatus: string = (req?.body?.TranscriptionStatus || '').toString();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
@@ -279,6 +289,12 @@ export const phoneSurveyTranscriptionEvent = async (req: any, res: any) => {
     const transcriptionSid: string = (req?.body?.TranscriptionSid || '').toString();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
     const transcriptionType: string = (req?.body?.TranscriptionType || '').toString();
+
+    if (transcribeAsEmail) {
+        transcriptionText = convertTranscriptionToEmail(transcriptionText);
+    }
+
+    // transcriptionText = "foo";
 
     const questionTranscriptionData = {
         transcriptionText: transcriptionText,
@@ -303,3 +319,46 @@ export const phoneSurveyTranscriptionEvent = async (req: any, res: any) => {
             res.send("Done");
         });
 }
+
+// @ts-ignore
+String.prototype.replaceLast = function (what, replacement) {
+    const pcs = this.split(what);
+    if (pcs.length == 1) {
+        return this;
+    }
+    const lastPc = pcs.pop();
+    return pcs.join(what) + replacement + lastPc;
+};
+
+export const convertTranscriptionToEmail = (text: string): string => {
+    // replace 'at' with '@'
+    let split_text = text?.split(' ') || [];
+    let result = "";
+    let atFlag = false;
+    for (let i = 0; i < split_text.length; i++) {
+        if (split_text[i] === 'at' && !atFlag) {
+            result += '@';
+            atFlag = true;
+        } else {
+            result += split_text[i];
+        }
+    }
+
+    // remove all spaces
+    result = result.replace(/\s+/g, '');
+
+    // make lowercase
+    result = result.toLowerCase();
+
+    // replace last instance of dotcom with .com
+    // @ts-ignore
+    result = result.replaceLast("dotcom", ".com");
+
+    // if string ends in period, remove that
+    if (result.length > 0 && result.charAt(result.length - 1) === '.') {
+        result = result.substring(0, result.length - 1);
+    }
+
+    return result;
+}
+
