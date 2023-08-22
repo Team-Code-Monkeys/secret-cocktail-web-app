@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 // } from 'firebase/firestore';
 // import ReactMarkdown from 'react-markdown';
 import {
-    collection, deleteDoc, doc, getDocs, getFirestore, query,
+    collection, deleteDoc, doc, getDocs, getFirestore, query, writeBatch,
 } from 'firebase/firestore';
 import { CSVLink } from 'react-csv';
+import { Table, Form } from 'react-bootstrap';
 import Navbar from '../navbar';
 import styles from './styles.module.css';
 import { setupAuthListener } from '../authredirect/setup-auth-listener';
@@ -30,6 +31,7 @@ const AdminPhoneSurveyResponsesPage = () => {
     const [phoneSurveyResponses, setPhoneSurveyResponses] = useState<any>([]);
     const [questions, setQuestions] = useState<any>(undefined);
     const [responsesData, setResponsesData] = useState<Array<Array<string>>>([]);
+    const selectedResponses = new Set<string>();
 
     useEffect(() => {
         checkedIfAllowedOnPage(auth, navigate, [k_admin_role]);
@@ -141,6 +143,183 @@ const AdminPhoneSurveyResponsesPage = () => {
                     </CSVLink>
                 )
             }
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Facility Name</th>
+                        <th>Twilio Call SID</th>
+                        <th>Phone Number</th>
+                        <th>Q1 Answer</th>
+                        <th>Q2 Answer</th>
+                        <th>Q3 Answer</th>
+                        <th>Q4 Answer</th>
+                        <th>Create</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {phoneSurveyResponses.map((phoneSurveyResponse: any) => (
+                        <tr>
+                            <td>
+                                <Form.Check
+                                    aria-label="checkbox-facility"
+                                    type="checkbox"
+                                    id={phoneSurveyResponse.id}
+                                    onClick={() => {
+                                        // eslint-disable-next-line max-len
+                                        if (selectedResponses.has(phoneSurveyResponse.id)) selectedResponses.delete(phoneSurveyResponse.id);
+                                        else selectedResponses.add(phoneSurveyResponse.id);
+
+                                        // eslint-disable-next-line no-console
+                                        console.log(selectedResponses);
+                                    }}
+                                />
+                            </td>
+                            <td>
+                                <Form.Control
+                                    type="email"
+                                    defaultValue={phoneSurveyResponse?.name || ''}
+                                    onChange={(event) => {
+                                        // eslint-disable-next-line no-param-reassign
+                                        phoneSurveyResponse.name = event.target.value;
+                                        // eslint-disable-next-line no-console
+                                        console.log(phoneSurveyResponse.name);
+                                    }}
+                                />
+                            </td>
+                            <td>
+                                {phoneSurveyResponse?.callSid || 'None'}
+                            </td>
+                            <td>
+                                Phone:
+                                {' '}
+                                {phoneSurveyResponse?.toPhoneNumber || 'None'}
+                            </td>
+                            {
+                                Object.keys(questions).map((questionID: any) => {
+                                    let questionText = `${questions[questionID]?.question || ''}`;
+                                    let response: any = 'Failed to capture response';
+                                    let recordingURL: any;
+                                    // eslint-disable-next-line max-len
+                                    if (phoneSurveyResponse?.questions) {
+                                        // eslint-disable-next-line no-unsafe-optional-chaining
+                                        // eslint-disable-next-line max-len
+                                        const digitResponses: any = phoneSurveyResponse?.questions;
+                                        digitResponses.forEach((questionResponse: any) => {
+                                            // eslint-disable-next-line max-len
+                                            if (questionID === questionResponse?.questionDBOID) {
+                                                response = questionResponse?.digit || 'Failed to capture key press';
+                                                // eslint-disable-next-line max-len
+                                                recordingURL = recordingURL || questionResponse?.recordingUrl;
+                                            }
+                                        });
+                                    }
+
+                                    if (phoneSurveyResponse?.questionTranscriptions) {
+                                        questionText = `${questions[questionID]?.question || ''}`;
+                                        // eslint-disable-next-line max-len
+                                        const transcriptionResponses: any = phoneSurveyResponse?.questionTranscriptions;
+                                        // eslint-disable-next-line max-len
+                                        transcriptionResponses.forEach((questionResponse: any) => {
+                                            // eslint-disable-next-line max-len
+                                            if (questionID === questionResponse?.questionDBOID) {
+                                                response = questionResponse?.transcriptionText || 'Failed to transcribe audio';
+                                                // eslint-disable-next-line max-len
+                                                recordingURL = recordingURL || questionResponse?.recordingUrl;
+                                            }
+                                        });
+                                    }
+                                    if (questionText) {
+                                        return (
+                                            <td>
+                                                {/* eslint-disable-next-line max-len */}
+                                                <div className={styles.listItemText2}>{questionText}</div>
+                                                <div>
+                                                    {`${response}`}
+                                                </div>
+                                                {
+                                                    recordingURL
+                                                    // eslint-disable-next-line max-len
+                                                    // eslint-disable-next-line max-len,jsx-a11y/media-has-caption
+                                                    && (
+                                                        // eslint-disable-next-line max-len
+                                                        // eslint-disable-next-line jsx-a11y/media-has-caption
+                                                        <audio controls>
+                                                            <source src={recordingURL} type="audio/mpeg" />
+                                                        </audio>
+                                                    )
+                                                }
+                                            </td>
+                                        );
+                                    }
+                                    return <div />;
+                                })
+                            }
+                            <td>
+                                {/* eslint-disable-next-line max-len */}
+                                {(phoneSurveyResponse?.added === undefined || phoneSurveyResponse?.added === false)
+                                    && (
+                                        <a
+                                            target="_blank"
+                                            href={`${k_admin_facility_page_route}?phoneSurveyResponseID=${phoneSurveyResponse.id}`}
+                                            rel="noreferrer"
+                                        >
+                                            Create Facility
+                                        </a>
+                                    )}
+                            </td>
+                            <td>
+                                <button
+                                    style={{ border: '#e13d3d', background: '#e13d3d' }}
+                                    className={styles.deleteBtnListView}
+                                    onClick={() => {
+                                        const batch = writeBatch(db);
+                                        selectedResponses.forEach((id) => {
+                                            batch.delete(doc(db, 'phone-survey-responses', id || ''));
+                                        });
+                                        batch.commit()
+                                            .then(() => {
+                                                window.location.reload();
+                                            })
+                                            .catch((error: any) => {
+                                                // eslint-disable-next-line no-alert
+                                                alert('Error deleting phone survey response.');
+                                                // eslint-disable-next-line no-console
+                                                console.error('Error deleting phone survey response', error);
+                                            });
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+            <div className={styles.listItemButtonsContainer}>
+                <button className={styles.primaryBtn}>
+                    Bulk Add
+                </button>
+                <button
+                    style={{ border: '#e13d3d', background: '#e13d3d' }}
+                    className={styles.deleteBtnListView}
+                    onClick={() => {
+                        deleteDoc(doc(db, 'phone-survey-responses', 'asdfadsf' || ''))
+                            .then(() => {
+                                window.location.reload();
+                            })
+                            .catch((error: any) => {
+                                // eslint-disable-next-line no-alert
+                                alert('Error deleting phone survey response.');
+                                // eslint-disable-next-line no-console
+                                console.error('Error deleting phone survey response', error);
+                            });
+                    }}
+                >
+                    Delete
+                </button>
+            </div>
             {
                 questions && (
                     <div className={styles.innerContainer3}>
@@ -250,7 +429,7 @@ const AdminPhoneSurveyResponsesPage = () => {
                                         Delete
                                     </button>
                                     {/* eslint-disable-next-line max-len */}
-                                    { (phoneSurveyResponse?.added === undefined || phoneSurveyResponse?.added === false)
+                                    {(phoneSurveyResponse?.added === undefined || phoneSurveyResponse?.added === false)
                                         && (
                                             <a
                                                 className={styles.primaryBtnListView}
