@@ -143,17 +143,17 @@ const AdminPhoneSurveyResponsesPage = () => {
                     </CSVLink>
                 )
             }
-            <Table striped bordered hover>
+            <Table striped bordered hover responsive="sm">
                 <thead>
                     <tr>
                         <th>Select</th>
-                        <th>Facility Name</th>
+                        <th className={styles.longTableColumn}>Facility Name</th>
                         <th>Twilio Call SID</th>
-                        <th>Phone Number</th>
-                        <th>Q1 Answer</th>
-                        <th>Q2 Answer</th>
-                        <th>Q3 Answer</th>
-                        <th>Q4 Answer</th>
+                        <th className={styles.longTableColumn}>Phone Number</th>
+                        <th className={styles.longTableColumn}>Q1 Answer</th>
+                        <th className={styles.longTableColumn}>Q2 Answer</th>
+                        <th className={styles.longTableColumn}>Q3 Answer</th>
+                        <th className={styles.longTableColumn}>Q4 Answer</th>
                         <th>Create</th>
                         <th>Delete</th>
                     </tr>
