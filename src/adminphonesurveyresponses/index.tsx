@@ -147,7 +147,6 @@ const AdminPhoneSurveyResponsesPage = () => {
                 <thead>
                     <tr>
                         <th>Select</th>
-                        <th className={styles.longTableColumn}>Facility Name</th>
                         <th>Twilio Call SID</th>
                         <th className={styles.longTableColumn}>Phone Number</th>
                         <th className={styles.longTableColumn}>Q1 Answer</th>
@@ -173,18 +172,6 @@ const AdminPhoneSurveyResponsesPage = () => {
 
                                         // eslint-disable-next-line no-console
                                         console.log(selectedResponses);
-                                    }}
-                                />
-                            </td>
-                            <td>
-                                <Form.Control
-                                    type="email"
-                                    defaultValue={phoneSurveyResponse?.name || ''}
-                                    onChange={(event) => {
-                                        // eslint-disable-next-line no-param-reassign
-                                        phoneSurveyResponse.name = event.target.value;
-                                        // eslint-disable-next-line no-console
-                                        console.log(phoneSurveyResponse.name);
                                     }}
                                 />
                             </td>
@@ -274,11 +261,7 @@ const AdminPhoneSurveyResponsesPage = () => {
                                     style={{ border: '#e13d3d', background: '#e13d3d' }}
                                     className={styles.deleteBtnListView}
                                     onClick={() => {
-                                        const batch = writeBatch(db);
-                                        selectedResponses.forEach((id) => {
-                                            batch.delete(doc(db, 'phone-survey-responses', id || ''));
-                                        });
-                                        batch.commit()
+                                        deleteDoc(doc(db, 'phone-survey-responses', phoneSurveyResponse.id || ''))
                                             .then(() => {
                                                 window.location.reload();
                                             })
@@ -298,14 +281,24 @@ const AdminPhoneSurveyResponsesPage = () => {
                 </tbody>
             </Table>
             <div className={styles.listItemButtonsContainer}>
-                <button className={styles.primaryBtn}>
+                <button
+                    className={styles.primaryBtnListView}
+                    onClick={(event) => {
+                        event.preventDefault();
+                        selectedResponses.forEach((responseID) => window.open(`${k_admin_facility_page_route}?phoneSurveyResponseID=${responseID}`, '_blank'));
+                    }}
+                >
                     Bulk Add
                 </button>
                 <button
                     style={{ border: '#e13d3d', background: '#e13d3d' }}
                     className={styles.deleteBtnListView}
                     onClick={() => {
-                        deleteDoc(doc(db, 'phone-survey-responses', 'asdfadsf' || ''))
+                        const batch = writeBatch(db);
+                        selectedResponses.forEach((id) => {
+                            batch.delete(doc(db, 'phone-survey-responses', id || ''));
+                        });
+                        batch.commit()
                             .then(() => {
                                 window.location.reload();
                             })
@@ -317,135 +310,9 @@ const AdminPhoneSurveyResponsesPage = () => {
                             });
                     }}
                 >
-                    Delete
+                    Bulk Delete
                 </button>
             </div>
-            {
-                questions && (
-                    <div className={styles.innerContainer3}>
-                        {phoneSurveyResponses.map((phoneSurveyResponse: any) => (
-                            <div className={styles.listItemContainer} key={phoneSurveyResponse.id}>
-                                <div className={styles.listItemText2}>
-                                    Twilio Call SID:
-                                    {' '}
-                                    {phoneSurveyResponse?.callSid || 'None'}
-                                </div>
-                                <div className={styles.listItemText2}>
-                                    Phone:
-                                    {' '}
-                                    {phoneSurveyResponse?.toPhoneNumber || 'None'}
-                                </div>
-                                {
-                                    phoneSurveyResponse?.recordingUrl && (
-                                        <div>
-                                            <div className={styles.listItemText2}>
-                                                Recording:
-                                            </div>
-                                            {/* eslint-disable-next-line max-len */}
-                                            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-                                            <audio controls>
-                                                <source src={phoneSurveyResponse?.recordingUrl} type="audio/mpeg" />
-                                            </audio>
-                                        </div>
-                                    )
-                                }
-                                {
-                                    Object.keys(questions).map((questionID: any) => {
-                                        let questionText = `${questions[questionID]?.question || ''}`;
-                                        let response: any = 'Failed to capture response';
-                                        let recordingURL: any;
-                                        // eslint-disable-next-line max-len
-                                        if (phoneSurveyResponse?.questions) {
-                                            // eslint-disable-next-line no-unsafe-optional-chaining
-                                            // eslint-disable-next-line max-len
-                                            const digitResponses: any = phoneSurveyResponse?.questions;
-                                            digitResponses.forEach((questionResponse: any) => {
-                                                // eslint-disable-next-line max-len
-                                                if (questionID === questionResponse?.questionDBOID) {
-                                                    response = questionResponse?.digit || 'Failed to capture key press';
-                                                    // eslint-disable-next-line max-len
-                                                    recordingURL = recordingURL || questionResponse?.recordingUrl;
-                                                }
-                                            });
-                                        }
-
-                                        if (phoneSurveyResponse?.questionTranscriptions) {
-                                            questionText = `${questions[questionID]?.question || ''}`;
-                                            // eslint-disable-next-line max-len
-                                            const transcriptionResponses: any = phoneSurveyResponse?.questionTranscriptions;
-                                            // eslint-disable-next-line max-len
-                                            transcriptionResponses.forEach((questionResponse: any) => {
-                                                // eslint-disable-next-line max-len
-                                                if (questionID === questionResponse?.questionDBOID) {
-                                                    response = questionResponse?.transcriptionText || 'Failed to transcribe audio';
-                                                    // eslint-disable-next-line max-len
-                                                    recordingURL = recordingURL || questionResponse?.recordingUrl;
-                                                }
-                                            });
-                                        }
-                                        if (questionText) {
-                                            return (
-                                                <div style={{ marginTop: '10px' }} key={questionID}>
-                                                    {/* eslint-disable-next-line max-len */}
-                                                    <div className={styles.listItemText2}>{questionText}</div>
-                                                    <div>
-                                                        {`${response}`}
-                                                    </div>
-                                                    {
-                                                        recordingURL
-                                                        // eslint-disable-next-line max-len
-                                                        // eslint-disable-next-line max-len,jsx-a11y/media-has-caption
-                                                        && (
-                                                            // eslint-disable-next-line max-len
-                                                            // eslint-disable-next-line jsx-a11y/media-has-caption
-                                                            <audio controls>
-                                                                <source src={recordingURL} type="audio/mpeg" />
-                                                            </audio>
-                                                        )
-                                                    }
-                                                </div>
-                                            );
-                                        }
-                                        return <div />;
-                                    })
-                                }
-                                <div className={styles.listItemButtonsContainer}>
-                                    <button
-                                        style={{ border: '#e13d3d', background: '#e13d3d' }}
-                                        className={styles.deleteBtnListView}
-                                        onClick={() => {
-                                            deleteDoc(doc(db, 'phone-survey-responses', phoneSurveyResponse.id || ''))
-                                                .then(() => {
-                                                    window.location.reload();
-                                                })
-                                                .catch((error: any) => {
-                                                    // eslint-disable-next-line no-alert
-                                                    alert('Error deleting phone survey response.');
-                                                    // eslint-disable-next-line no-console
-                                                    console.error('Error deleting phone survey response', error);
-                                                });
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
-                                    {/* eslint-disable-next-line max-len */}
-                                    {(phoneSurveyResponse?.added === undefined || phoneSurveyResponse?.added === false)
-                                        && (
-                                            <a
-                                                className={styles.primaryBtnListView}
-                                                target="_blank"
-                                                href={`${k_admin_facility_page_route}?phoneSurveyResponseID=${phoneSurveyResponse.id}`}
-                                                rel="noreferrer"
-                                            >
-                                                Create Facility
-                                            </a>
-                                        )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )
-            }
             <div className={styles.innerContainer}>
                 {/* TODO: make this a button */}
                 {/* eslint-disable-next-line max-len */}
